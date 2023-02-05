@@ -39,7 +39,7 @@ json format:
 def SaveGame(playerScore, playerRank, playerGuesses, puzzleId, fileName):
 
     ## Creates the local file path, plus includes the file extension  
-    saveFileName = 'Python_Ethan/Saves/' + fileName + '.json'
+    saveFileName = 'Saves/' + fileName + '.json'
 
     ## Create json object
     saveStat = {
@@ -66,7 +66,7 @@ Function Checks to see if the file name is already in use (case sensitive) and r
 """
 def CheckFileName(fileName):
     check = bool
-    saveGames = os.listdir('Python_Ethan/Saves')
+    saveGames = os.listdir('Saves')
     check = (fileName + '.json') not in saveGames
     return check
 
@@ -86,7 +86,7 @@ def LoadGame(fileName):
         return 1
         
     ## Loads the local file path for the saved game
-    saveFile = 'Python_Ethan/Saves/' + fileName + '.json'
+    saveFile = 'Saves/' + fileName + '.json'
     
     ## reads the json file as a Dict
     with open(saveFile, "r") as openfile:
