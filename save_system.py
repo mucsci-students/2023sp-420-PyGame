@@ -10,11 +10,6 @@ playerScore = 0
 playerRank = 0
 playerGuesses = []
 
-## Empty/Test functions for testing
-## Need to change to the real function name when made
-def FUNCTION_LOAD_PUZZLE(puzzleId):
-    print('Object Id is: ' + puzzleId)
-
 
 """ 
 Save Game Takes Five Parameters 
@@ -36,6 +31,7 @@ json format:
     "GameId": puzzleId 
 }
 """
+
 def SaveGame(playerScore, playerRank, playerGuesses, puzzleId, fileName):
 
     ## Creates the local file path, plus includes the file extension  
@@ -48,6 +44,7 @@ def SaveGame(playerScore, playerRank, playerGuesses, puzzleId, fileName):
         "Guesses": playerGuesses,
         "GameId": puzzleId 
     }
+    
     json_object = json.dumps(saveStat, indent=4)
 
     # Writing to sample.json
@@ -101,7 +98,7 @@ def LoadGame(fileName):
     playerGuesses = saveInfo["Guesses"]
 
     ## Passes the DB Object Id to the Load Puzzle function
-    FUNCTION_LOAD_PUZZLE(saveInfo["GameId"])
+    # FUNCTION_LOAD_PUZZLE(saveInfo["GameId"])
     openfile.close()
 
 """
@@ -117,7 +114,6 @@ def LoadSharedGame(puzzleId):
     playerScore = 0
     playerRank = 0
     playerGuesses = []
-    FUNCTION_LOAD_PUZZLE(puzzleId)
 
 """ 
 ## __________________________________________________________________________________________
@@ -149,3 +145,4 @@ if not CheckFileName(testFileName):
     print('Player Rank is: ' + str(playerRank))
     print('Players Guesses are: ' + str(playerGuesses))
  """
+ 
