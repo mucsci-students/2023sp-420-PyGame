@@ -1,5 +1,6 @@
 import os
 import json
+from Database.database import get_word_info, get_random_word, get_word_list
 
 
 ## Global Var for file name, use for checks?
@@ -9,11 +10,6 @@ loadedFileName = ''
 playerScore = 0
 playerRank = 0
 playerGuesses = []
-
-## Empty/Test functions for testing
-## Need to change to the real function name when made
-def FUNCTION_LOAD_PUZZLE(puzzleId):
-    print('Object Id is: ' + puzzleId)
 
 
 """ 
@@ -36,6 +32,7 @@ json format:
     "GameId": puzzleId 
 }
 """
+
 def SaveGame(playerScore, playerRank, playerGuesses, puzzleId, fileName):
 
     ## Creates the local file path, plus includes the file extension  
@@ -48,6 +45,7 @@ def SaveGame(playerScore, playerRank, playerGuesses, puzzleId, fileName):
         "Guesses": playerGuesses,
         "GameId": puzzleId 
     }
+    
     json_object = json.dumps(saveStat, indent=4)
 
     # Writing to sample.json
@@ -101,7 +99,7 @@ def LoadGame(fileName):
     playerGuesses = saveInfo["Guesses"]
 
     ## Passes the DB Object Id to the Load Puzzle function
-    FUNCTION_LOAD_PUZZLE(saveInfo["GameId"])
+    # FUNCTION_LOAD_PUZZLE(saveInfo["GameId"])
     openfile.close()
 
 """
@@ -117,7 +115,16 @@ def LoadSharedGame(puzzleId):
     playerScore = 0
     playerRank = 0
     playerGuesses = []
-    FUNCTION_LOAD_PUZZLE(puzzleId)
+
+
+
+def GenerateRandomPuzzle():
+    random_puzzle = get_word_info()
+    current_puzzle = get_random_word(random_puzzle)
+    print(current_puzzle)
+    word_list = get_word_list(current_puzzle[0])
+    print(word_list)
+
 
 """ 
 ## __________________________________________________________________________________________
@@ -149,3 +156,4 @@ if not CheckFileName(testFileName):
     print('Player Rank is: ' + str(playerRank))
     print('Players Guesses are: ' + str(playerGuesses))
  """
+GenerateRandomPuzzle()

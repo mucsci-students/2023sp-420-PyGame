@@ -52,11 +52,15 @@ def generate_table():
 """
 
 def get_word_list(key):
+  conn = sqlite3.connect("Database/allwords")
+  cursor = conn.cursor()
   cursor.execute("SELECT word, points FROM all_words WHERE key=?", (key,))
   words = cursor.fetchall()
   dictionary = {}
   for key, value in words:
     dictionary.setdefault(key, value)
+  conn.commit()
+  conn.close()
   return dictionary
 
 """ 
@@ -67,8 +71,13 @@ def get_word_list(key):
 """
 
 def get_word_info():
+  conn = sqlite3.connect("Database/allwords")
+  cursor = conn.cursor()
   cursor.execute("SELECT * FROM word_info")
-  return cursor.fetchall()
+  info = cursor.fetchall()
+  conn.commit()
+  conn.close()
+  return info
 
 """ 
   Author: Robert 2/3/23
