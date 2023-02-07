@@ -78,7 +78,7 @@ Select Game to Load:
 #then  calls a function to get a list of game save files F#
 
 ###----------------ENTER 7 LETTER KEY----------------
-sevenKey = f'''
+baseKey = f'''
 Enter 7 letters:
 '''
 ###----------------COMMAND/HELP SCREEN----------------
@@ -108,7 +108,7 @@ Commands
 ###------------MAIN MENU SCREEN---------------
 
 def main_menu_handler(currentPuzzle):
-    runningGame = false
+    runningGame = False
     #loop
     
     while (runningGame):
@@ -159,17 +159,20 @@ def main_menu_handler(currentPuzzle):
 def loadSaveGame():
   print(<savedGames>) #will display list of saved games, will need to change to actual name
     #will have the saved game 
+    #TO DO: call function LoadGame
+    #TO DO: check to see if game was loaded or not
+  
 
 # when user wants to load a game with a key
-def keyStart():
+def keyStart(getKey):
     key = getkey()
     puzzle = generatePuzzle(key)
-    startGame()# with key
+    startGame()# with key, will need to create startGame
 
 # function to allow user to enter a 7 character key
 def getKey():
     while (True):       
-        print(sevenKey)
+        print(baseKey)
         answer = input
               #if validKey(answer) return answer
     else: print('Enter 7 unique letters as a key:')
@@ -210,39 +213,51 @@ def saveGamePrompt():
          print('Command not recognized')    
 
 ###------------ACTIVE GAME SCREEN---------------
+#Loops thru the active game screens
+def activeGameLoop(currentPuzzle):
+  loop = True
+  while (loop):
+    loop = activeGame(currentPuzzle)
 
 # when an active game is in play
 def activeGame(currentPuzzle):
     print(currentPuzzle)
     userInput = input #asks user for input to match
-    if(userInput[0] == '/'):
-        match userInput:
-         case ['/Help']:
-            print(help)
-            #then return to default state. perhaps call main menu handler???(this would eventually lead to stack overflow  😦  )
+    if (userInput[0] != '/'):
+      load(CheckGuess(userInput))
+    match userInput:
+      case ['/Help']:
+        print(help)
+        return True
+        #then return to default state. perhaps call main menu handler???(this would eventually lead to stack overflow  😦  )
 
-         case ['/Shuffle']:
-            myList= ["a","b","c","d","e","f","g"] #temporary example of a list
-            random.shuffle(myList)  
-            print(myList)  
+      case ['/Shuffle']:
+        myList= ["a","b","c","d","e","f","g"] #temporary example of a list
+        random.shuffle(myList)  
+        print(myList)  
+        return True
 
-         case ['/Share']:
-            myList= ["a","b","c","d","e","f","g"] #temporary example of a list
-            print(f'Share the following ID:{myList}')
+      case ['/Share']:
+        myList= ["a","b","c","d","e","f","g"] #temporary example of a list
+        print(f'Share the following ID:{myList}')
+        return True
 
-         case ['/Exit']:
-             print(f'Would you like to save?{gameSave}')
-             answer = input
-             match answer:
-              case['/y']: 
-                saveGamePrompt()
-                runningGame = exitCall() #temporary variable
-              case['/n']:
-                runningGame = exitCall() 
-              case _:
-                print('Command not recognized')
+      case ['/Exit']:
+        print(f'Would you like to save?{gameSave}')
+        answer = input
+        match answer:
+          case['/y']: 
+          saveGamePrompt()
+          runningGame = exitCall() #temporary variable
+          case['/n']:
+            runningGame = exitCall() 
+            return False
+          case _:
+            print('Command not recognized')
               #should proceed with exiting. if !running game
-         case _: 
-             print('Command not recognized')
-             
+            return False
+      case _: 
+        print('Command not recognized')
+        return True
+    
     
