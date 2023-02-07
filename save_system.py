@@ -1,6 +1,5 @@
 import os
 import json
-from Database.database import get_word_info, get_random_word, get_word_list
 
 
 ## Global Var for file name, use for checks?
@@ -116,16 +115,6 @@ def LoadSharedGame(puzzleId):
     playerRank = 0
     playerGuesses = []
 
-
-
-def GenerateRandomPuzzle():
-    random_puzzle = get_word_info()
-    current_puzzle = get_random_word(random_puzzle)
-    print(current_puzzle)
-    word_list = get_word_list(current_puzzle[0])
-    print(word_list)
-
-
 """ 
 ## __________________________________________________________________________________________
 ## Test For the Save Game Funciton
@@ -156,4 +145,4 @@ if not CheckFileName(testFileName):
     print('Player Rank is: ' + str(playerRank))
     print('Players Guesses are: ' + str(playerGuesses))
  """
-GenerateRandomPuzzle()
+ 
