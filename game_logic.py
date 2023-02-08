@@ -1,5 +1,3 @@
-from Database.database import get_word_info, get_random_word, get_word_list
-
 ## TEST Global Var
 playerScore = 0
 playerRank = 0
@@ -40,12 +38,6 @@ def CheckValidity(guess):
     ## Word not valid
     return 1
 
-def GenerateRandomPuzzle():
-    random_puzzle = get_word_info()
-    current_puzzle = get_random_word(random_puzzle)
-    print(current_puzzle)
-    word_list = get_word_list(current_puzzle[0])
-    print(word_list)
 
 """
 CheckGuess take One Paramater
@@ -122,7 +114,6 @@ def CheckGuess(guess):
 
     return CheckValidity(guess)
 
-
 """ 
 ## _____________________________________
 ## Test Valid Guesses
@@ -159,4 +150,4 @@ print (CheckValidity("abcd"))
 print (str(playerGuesses))
 print (playerScore)
  """
-GenerateRandomPuzzle()
+ 

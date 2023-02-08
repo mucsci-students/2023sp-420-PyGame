@@ -7,7 +7,7 @@ class rank:
 
         difference = currentPoints/maxPoints
         #precondition check for between 0.00 and 1.00
-        if difference <0 or difference >1:
+        if difference < 0 or difference > 1:
             return 0 #out of bounds
 
 
