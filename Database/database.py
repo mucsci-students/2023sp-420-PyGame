@@ -45,10 +45,9 @@ def generate_table():
 """ 
   Author: Robert 2/3/23
   Last Edited:
-  Parameters: 1 paramter
-    "Key" string
+  Parameters: string
   Returns: A dictionary
-  Definition: Return list of possible words for panagram given a keyword.
+  Definition: Return list of possible words for pangram given a keyword.
 """
 
 def get_word_list(key):
@@ -65,15 +64,30 @@ def get_word_list(key):
 
 """ 
   Author: Robert 2/3/23
-  Last Edited:
   Returns: A list - ('string', 'string', int)
-  Definition: Returns ('panagram', 'required letter', total_points)
+  Definition: Returns ('pangram', 'required letter', total_points)
 """
 
 def get_word_info():
   conn = sqlite3.connect("Database/allwords")
   cursor = conn.cursor()
   cursor.execute("SELECT * FROM word_info")
+  info = cursor.fetchall()
+  conn.commit()
+  conn.close()
+  return info
+
+
+""" 
+  Author: Robert 2/3/23
+  Parameters: string
+  Returns: A list - ('string', 'string', int)
+  Definition: Returns ('pangram', 'required letter', total_points) from a given key.
+"""
+def get_word_info_from_key(key):
+  conn = sqlite3.connect("Database/allwords")
+  cursor = conn.cursor()
+  cursor.execute("SELECT key, required_letter, total_points FROM word_info WHERE key=?", (key,))
   info = cursor.fetchall()
   conn.commit()
   conn.close()
@@ -86,9 +100,9 @@ def get_word_info():
   Definition: Returns a random keyword from list of possible words.
 """
 
-def get_random_word(panagram_list):
-  rand_num = random.randint(0, len(panagram_list))
-  return panagram_list[rand_num]
+def get_random_word(pangram_list):
+  rand_num = random.randint(0, len(pangram_list))
+  return pangram_list[rand_num]
 
 # all_words = get_word_info()
 # rand_word = get_random_word(all_words)
