@@ -45,8 +45,3 @@ class Puzzle:
             self.current_word_list = get_word_list(pangram)
 
 
-
-puzzle = Puzzle()
-puzzle2 = Puzzle()
-puzzle.generate_random_puzzle()
-puzzle2.generate_puzzle_from_base("dubdskfjsdjfSDFHSDUIFHSDFsdfsdf")
