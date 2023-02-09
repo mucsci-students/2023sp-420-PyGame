@@ -2,10 +2,21 @@
 
 import random
 
+from game_logic import CheckGuess
+from puzzle import Puzzle
+from save_system import SaveGame
+
+activeRank = ""
+activeProgress = 0
+activeScore = 0
+activeGuesses = {}
+activePuzzleLetters = ""
+# currentPuzzle = ""
+
 #Variables to print
 
 ###----------------START SCREEN-------------------
-startingscreen = f"""
+startingScreen = f"""
           \             /
            \   o ^ o   /            
             \ (     ) /
@@ -27,7 +38,7 @@ startingscreen = f"""
 #playerRank = 0
 #playerGuesses = []
 
-curentPuzzle = f'''
+currentPuzzle = f'''
 
 Rank: {activeRank} {activeProgress}
 Score: {activeScore}
@@ -107,57 +118,63 @@ Commands
 ''' 
 ###------------MAIN MENU SCREEN---------------
 
-def main_menu_handler(currentPuzzle):
-    runningGame = False
+def main_menu_handler():
+    global currentPuzzle
+    runningGame = True
+
     #loop
-    
     while (runningGame):
-        print(mainMenu)
-        userInput = (input("Select Your Option")) # User should select from the options listed
-        match userInput:
-            case ['/NewGame']:
-            #calls loadNewGame
-            #this generates a new puzzle and fills all the variables. Theese will populate the following printCurentPuzzle()
-                print(currentPuzzle)
-            #prints load gets input then if y prints 
-            case ['/LoadGame']:
-            #calls loadGame
-              loadSaveGame()
-              answer = input
-              match answer:
-                  case ['/y']:
-                      print(gameSelect)
-                          #TODO actually get what game file they select, could be a list of numbered options on each new line they select             
-                  case ['/n']:
-                      print(mainMenu)
-                  #return to main menu screen : or abstracted the last screen
-                  case _: # if any other command not in the list is entered, then this output will be returned
-                      print('Command Not Recognized')
-              
-            case['/Start From Key']:
-              keyStart()
-              print(sevenKey)
-              answer = input
-              #CHECK IF input is valid 
-              #generate new puzzle based on input
-              #populates globals, ect. 
-              print(currentPuzzle)
+      print(mainMenu)
+      
+      userInput = (input("Select Your Option\n")) # User should select from the options listed
+      userInput = userInput.lower()
+      match userInput:
+        case "/newgame":
+          start_new_game()
+          activeGameLoop()
+          #calls loadNewGame
+          #this generates a new puzzle and fills all the variables. Theese will populate the following printCurentPuzzle()
 
-            case['/Help']:
-              print(help)
-            
-            case['/Exit']:
-              runningGame = exitCall() 
-
-            case _:
+          #prints load gets input then if y prints 
+        case "/loadgame":
+          #calls loadGame
+          loadSaveGame()
+          answer = input
+          match answer:
+            case "/y":
+              print(gameSelect)
+              #TODO actually get what game file they select, could be a list of numbered options on each new line they select             
+            case "/n":
+              print(mainMenu)
+              #return to main menu screen : or abstracted the last screen
+            case _: # if any other command not in the list is entered, then this output will be returned
               print('Command Not Recognized')
+              
+        case "/start from key":
+          keyStart()
+          print(sevenKey)
+          answer = input
+          #CHECK IF input is valid 
+          #generate new puzzle based on input
+          #populates globals, ect. 
+          print(currentPuzzle)
+
+        case "help":
+          print(help)
+            
+        case "exit":
+          runningGame = exitCall() 
+
+        case "_":
+          print('Command Not Recognized')
 
 
 ###-----CLEAN UP FOR MAIN MENU------
 
 # when user wants to load a saved game
 def loadSaveGame():
-  print(<savedGames>) #will display list of saved games, will need to change to actual name
+  # print(<savedGames>) #will display list of saved games, will need to change to actual name
+    print("lawl")
     #will have the saved game 
     #TO DO: call function LoadGame
     #TO DO: check to see if game was loaded or not
@@ -183,9 +200,9 @@ def exitCall():
         print(exit)
         answer = input
         match answer:
-            case ['/y']:
+            case "/y":
                 return False             
-            case ['/n']:
+            case "/n":
                 return True
             case _: 
                 print('Command not recognized')
@@ -197,16 +214,16 @@ def saveGamePrompt():
      userInput = input #asks user for an input
      match userInput:
 
-        case['/Current']:
+        case "/current":
          print('Enter title to save current as:')
          answer = input
-         saveCurrentGame(answer) #title given will be used within saveCurrentGame, will need to change name
+         SaveGame(answer) #title given will be used within saveCurrentGame, will need to change name
          print(f'{userInput} has been saved.')
 
-        case['/Blank']:
+        case "blank":
          print['Enter title to save blank as:'] 
          answer = input
-         saveCurrentGame(answer)
+         SaveGame(answer)
          print(f'{userInput} has been saved.')
 
         case _: 
@@ -214,50 +231,69 @@ def saveGamePrompt():
 
 ###------------ACTIVE GAME SCREEN---------------
 #Loops thru the active game screens
-def activeGameLoop(currentPuzzle):
+def activeGameLoop():
   loop = True
   while (loop):
-    loop = activeGame(currentPuzzle)
+    loop = activeGame()
 
 # when an active game is in play
-def activeGame(currentPuzzle):
-    print(currentPuzzle)
-    userInput = input #asks user for input to match
-    if (userInput[0] != '/'):
-      load(CheckGuess(userInput))
+def activeGame():
+  global currentPuzzle
+  print(currentPuzzle)
+  userInput = input("Enter your guess. \n").lower() #asks user for input to match
+  if (userInput == ""):
+    return True
+  elif (userInput[0] != "/"):
+    CheckGuess(userInput)
+    return True
+    # CheckGuess(userInput, puzzle))
+  else:
     match userInput:
-      case ['/Help']:
+      case "help":
         print(help)
         return True
         #then return to default state. perhaps call main menu handler???(this would eventually lead to stack overflow  😦  )
 
-      case ['/Shuffle']:
-        myList= ["a","b","c","d","e","f","g"] #temporary example of a list
+      case "shuffle":
+        myList = ["a","b","c","d","e","f","g"] #temporary example of a list
         random.shuffle(myList)  
         print(myList)  
         return True
 
-      case ['/Share']:
+      case "share":
         myList= ["a","b","c","d","e","f","g"] #temporary example of a list
         print(f'Share the following ID:{myList}')
         return True
 
-      case ['/Exit']:
+      case "exit":
         print(f'Would you like to save?{gameSave}')
         answer = input
         match answer:
-          case['/y']: 
-          saveGamePrompt()
-          runningGame = exitCall() #temporary variable
-          case['/n']:
+          case "/y": 
+            saveGamePrompt()
+            runningGame = exitCall() #temporary variable
+          case "/n":
             runningGame = exitCall() 
             return False
           case _:
             print('Command not recognized')
               #should proceed with exiting. if !running game
             return False
-      case _: 
+      case _:
         print('Command not recognized')
         return True
+
+def start_new_game():
+  global activeRank
+  global activePuzzleLetters
+  global currentPuzzle
+  puzzle = Puzzle()
+  puzzle.generate_random_puzzle()
+  
+  # This will need to be shuffled.
+  activePuzzleLetters = puzzle.pangram
+  currentPuzzle = puzzle.pangram
+  print("My letters are: " + activePuzzleLetters)
+  activeRank = "Beginner"
     
-    
+main_menu_handler()

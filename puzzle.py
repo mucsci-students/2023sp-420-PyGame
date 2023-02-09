@@ -46,7 +46,7 @@ class Puzzle:
 
 
 
-puzzle = Puzzle()
-puzzle2 = Puzzle()
-puzzle.generate_random_puzzle()
-puzzle2.generate_puzzle_from_base("dubdskfjsdjfSDFHSDUIFHSDFsdfsdf")
+# puzzle = Puzzle()
+# puzzle2 = Puzzle()
+# puzzle.generate_random_puzzle()
+# puzzle2.generate_puzzle_from_base("dubstepp")
