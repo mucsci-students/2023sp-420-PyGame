@@ -26,11 +26,12 @@ def main_menu_handler():
         case "/loadgame":
           load_save_game()
               
-        case "/start from key":
+        case "/startfromkey":
           keyStart()
 
         case "/help":
-          print(help)
+          print_help()
+          input()
             
         case "/exit":
           print_exit()
@@ -51,9 +52,9 @@ def load_save_game():
   print_load_game()
   answer = input()
   match answer:
-    case "/y":
+    case "y":
       start_game_with_key(puzzle_stats.LoadGame(file_name))
-    case "/n":
+    case "n":
       return
 
     case _: # if any other command not in the list is entered, then this output will be returned
@@ -67,10 +68,11 @@ def keyStart():
     print_base_input()
     key = input().lower()
     puzzle = puzzle.generate_puzzle_from_base(key)
-    if (puzzle == 0):
+    if (puzzle != 0):
       loop = 0
+      start_game_with_key(key)
     else:
-      response = input("Invalid word. Exit? y/n").lower()
+      response = input("Invalid word. Exit? y/n\n").lower()
       if(response == "y"):
         main_menu_handler()
 
@@ -105,12 +107,12 @@ def activeGame():
   if (userInput == ""):
     return True
   elif (userInput[0] != "/"):
-    print_guess_outcome(puzzle_stats.get_check_guess(userInput, puzzle))
-    return True
+    return print_guess_outcome(puzzle_stats.get_check_guess(userInput, puzzle))
   else:
     match userInput:
       case "/help":
         print_help()
+        input()
         return True
 
       case "/newgame":
@@ -125,6 +127,13 @@ def activeGame():
         file_name = input().lower()
         save_current_game(file_name)
         return True
+      
+      case "/showall":
+        print_all_guesses(puzzle_stats)
+        return True
+      
+      case "/back":
+        return False
 
       case "/share":
         # myList = ["a","b","c","d","e","f","g"] #temporary example of a list
@@ -165,10 +174,10 @@ def save_current_game(filename):
 
 def exit_game(answer):
   match answer:
-    case "/y": 
+    case "y": 
       sys.exit()
 
-    case "/n":
+    case "n":
       return True
 
     case _:

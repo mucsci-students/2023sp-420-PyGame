@@ -36,7 +36,7 @@ def print_current_puzzle(stats):
         Required Letter: {stats.shuffled_puzzle[3]}
         Optional Letters: {stats.shuffled_puzzle[0] + ' - ' + stats.shuffled_puzzle[1] + ' - ' + stats.shuffled_puzzle[2] + ' - ' + stats.shuffled_puzzle[4] + ' - ' + stats.shuffled_puzzle[5] + ' - ' + stats.shuffled_puzzle[6]}
 
-        Commands: /Help /Shuffle /Share /SaveGame /Exit
+        Commands: /Help /Shuffle /ShowAll /Back /Share /SaveGame /Exit
         Guess?
         '''
     print(currentProgress)
@@ -57,7 +57,7 @@ def print_main_menu():
     mainMenu = f'''
 /NewGame
 /LoadGame
-/Start From Key
+/StartFromKey
 /Help
 /Exit
 '''
@@ -66,24 +66,24 @@ def print_main_menu():
 def print_exit():
     exit = f'''
 Confirm exit?
-/y
-/n
+y
+n
 '''
     print(exit)
 
 def print_game_save():
     gameSave = f'''
 Save Game?
-/y
-/n
+y
+n
 '''
     print(gameSave)
 
 def print_load_game():
     load = f'''
 Load Game?
-/y
-/n
+y
+n
 '''
     print(load)
 
@@ -101,10 +101,13 @@ def print_base_input():
 def print_guess_outcome(outcome):
     if(outcome == 69420):
         print_game_over()
+        return False
     elif(outcome != 0):
         print("\n\tWrong!")
+        return True
     else:
         print("\n\tCorrect!")
+        return True
 
 def print_help():
     help = f'''
@@ -125,10 +128,12 @@ Feedback/File Bug Report: <custom url>
 Commands
 /NewGame         /Loads a new game
 /LoadGame        /Loads a saved game
-/Start from key  /Enter a 7 letter key to start a new puzzle
+/StartFromKey    /Enter a 7 letter key to start a new puzzle
 /Share           /copies the key to your clipboard
 /Help            /get instructions and commands 
 /Exit            /exits the game
+
+Enter any key to continue...
 ''' 
     print(help)
 
@@ -153,3 +158,15 @@ def print_game_over():
 def get_load_options():
         options = os.listdir('Saves')
         return options
+
+def print_all_guesses(stats):
+    print("\t SHOW ALL GUESSES")
+    prettyGuesses = '\t\t'
+    counter = 0
+    for guess in stats.guesses:
+        counter += 1
+        prettyGuesses = prettyGuesses + guess + ", "
+        if(counter == 4):
+            prettyGuesses = prettyGuesses + "\n\t\t"
+            counter = 0
+    print(prettyGuesses)
