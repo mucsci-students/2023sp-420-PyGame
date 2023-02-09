@@ -1,18 +1,6 @@
 # 2023sp-420-PyGame
 
 Spelling Bee by PyGame
-          \             /
-           \   o ^ o   /            
-            \ (     ) /
- ____________(%%%%%%%)____________      
-(     /   /  )%%%%%%%(  \   \     )          
-(___/___/__/           \__\___\___)
-   (     /  /(%%%%%%%)\  \     )
-    (__/___/ (%%%%%%%) \___\__)        
-            /(       )\ 
-          /   (%%%%%)   \ 
-               (%%%) 
-                 !
 
 Summary:
 A simple game where a player is to create english words using a number of given characters, but the word has to use the required character
