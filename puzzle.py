@@ -44,4 +44,3 @@ class Puzzle:
             self.total_points = total_points
             self.current_word_list = get_word_list(pangram)
 
-
