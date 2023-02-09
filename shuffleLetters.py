@@ -2,9 +2,6 @@
 import random           # Used for shuffling letters
 import sys              # Used to exit function (invalid puzzleKey length)
 
-puzzleKey = "twinkle"   # Global variable test
-
-
 
 """
 ShuffleKey function
@@ -22,21 +19,12 @@ Rundown:
     - Take the required letter out of the word, shuffle the other 6 letters
     - Insert the required letter back into the middle (index = 3)
     - Return the shuffled word
-
 """
+
 def ShuffleKey(curr):
-
-    # (Is this global variable here correct?)
-    global puzzleKey
-
     curr = curr.lower()
-
     LengthPrereq(curr)
-
-    if curr != puzzleKey:
-        requiredKey = curr[3]
-    else:
-        requiredKey = puzzleKey[0]
+    requiredKey = curr[0]
 
     result = curr.replace(requiredKey, '')
     result = random.sample(result, len(result))
@@ -60,11 +48,7 @@ Rundown:
 def LengthPrereq(word):
     if len(word) < 7 or len(word) > 7:
         print("puzzleKey is " + str(len(word)) + " letters long..")
-        sys.exit()
-
-
-
-
+        return 1
 
 
 """

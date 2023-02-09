@@ -36,7 +36,7 @@ class Puzzle:
         word = get_word_info_from_key(key.lower())
         if len(word) == 0:
             print("Word doesn't exist")
-            return None
+            return 1
         else:
             pangram, letter, total_points = word[0]
             self.pangram = pangram
