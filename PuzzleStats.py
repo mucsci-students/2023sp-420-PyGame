@@ -118,12 +118,13 @@ class PuzzleStats():
         wordGuessed = self.InGuesses(guess) # Bool
         if wordGuessed:
             return wordGuessed 
-
-        if self.check_progress():
-            return 69420
            
         ## Returns 0 if valid; anything else if unvalid
-        return self.CheckValidity(guess, puzzleInfo.current_word_list)
+        outcome = self.CheckValidity(guess, puzzleInfo.current_word_list)
+        if self.check_progress():
+            return 69420
+        else:
+            return outcome
     
     """ 
     # return_Rank takes in current_Points, and max_Points as parameters, then returns the correspending integer
