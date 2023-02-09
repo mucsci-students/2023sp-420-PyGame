@@ -7,7 +7,8 @@ import os
 import json
 
 class PuzzleStats():
-    def __inti__(self):
+
+    def __init__(self, max_score, shuffled_puzzle):
         ## Total amount of points recieved from valid guesses
         self.score = 0
         ## Holds the index of the rank the player is at
@@ -15,7 +16,9 @@ class PuzzleStats():
         ## All valid word guesses that has given points
         self.guesses = []
         ## Total amount of points in the puzzle
-        self.maxScore = 0
+        self.maxScore = max_score
+        ## Current puzzle layout
+        self.shuffled_puzzle = shuffled_puzzle 
 
     ## ----------------------------------------------------------
     ## Start of Class functions
@@ -36,8 +39,8 @@ class PuzzleStats():
         guess = guess.lower()
         if guess in wordList: 
             self.guesses.append(guess)
-            playerScore = playerScore + wordList[guess]
-            self.rankIndex()
+            self.score = self.score + wordList[guess]
+            self.RankIndex()
             return 0 
         ## Word not valid
         return 1
@@ -105,6 +108,7 @@ class PuzzleStats():
         100: Word needs to be 4 or more letters in length
         200: Word needs to contain the required letter
         300: Word can only contain letters from pangram
+        69420: Player guessed all words. Game over
     """
     def get_check_guess(self, guess, puzzleInfo):
         wordReq = self.CheckWordReq(guess, puzzleInfo.pangram)
@@ -115,6 +119,9 @@ class PuzzleStats():
         if wordGuessed:
             return wordGuessed 
 
+        if self.check_progress():
+            return 69420
+           
         ## Returns 0 if valid; anything else if unvalid
         return self.CheckValidity(guess, puzzleInfo.current_word_list)
     
@@ -145,12 +152,16 @@ class PuzzleStats():
             self.rank = 6 #Great
         elif difference < 1:
             self.rank = 7 #Amazing
-            
-        self.rank = 8 #Genius
+        else:
+            self.rank = 8 #Genius
 
     def get_rank(self):
         rankSteps = ['Beginner','Novice','Okay','Good','Solid','Nice','Great','Amazing','Genius']
         return str(rankSteps[self.rank])
+
+    def check_progress(self):
+        return (self.score == self.maxScore)
+            
 
     """ 
     Save Game Takes Five Parameters 
@@ -201,7 +212,7 @@ class PuzzleStats():
         Case 1: FileName is new; Returns True
         Case 2: FileName is in use; Return Flase 
     """
-    def get_check_file(fileName):
+    def get_check_file(self, fileName):
         check = bool
         saveGames = os.listdir('Saves')
         check = (fileName + '.json') not in saveGames
