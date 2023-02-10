@@ -1,6 +1,8 @@
 ### Main Menu CLI
 
 import sys
+import os
+import time
 
 from PuzzleStats import PuzzleStats
 from puzzle import Puzzle
@@ -17,6 +19,7 @@ def main_menu_handler():
     print_start_screen()
     
     while (True):
+      os.system('cls')
       print_main_menu()
       userInput = (input("Select Your Option\n")).lower() # User should select from the options listed
       match userInput:
@@ -62,19 +65,16 @@ def load_save_game():
 
 # when user wants to load a game with a key
 def keyStart():
-  global puzzle
-  loop = 1
-  while(loop == 1):
+  check_value = 1
+  while(check_value == 1):
     print_base_input()
     key = input().lower()
-    puzzle = puzzle.generate_puzzle_from_base(key)
-    if (puzzle != 0):
-      loop = 0
-      start_game_with_key(key)
-    else:
-      response = input("Invalid word. Exit? y/n\n").lower()
-      if(response == "y"):
-        main_menu_handler()
+    check_value = start_game_with_key(key)
+    
+    # Turn into custom error call to Output.py with key
+    response = input("Invalid word, not a valid pangram. Return to main menu? Y/N \n").lower()
+    if(response == "y"):
+      main_menu_handler()
 
 
 # function to save game
@@ -101,6 +101,8 @@ def activeGameLoop():
 def activeGame():
   global puzzle
   global puzzle_stats
+  time.sleep(.25)
+  os.system('cls')
   print_current_puzzle(puzzle_stats)
   userInput = input("Enter your guess. \n").lower() #asks user for input to match
   
@@ -130,6 +132,7 @@ def activeGame():
       
       case "/showall":
         print_all_guesses(puzzle_stats)
+        input()
         return True
       
       case "/back":
@@ -162,7 +165,10 @@ def start_game_with_key(key):
   global puzzle
   global puzzle_stats
   puzzle = Puzzle()
-  puzzle.generate_puzzle_from_base(key)
+  if(puzzle.generate_puzzle_from_base(key) == 1):
+    print(puzzle.generate_puzzle_from_base(key))
+    return 1
+
   puzzle_stats.shuffled_puzzle = ShuffleKey(puzzle.pangram)
   puzzle_stats.maxScore = puzzle.total_points
   activeGameLoop()
