@@ -33,14 +33,19 @@ class Puzzle:
             panagram, required_letter, total_points, and current_word_list
     """
     def generate_puzzle_from_base(self, key):
-        word = get_word_info_from_key(key.lower())
-        if len(word) == 0:
-            print("Word doesn't exist")
+        check_value = self.check_valid_word(key)
+        print("Check valid word is " + str(check_value))
+        if(check_value == 1):
             return 1
         else:
-            pangram, letter, total_points = word[0]
+            pangram, letter, total_points = check_value[0]
             self.pangram = pangram
             self.required_letter = letter
             self.total_points = total_points
             self.current_word_list = get_word_list(pangram)
 
+    def check_valid_word(self, key):
+        word = get_word_info_from_key(key.lower())
+        if len(word) == 0:
+            return 1
+        return word

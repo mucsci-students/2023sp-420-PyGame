@@ -24,10 +24,9 @@ Parameters: 2
     requiredLetter; str
     Remaining Letters; list
 """
+
 def print_current_puzzle(stats):
     prettyGuesses = get_pretty_guesses(stats)
-        
-        
     currentProgress = f'''
         Rank: {stats.get_rank()}   
         Score: {stats.score} / {stats.maxScore} 
@@ -170,3 +169,4 @@ def print_all_guesses(stats):
             prettyGuesses = prettyGuesses + "\n\t\t"
             counter = 0
     print(prettyGuesses)
+    print("\t Enter any key to continue...")
