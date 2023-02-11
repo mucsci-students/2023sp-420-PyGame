@@ -22,10 +22,11 @@ def main_menu_handler():
       os.system('cls')
       print_main_menu()
       userInput = (input("Select Your Option\n")).lower() # User should select from the options listed
+      cls()
       match userInput:
         case "/newgame":
           start_new_game()
-        
+
         case "/loadgame":
           load_save_game()
               
@@ -39,6 +40,7 @@ def main_menu_handler():
         case "/exit":
           print_exit()
           answer = input().lower()
+          cls()
           exit_game(answer)
 
         case _:
@@ -53,8 +55,10 @@ def load_save_game():
   global puzzle_stats
   print_load_options()
   file_name = input()
+  cls()
   print_load_game()
   answer = input()
+  cls()
   match answer:
     case "y":
       start_game_with_key(puzzle_stats.LoadGame(file_name))
@@ -70,6 +74,7 @@ def keyStart():
   while(check_value == 1):
     print_base_input()
     key = input().lower()
+    cls()
     check_value = start_game_with_key(key)
     
     # Turn into custom error call to Output.py with key
@@ -86,6 +91,7 @@ def saveGamePrompt():
     while(True):
       print('Enter title to save game as:')
       userInput = input().lower() #asks user for an input
+      cls()
       puzzle_stats.get_save_game(puzzle, userInput)
       print(f'{userInput} has been saved.')
       return
@@ -106,7 +112,6 @@ def activeGame():
   os.system('cls')
   print_current_puzzle(puzzle_stats)
   userInput = input("Enter your guess. \n").lower() #asks user for input to match
-  
   if (userInput == ""):
     return True
   elif (userInput[0] != "/"):
@@ -128,6 +133,7 @@ def activeGame():
       case "/savegame":
         print(f'Enter filename: ')
         file_name = input().lower()
+        cls()
         save_current_game(file_name)
         return True
       
@@ -141,6 +147,7 @@ def activeGame():
         if(input().lower() == "y"):
           print(f'Enter filename: ')
           file_name = input().lower()
+          cls()
           save_current_game(file_name)
         return False
 
@@ -152,6 +159,7 @@ def activeGame():
       case "/exit":
         print_exit()
         answer = input().lower()
+        cls()
         return exit_game(answer)
 
       case _:
@@ -198,4 +206,8 @@ def exit_game(answer):
         #should proceed with exiting. if !running game
       return True
 
+# Function to clear the console after a user input is taken in 
+def cls():
+  os.system('cls' if os.name=='nt' else 'clear') # now, to clear the screen
+  
 main_menu_handler()

@@ -29,13 +29,33 @@ Parameters: 2
 """
 def print_current_puzzle(stats):
     prettyGuesses = get_pretty_guesses(stats.guesses)
+    # variables to store each letter 
+    req = stats.shuffled_puzzle[3]
+    fir = stats.shuffled_puzzle[0]
+    sec = stats.shuffled_puzzle[1]
+    thi = stats.shuffled_puzzle[2]
+    fou = stats.shuffled_puzzle[4]
+    fif = stats.shuffled_puzzle[5]
+    six = stats.shuffled_puzzle[6]
+
     currentProgress = f'''
         Rank: {stats.get_rank()}   
         Score: {stats.score} / {stats.maxScore} 
         Words Guessed: {prettyGuesses}
         
-        Required Letter: {stats.shuffled_puzzle[3]}
-        Optional Letters: {stats.shuffled_puzzle[0] + ' - ' + stats.shuffled_puzzle[1] + ' - ' + stats.shuffled_puzzle[2] + ' - ' + stats.shuffled_puzzle[4] + ' - ' + stats.shuffled_puzzle[5] + ' - ' + stats.shuffled_puzzle[6]}
+                 ,---,
+                /     \\
+          ,---<    {fir}   >---.
+         /      \     /     \\
+        '   {sec}   '    '   {thi}  '
+         \     /      \     /
+           >--<    {req}   >--<
+         /     \      /     \\
+        '   {fou}   '    '   {fif}  '
+         \     /      \     /
+          `--<     {six}   >--'
+               \     /
+                '---'
 
         Commands: /Help /Shuffle /ShowAll /Back /Share /SaveGame /Exit
         Guess?
@@ -136,7 +156,8 @@ def print_help():
 Instructions
 
 Create words using letters from the hive and try to get the maximum score. 
-Words must have at least four letters and include the center letter in brackets. 
+Words must have at least four letters and include the center letter in brackets.
+All optional letters will be surrounding the required center letter.   
 Letters can be used more than once. 
 Words with hyphens, proper nouns, vulgarities, and especially obscure words are not in the word list. 
 Score points to increase your rating. 
