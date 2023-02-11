@@ -1,6 +1,5 @@
 
 import random           # Used for shuffling letters
-import sys              # Used to exit function (invalid puzzleKey length)
 
 
 """
