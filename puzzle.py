@@ -34,7 +34,6 @@ class Puzzle:
     """
     def generate_puzzle_from_base(self, key):
         check_value = self.check_valid_word(key)
-        print("Check valid word is " + str(check_value))
         if(check_value == 1):
             return 1
         else:

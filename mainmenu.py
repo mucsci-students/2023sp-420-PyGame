@@ -41,8 +41,9 @@ def main_menu_handler():
           answer = input().lower()
           exit_game(answer)
 
-        case "_":
+        case _:
           print('Command Not Recognized')
+          time.sleep(.5)
 
 
 ###-----CLEAN UP FOR MAIN MENU------
@@ -101,7 +102,7 @@ def activeGameLoop():
 def activeGame():
   global puzzle
   global puzzle_stats
-  time.sleep(.25)
+  time.sleep(.5)
   os.system('cls')
   print_current_puzzle(puzzle_stats)
   userInput = input("Enter your guess. \n").lower() #asks user for input to match
@@ -136,6 +137,11 @@ def activeGame():
         return True
       
       case "/back":
+        print_game_save()
+        if(input().lower() == "y"):
+          print(f'Enter filename: ')
+          file_name = input().lower()
+          save_current_game(file_name)
         return False
 
       case "/share":
@@ -166,11 +172,12 @@ def start_game_with_key(key):
   global puzzle_stats
   puzzle = Puzzle()
   if(puzzle.generate_puzzle_from_base(key) == 1):
-    print(puzzle.generate_puzzle_from_base(key))
     return 1
 
-  puzzle_stats.shuffled_puzzle = ShuffleKey(puzzle.pangram)
-  puzzle_stats.maxScore = puzzle.total_points
+  shuffled_puzzle = ShuffleKey(puzzle.pangram)
+  puzzle_stats = PuzzleStats(puzzle.total_points, shuffled_puzzle)
+  # puzzle_stats.shuffled_puzzle = ShuffleKey(puzzle.pangram)
+  # puzzle_stats.maxScore = puzzle.total_points
   activeGameLoop()
 
 def save_current_game(filename):
