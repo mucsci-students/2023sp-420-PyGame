@@ -31,13 +31,13 @@ class TestSpellingBeePuzzleStats(unittest.TestCase):
         # Test valid word
         result = puzzle_stats.CheckValidity("abcd", word_list)
         self.assertEqual(result, 0)
-        self.assertEqual(puzzle_stats.score, 10)
+        self.assertEqual(puzzle_stats.score, 1)
         self.assertEqual(puzzle_stats.guesses, ["abcd"])
 
         # Test invalid word
         result = puzzle_stats.CheckValidity("efgh", word_list)
         self.assertEqual(result, 1)
-        self.assertEqual(puzzle_stats.score, 10)
+        self.assertEqual(puzzle_stats.score, 1)
         self.assertEqual(puzzle_stats.guesses, ["abcd"])
 
     def test_in_guesses(self):

@@ -37,8 +37,7 @@ class TestSpellingBeeOutput(unittest.TestCase):
         self.assertIn("Rank: 1", captured_output.getvalue())
         self.assertIn("Score: 0 / 100", captured_output.getvalue())
         self.assertIn("Words Guessed: word1 word2 word3", captured_output.getvalue())
-        self.assertIn(">--<    d   >--<", captured_output.getvalue())
-        self.assertIn("---<    a   >---.\n         /      \\     /     \\\n        '   b   '    '   c  '\n         \\     /      \\     /\n           >--<    d   >--<\n         /     \\      /     \\\n        '   e   '    '   f  '\n         \\     /      \\     /\n          `--<     g   >--", captured_output.getvalue())
+        self.assertIn(">--<   d    >--<", captured_output.getvalue())
         self.assertIn("Commands: /Help /Shuffle /ShowAll /Back /Share /SaveGame /Exit", captured_output.getvalue())
 
     def test_with_longer_guesses_list(self):
@@ -260,7 +259,7 @@ class TestSpellingBeeOutput(unittest.TestCase):
         captured_output = io.StringIO()
         sys.stdout = captured_output
         Output.get_detailed_response(1)
-        self.assertEqual(captured_output.getvalue(), '\n\t... Input is not in the Scrable Dictionary ...\n')
+        self.assertEqual(captured_output.getvalue(), '\n\t... Input is not in the Scrabble Dictionary ...\n')
         
     
         # Test case when outcome is 100

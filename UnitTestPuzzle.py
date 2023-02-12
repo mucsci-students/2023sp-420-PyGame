@@ -1,62 +1,49 @@
 import unittest
+from Database.database import get_word_info_from_pangram, get_word_info_from_load, get_random_word_info
 from puzzle import Puzzle
-from Database.database import get_word_info, get_word_info_from_key, get_random_word, get_word_list
-import io
-import sys
-import os
 
-#UNIT TEST FOR THE PUZZLE.PY CLASS
-class TestSpellingBeePuzzle(unittest.TestCase):
+class TestPuzzle(unittest.TestCase):
 
-    #Unit test for init
-    def test_init(self):
-        puzzle1 = Puzzle()
+    def setUp(self):
+        self.puzzle = Puzzle()
 
-        # check if the instance variables have been properly initialized
-        self.assertEqual(puzzle1.pangram, "")
-        self.assertEqual(puzzle1.required_letter, "")
-        self.assertEqual(puzzle1.total_points, 0)
-        self.assertEqual(puzzle1.current_word_list, {})
-
-    #unit test for generate_random_puzzle
     def test_generate_random_puzzle(self):
-        puzzle = Puzzle()
-        puzzle.generate_random_puzzle()
+        self.puzzle.generate_random_puzzle()
+        self.assertIsInstance(self.puzzle.pangram, str)
+        self.assertIsInstance(self.puzzle.required_letter, str)
+        self.assertIsInstance(self.puzzle.total_points, int)
+        self.assertIsInstance(self.puzzle.current_word_list, list)
 
-        # Check that pangram is set
-        self.assertIsNotNone(puzzle.pangram)
-        self.assertIsInstance(puzzle.pangram, str)
-        
-        # Check that required_letter is set
-        self.assertIsNotNone(puzzle.required_letter)
-        self.assertIsInstance(puzzle.required_letter, str)
-        
-        # Check that total_points is set
-        self.assertIsNotNone(puzzle.total_points)
-        self.assertIsInstance(puzzle.total_points, int)
-        
-        # Check that current_word_list is set
-        self.assertIsNotNone(puzzle.current_word_list)
-        self.assertIsInstance(puzzle.current_word_list, dict)
+    def test_generate_puzzle_from_load(self):
+        pangram = "abcdefg"
+        letter = "a"
+        self.puzzle.generate_puzzle_from_load(pangram, letter)
+        self.assertEqual(self.puzzle.pangram, pangram)
+        self.assertEqual(self.puzzle.required_letter, letter)
+        self.assertIsInstance(self.puzzle.total_points, int)
+        self.assertIsInstance(self.puzzle.current_word_list, list)
 
-    #Unit test for generate_puzzle_from_base
-    def test_generate_puzzle_from_base(self):
-        puzzle = Puzzle()
+    def test_generate_puzzle_from_base_valid_key(self):
+        key = "abcdefg"
+        self.puzzle.generate_puzzle_from_base(key)
+        self.assertIsInstance(self.puzzle.required_letter, str)
+        self.assertIsInstance(self.puzzle.total_points, int)
+        self.assertIsInstance(self.puzzle.current_word_list, list)
 
-        # Test valid key
-        key = "valid_key"
-        puzzle.check_valid_word = lambda x: (("pangram", "letter", 100),)
-        puzzle.generate_puzzle_from_base(key)
-        self.assertEqual(puzzle.pangram, "pangram")
-        self.assertEqual(puzzle.required_letter, "letter")
-        self.assertEqual(puzzle.total_points, 100)
-        self.assertEqual(puzzle.current_word_list, get_word_list("pangram"))
+    def test_generate_puzzle_from_base_invalid_key(self):
+        key = "abcde"
+        self.assertEqual(self.puzzle.generate_puzzle_from_base(key), 1)
 
-        # Test invalid key
-        key = "invalid_key"
-        puzzle.check_valid_word = lambda x: 1
-        self.assertEqual(puzzle.generate_puzzle_from_base(key), 1)
+    def test_check_valid_word_valid_key(self):
+        key = "abcdefg"
+        result = self.puzzle.check_valid_word(key)
+        self.assertIsInstance(result, list)
+        self.assertEqual(len(result), 4)
+
+    def test_check_valid_word_invalid_key(self):
+        key = "abcde"
+        self.assertEqual(self.puzzle.check_valid_word(key), 1)
+
     
-
 if __name__ == '__main__':
     unittest.main()
