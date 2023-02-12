@@ -1,6 +1,6 @@
 import os
 
-## prints the start up 'Loading' screen
+## prints the start up "Loading" screen
 def print_start_screen():
     startingScreen = f"""
           \             /
@@ -38,28 +38,28 @@ def print_current_puzzle(stats):
     fif = stats.shuffled_puzzle[5]
     six = stats.shuffled_puzzle[6]
 
-    currentProgress = f'''
+    currentProgress = f"""
         Rank: {stats.get_rank()}   
         Score: {stats.score} / {stats.maxScore} 
         Words Guessed: {prettyGuesses}
         
-                 ,---,
-                /     \\
-          ,---<    {fir}   >---.
-         /      \     /     \\
-        '   {sec}   '    '   {thi}  '
-         \     /      \     /
-           >--<    {req}   >--<
+                ,---,
+               /     \\
+          ,---<   {fir}    >---.
          /     \      /     \\
-        '   {fou}   '    '   {fif}  '
+        "   {sec}   "    "   {thi}  "
          \     /      \     /
-          `--<     {six}   >--'
+           >--<   {req}    >--<
+         /     \      /     \\
+        "   {fou}   "    "   {fif}  "
+         \     /      \     /
+          `---<   {six}    >---'
                \     /
-                '---'
+                "---"
 
         Commands: /Help /Shuffle /ShowAll /Back /Share /SaveGame /Exit
-        Guess?
-        '''
+        
+        """
     print(currentProgress)
 
 """
@@ -71,7 +71,7 @@ One paramater:
 Returns a string of four last entered guesses
 """
 def get_pretty_guesses(guesses):
-    prettyGuesses = ''
+    prettyGuesses = ""
     counter = 0
     ## If the list length is longer than 3, string has last four entered words
     if len(guesses) > 3:
@@ -87,53 +87,53 @@ def get_pretty_guesses(guesses):
 
 ## prints the main start up menu
 def print_main_menu():
-    mainMenu = f'''
+    mainMenu = f"""
 /NewGame
 /LoadGame
 /StartFromKey
 /Help
 /Exit
-'''
+"""
     print(mainMenu)
 
 ## Promtps user if he wants to exit the game or not
 def print_exit():
-    exit = f'''
+    exit = f"""
 Confirm exit?
 y
 n
-'''
+"""
     print(exit)
 
 ## Promtps user if he wants to save the game or not
 def print_game_save():
-    gameSave = f'''
+    gameSave = f"""
 Save Game?
 y
 n
-'''
+"""
     print(gameSave)
 
 ## Promtps user if he wants to load the game or not
 def print_load_game():
-    load = f'''
+    load = f"""
 Load Game?
 y
 n
-'''
+"""
     print(load)
 
 ## prints screen shwoing all avaiable saves, prompting for input
 def print_load_options():
-    print('All Saved Games:')
+    print("All Saved Games:")
     for option in get_load_options():
-        print('-- ' + option.replace('.json',''))
-    print('\n(Type just the name in):')
-    print('\nSelect Game to load:')
+        print("-- " + option.replace(".json",""))
+    print("\n(Type just the name in):")
+    print("\nSelect Game to load:")
 
 ## prints string for when you select start puzzle from Base
 def print_base_input():
-    print('Enter a panagram with seven unique letters: ')
+    print("Enter a panagram with seven unique letters: ")
 
 ## prints outcome for players guesses to active puzzle
 def print_guess_outcome(outcome):
@@ -151,7 +151,7 @@ def print_guess_outcome(outcome):
 
 ## prints the generic help screen including game instructions
 def print_help():
-    help = f'''
+    help = f"""
 
 Instructions
 
@@ -176,7 +176,7 @@ Commands
 /Exit            /exits the game
 
 Enter any key to continue...
-''' 
+""" 
     print(help)
 
 ## prints the nice message when the puzzle is completed
@@ -203,7 +203,7 @@ def print_game_over():
 ## Layout: four coulmns and N amount of rows depending on the list size
 def print_all_guesses(stats):
     print("\t SHOW ALL GUESSES")
-    prettyGuesses = '\t\t'
+    prettyGuesses = "\t\t"
     counter = 0
     for guess in stats.guesses:
         counter += 1
@@ -216,10 +216,10 @@ def print_all_guesses(stats):
 
 ## Returns a list of all save files able to load (load options)
 def get_load_options():
-        options = os.listdir('Saves')
+        options = os.listdir("Saves")
         return options
 
-## prints a detatiled 'Invalid Guess' given a passed value from print_guess_outcome()
+## prints a detatiled "Invalid Guess" given a passed value from print_guess_outcome()
 """
     All Possible Outcome Values: 
         0: Word was valid & updated player stats *Checked in print_guess_outcome*
@@ -235,18 +235,18 @@ def get_detailed_response(outcome):
 
     ## Checks the bool value
     if type(outcome) == bool:
-        print('\n\t... Guessed word was already used ...')
+        print("\n\t... Guessed word was already used ...")
         return 
     
     ## Checks int values
     match outcome:
         case 1:
-            print('\n\t... Input is not in the Scrable Dictionary ...')
+            print("\n\t... Input is not in the Scrabble Dictionary ...")
         case 100:
-            print('\n\t... Input is shorter than four letters ...')
+            print("\n\t... Input is shorter than four letters ...")
         case 200:
-            print('\n\t... Input does not contain the required letter ...')
+            print("\n\t... Input does not contain the required letter ...")
         case 300:
-            print('\n\t... Input has non-given letters ...')
+            print("\n\t... Input has non-given letters ...")
 
     

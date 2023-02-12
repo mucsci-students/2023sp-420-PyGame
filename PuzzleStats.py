@@ -37,11 +37,12 @@ class PuzzleStats():
     def CheckValidity(self, guess, wordList):
         ## Checks if word is valid
         guess = guess.lower()
-        if guess in wordList: 
-            self.guesses.append(guess)
-            self.score = self.score + wordList[guess]
-            self.RankIndex()
-            return 0 
+        for word in wordList:
+            if guess in word:
+                self.guesses.append(guess)
+                self.score = self.score + self.get_word_points(guess)
+                self.RankIndex()
+                return 0 
         ## Word not valid
         return 1
 
@@ -77,13 +78,13 @@ class PuzzleStats():
         200: Word needs to contain the required letter
         300: Word can only contain letters from pangram
     """
-    def CheckWordReq(self, guess, keyWord):
+    def CheckWordReq(self, guess, letter, keyWord):
         ## Req 1: Length 4 or more
         if len(guess) < 4:
             return 100
 
         ## Req 2: Contains required letter
-        if keyWord[0] not in guess:
+        if letter not in guess:
             return 200
 
         ## Req 3: Contains only given letters
@@ -111,7 +112,7 @@ class PuzzleStats():
         69420: Player guessed all words. Game over
     """
     def get_check_guess(self, guess, puzzleInfo):
-        wordReq = self.CheckWordReq(guess, puzzleInfo.pangram)
+        wordReq = self.CheckWordReq(guess, puzzleInfo.required_letter, puzzleInfo.pangram)
         if wordReq != 0:
             return int(wordReq)
         
@@ -157,11 +158,24 @@ class PuzzleStats():
             self.rank = 8 #Genius
 
     def get_rank(self):
-        rankSteps = ['Beginner','Novice','Okay','Good','Solid','Nice','Great','Amazing','Genius']
+        rankSteps = ["Beginner","Novice","Okay","Good","Solid","Nice","Great","Amazing","Genius"]
         return str(rankSteps[self.rank])
 
     def check_progress(self):
         return (self.score == self.maxScore)
+
+    def get_word_points(self, word):
+        length = len(word)
+        # If length of word is 4, worth 1 point.
+        if length == 4:
+            points = 1
+        # If word is a pangram, worth length * 2
+        elif length == len(set(word)):
+            points = (length)*2
+        # Else word is worth its length
+        else:
+            points = length
+        return points
             
 
     """ 
@@ -172,7 +186,7 @@ class PuzzleStats():
         puzzleId; STR
         File Name; STR (.json not included)
 
-    Function saves the current puzzle state to a 'Saves' directory in a json format
+    Function saves the current puzzle state to a "Saves" directory in a json format
         Case 1: FileName is new; Function creates the new .json file
         Case 2: FileName is already created; Overwrite the .json file with the new data
 
@@ -187,14 +201,17 @@ class PuzzleStats():
     def get_save_game(self, puzzleInfo, fileName):
 
         ## Creates the local file path, plus includes the file extension  
-        saveFileName = 'Saves/' + fileName + '.json'
+        saveFileName = "Saves/" + fileName + ".json"
 
         ## Create json object
         saveStat = {
             "Score": self.score,
             "Rank": self.rank,
             "Guesses": self.guesses,
-            "GameId": puzzleInfo.pangram 
+            "Shuffle" : self.shuffled_puzzle,
+            "Letter" : puzzleInfo.required_letter,
+            "GameId": puzzleInfo.pangram,
+            "MaxPoints" : puzzleInfo.total_points
         }
         
         json_object = json.dumps(saveStat, indent=4)
@@ -215,8 +232,8 @@ class PuzzleStats():
     """
     def get_check_file(self, fileName):
         check = bool
-        saveGames = os.listdir('Saves')
-        check = (fileName + '.json') not in saveGames
+        saveGames = os.listdir("Saves")
+        check = (fileName + ".json") not in saveGames
         return check
 
     """
@@ -227,7 +244,7 @@ class PuzzleStats():
         Case 1: File Name is not valid; returns an error message
         Case 2: File Name is valid; populates Global Var with the players stats and load the puzzle
 
-    Returns a '1' if the file name couldn't be found
+    Returns a "1" if the file name couldn"t be found
     """
     def LoadGame(self, fileName):
         ## Check if name is valid
@@ -235,7 +252,7 @@ class PuzzleStats():
             return 1
             
         ## Loads the local file path for the saved game
-        saveFile = 'Saves/' + fileName + '.json'
+        saveFile = "Saves/" + fileName + ".json"
         
         ## reads the json file as a Dict
         with open(saveFile, "r") as openfile:
@@ -244,12 +261,13 @@ class PuzzleStats():
         self.score = saveInfo["Score"]
         self.rank = saveInfo["Rank"]
         self.guesses = saveInfo["Guesses"]
-        self.maxScore = 0
+        self.maxScore = saveInfo["MaxPoints"]
+        self.shuffled_puzzle = saveInfo["Shuffle"]
 
         openfile.close()
 
         ## Passes the DB Object Id to the Load Puzzle function
-        return saveInfo["GameId"]
+        return saveInfo["GameId"], saveInfo["Letter"]
 
 
 """ 
@@ -257,17 +275,17 @@ class PuzzleStats():
 ## Test Valid Guesses (get_check_guess)
 ## _____________________________________
 
-print('Word Reg Test')
+print("Word Reg Test")
 print(str(CheckGuess("dcba")))
 print(str(CheckGuess("abc")))
 print(str(CheckGuess("abcc")))
 print(str(CheckGuess("abde")))
 
-print('In Guesses Test')
+print("In Guesses Test")
 print(InGuesses("daha"))
 print(InGuesses("dahaa"))
 
-print('Check Validity')
+print("Check Validity")
 ## Test: Add valid word to player guess list & points
 print (CheckValidity("efgh"))
 print (str(playerGuesses))
@@ -294,7 +312,7 @@ print (playerScore)
 ## Test For the Save Game Funciton
 ## __________________________________________________________________________________________
 
-SaveGame(100, 1, ['a','b','c','d','e'], 'DBObjectId', 'test')
+SaveGame(100, 1, ["a","b","c","d","e"], "DBObjectId", "test")
 """
 
 """
@@ -302,8 +320,8 @@ SaveGame(100, 1, ['a','b','c','d','e'], 'DBObjectId', 'test')
 ## Testing for the Check File Name Function
 ## __________________________________________________________________________________________
 
-print(CheckFileName('test'))
-print(CheckFileName('te'))
+print(CheckFileName("test"))
+print(CheckFileName("te"))
 """
 
 """ 
@@ -311,11 +329,11 @@ print(CheckFileName('te'))
 ## Testin for the Load Game Function
 ## __________________________________________________________________________________________
 
-testFileName = 'test'
+testFileName = "test"
 LoadGame(testFileName)
 ## Print Player Stats (Global Var) if file name is valid
 if not CheckFileName(testFileName):
-    print('Player Score is: ' + str(playerScore))
-    print('Player Rank is: ' + str(playerRank))
-    print('Players Guesses are: ' + str(playerGuesses))
+    print("Player Score is: " + str(playerScore))
+    print("Player Rank is: " + str(playerRank))
+    print("Players Guesses are: " + str(playerGuesses))
  """

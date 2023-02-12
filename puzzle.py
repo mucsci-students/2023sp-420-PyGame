@@ -2,13 +2,13 @@
     Author: Robert 2/7/23
 """
 
-from Database.database import get_word_info, get_word_info_from_key, get_random_word, get_word_list
+from Database.database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
 
 class Puzzle:
 
     def __init__(self):
         self.pangram = ""
-        self.required_letter = ''
+        self.required_letter = ""
         self.total_points = 0
         self.current_word_list = {}
 
@@ -18,12 +18,18 @@ class Puzzle:
             panagram, required_letter, total_points, and current_word_list
     """
     def generate_random_puzzle(self):
-        random_puzzle = get_word_info()
-        current_puzzle = get_random_word(random_puzzle)
-        self.pangram = current_puzzle[0]
-        self.required_letter = current_puzzle[1]
-        self.total_points = current_puzzle[2]
-        self.current_word_list = get_word_list(current_puzzle[0])
+        random_puzzle = get_random_word_info()
+        self.pangram = random_puzzle[0]
+        self.required_letter = random_puzzle[1]
+        self.total_points = random_puzzle[2]
+        self.current_word_list = random_puzzle[3]
+
+    def generate_puzzle_from_load(self, pangram, letter):
+        word = get_word_info_from_load(pangram, letter)
+        self.pangram = word[0]
+        self.required_letter = word[1]
+        self.total_points = word[2]
+        self.current_word_list = word[3]
 
     """ 
         Author: Robert 2/7/23
@@ -37,14 +43,17 @@ class Puzzle:
         if(check_value == 1):
             return 1
         else:
-            pangram, letter, total_points = check_value[0]
-            self.pangram = pangram
-            self.required_letter = letter
-            self.total_points = total_points
-            self.current_word_list = get_word_list(pangram)
+            self.pangram = check_value[0]
+            self.required_letter = check_value[1]
+            self.total_points = check_value[2]
+            self.current_word_list = check_value[3]
 
     def check_valid_word(self, key):
-        word = get_word_info_from_key(key.lower())
+        key = key.lower()
+        unique_char = ''.join(set(key))
+        if len(unique_char) != 7:
+            return 1
+        word = get_word_info_from_pangram(unique_char)
         if len(word) == 0:
             return 1
         return word
