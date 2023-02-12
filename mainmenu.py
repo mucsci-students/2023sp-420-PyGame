@@ -17,9 +17,8 @@ puzzle_stats = PuzzleStats(-1,"")
 
 def main_menu_handler():
     print_start_screen()
-    
+    time.sleep(.5)
     while (True):
-      os.system('cls')
       print_main_menu()
       userInput = (input("Select Your Option\n")).lower() # User should select from the options listed
       cls()
@@ -44,7 +43,7 @@ def main_menu_handler():
           exit_game(answer)
 
         case _:
-          print('Command Not Recognized')
+          print("Command Not Recognized")
           time.sleep(.5)
 
 
@@ -61,12 +60,12 @@ def load_save_game():
   cls()
   match answer:
     case "y":
-      start_game_with_key(puzzle_stats.LoadGame(file_name))
+      start_game_with_key_from_load(puzzle_stats.LoadGame(file_name))
     case "n":
       return
 
     case _: # if any other command not in the list is entered, then this output will be returned
-      print('Command Not Recognized')
+      print("Command Not Recognized")
 
 # when user wants to load a game with a key
 def keyStart():
@@ -89,11 +88,11 @@ def saveGamePrompt():
     global puzzle
 
     while(True):
-      print('Enter title to save game as:')
+      print("Enter title to save game as:")
       userInput = input().lower() #asks user for an input
       cls()
       puzzle_stats.get_save_game(puzzle, userInput)
-      print(f'{userInput} has been saved.')
+      print(f"{userInput} has been saved.")
       return
 
 ###------------ACTIVE GAME SCREEN---------------
@@ -109,9 +108,8 @@ def activeGame():
   global puzzle
   global puzzle_stats
   time.sleep(.5)
-  os.system('cls')
   print_current_puzzle(puzzle_stats)
-  userInput = input("Enter your guess. \n").lower() #asks user for input to match
+  userInput = input("Enter your guess. ").lower() #asks user for input to match
   if (userInput == ""):
     return True
   elif (userInput[0] != "/"):
@@ -127,11 +125,11 @@ def activeGame():
         start_new_game()
 
       case "/shuffle":
-        puzzle_stats.shuffled_puzzle = ShuffleKey(puzzle.pangram)
+        puzzle_stats.shuffled_puzzle = ShuffleKey(puzzle.pangram, puzzle.required_letter)
         return True
 
       case "/savegame":
-        print(f'Enter filename: ')
+        print(f"Enter filename: ")
         file_name = input().lower()
         cls()
         save_current_game(file_name)
@@ -145,7 +143,7 @@ def activeGame():
       case "/back":
         print_game_save()
         if(input().lower() == "y"):
-          print(f'Enter filename: ')
+          print(f"Enter filename: ")
           file_name = input().lower()
           cls()
           save_current_game(file_name)
@@ -153,7 +151,7 @@ def activeGame():
 
       case "/share":
         # myList = ["a","b","c","d","e","f","g"] #temporary example of a list
-        print(f'Coming Soon.')
+        print(f"Coming Soon.")
         return True
 
       case "/exit":
@@ -163,7 +161,7 @@ def activeGame():
         return exit_game(answer)
 
       case _:
-        print('Command not recognized')
+        print("Command not recognized")
         return True
 
 def start_new_game():
@@ -171,7 +169,7 @@ def start_new_game():
   global puzzle_stats
   puzzle = Puzzle()
   puzzle.generate_random_puzzle()
-  shuffled_puzzle = ShuffleKey(puzzle.pangram)
+  shuffled_puzzle = ShuffleKey(puzzle.pangram, puzzle.required_letter)
   puzzle_stats = PuzzleStats(puzzle.total_points, shuffled_puzzle)
   activeGameLoop()
 
@@ -182,10 +180,20 @@ def start_game_with_key(key):
   if(puzzle.generate_puzzle_from_base(key) == 1):
     return 1
 
-  shuffled_puzzle = ShuffleKey(puzzle.pangram)
+  shuffled_puzzle = ShuffleKey(puzzle.pangram, puzzle.required_letter)
   puzzle_stats = PuzzleStats(puzzle.total_points, shuffled_puzzle)
-  # puzzle_stats.shuffled_puzzle = ShuffleKey(puzzle.pangram)
+  # puzzle_stats.shuffled_puzzle = ShuffleKey(puzzle.pangram, puzzle.required_letter)
   # puzzle_stats.maxScore = puzzle.total_points
+  activeGameLoop()
+
+def start_game_with_key_from_load(save_info):
+  global puzzle
+  global puzzle_stats
+  puzzle = Puzzle()
+  if(puzzle.generate_puzzle_from_load(save_info[0], save_info[1]) == 1):
+    return 1
+
+  ShuffleKey(puzzle.pangram, puzzle.required_letter)
   activeGameLoop()
 
 def save_current_game(filename):
@@ -202,12 +210,12 @@ def exit_game(answer):
       return True
 
     case _:
-      print('Command not recognized')
+      print("Command not recognized")
         #should proceed with exiting. if !running game
       return True
 
 # Function to clear the console after a user input is taken in 
 def cls():
-  os.system('cls' if os.name=='nt' else 'clear') # now, to clear the screen
+  os.system("cls" if os.name=="nt" else "clear") # now, to clear the screen
   
 main_menu_handler()

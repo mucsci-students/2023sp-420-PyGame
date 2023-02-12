@@ -4,7 +4,7 @@ import random           # Used for shuffling letters
 
 """
 ShuffleKey function
-    curr; STR
+    current_puzzle; STR
 
 Function shuffles the letters in the current word when the shuffle command
 is entered.
@@ -20,19 +20,19 @@ Rundown:
     - Return the shuffled word
 """
 
-def ShuffleKey(curr):
-    curr = curr.lower()
-    LengthPrereq(curr)
-    requiredKey = curr[0]
+def ShuffleKey(current_puzzle, required_letter):
+    current_puzzle = current_puzzle.lower()
+    uniqueSet = list(set(current_puzzle))
+    uniqueSet = "".join(uniqueSet)
 
-    result = curr.replace(requiredKey, '')
+    requiredKey = required_letter
+
+    result = uniqueSet.replace(requiredKey, "")
     result = random.sample(result, len(result))
     result.insert(3, requiredKey)
-    result = ''.join(result)
+    result = "".join(result)
 
     return result
-
-
 
 """
 LengthPrereq function
@@ -46,7 +46,7 @@ Rundown:
 """
 def LengthPrereq(word):
     if len(word) < 7 or len(word) > 7:
-        print("puzzleKey is " + str(len(word)) + " letters long..")
+        ## print("puzzleKey is " + str(len(word)) + " letters long..")
         return 1
 
 
