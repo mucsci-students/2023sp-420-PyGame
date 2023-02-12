@@ -44,17 +44,17 @@ def print_current_puzzle(stats):
         Score: {stats.score} / {stats.maxScore} 
         Words Guessed: {prettyGuesses}
         
-                ,---,
+                ,---.
                /     \\
-          ,---<   {fir}    >---.
-         /     \      /     \\
-        "   {sec}   "    "   {thi}  "
-         \     /      \     /
-           >--<   {req}    >--<
-         /     \      /     \\
-        "   {fou}   "    "   {fif}  "
-         \     /      \     /
-          `---<   {six}    >---'
+          ,---<   {fir}   >---.
+         /     \     /     \\
+         "  {sec}  "     "  {thi}  "
+         \     /     \     /
+          >---<   {req}   >---<
+         /     \     /     \\
+         "  {fou}  "     "  {fif}  "
+         \     /     \     /
+          `---<   {six}   >---'
                \     /
                 "---"
 
