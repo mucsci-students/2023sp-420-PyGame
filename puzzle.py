@@ -3,7 +3,6 @@
 """
 
 from Database.database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
-from codecs import *
 
 class Puzzle:
 
