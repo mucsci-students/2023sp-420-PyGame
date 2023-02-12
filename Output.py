@@ -43,6 +43,7 @@ def print_current_puzzle(stats):
         Score: {stats.score} / {stats.maxScore} 
         Words Guessed: {prettyGuesses}
         
+<<<<<<< Updated upstream
                  ,---,
                 /     \\
           ,---<    {fir}   >---.
@@ -54,6 +55,19 @@ def print_current_puzzle(stats):
         '   {fou}   '    '   {fif}  '
          \     /      \     /
           `--<     {six}   >--'
+=======
+                ,---.
+               /     \\
+          ,---<   {fir}   >---.
+         /     \     /     \\
+         "  {sec}  "     "  {thi}  "
+         \     /     \     /
+          >---<   {req}   >---<
+         /     \     /     \\
+         "  {fou}  "     "  {fif}  "
+         \     /     \     /
+          `---<   {six}   >---'
+>>>>>>> Stashed changes
                \     /
                 '---'
 
