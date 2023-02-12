@@ -16,12 +16,11 @@ puzzle_stats = PuzzleStats(-1,"")
 ###------------MAIN MENU SCREEN---------------
 
 def main_menu_handler():
-    print_start_screen()
-    time.sleep(.5)
     while (True):
+      cls()
+      print_start_screen()
       print_main_menu()
       userInput = (input("Select Your Option\n")).lower() # User should select from the options listed
-      cls()
       match userInput:
         case "/newgame":
           start_new_game()
@@ -31,6 +30,9 @@ def main_menu_handler():
               
         case "/startfromkey":
           keyStart()
+
+        case "/startsharedgame":
+          start_shared_game()
 
         case "/help":
           print_help()
@@ -44,7 +46,7 @@ def main_menu_handler():
 
         case _:
           print("Command Not Recognized")
-          time.sleep(.5)
+          time.sleep(1)
 
 
 ###-----CLEAN UP FOR MAIN MENU------
@@ -54,14 +56,13 @@ def load_save_game():
   global puzzle_stats
   print_load_options()
   file_name = input()
-  cls()
   print_load_game()
   answer = input()
-  cls()
   match answer:
     case "y":
       start_game_with_key_from_load(puzzle_stats.LoadGame(file_name))
     case "n":
+      cls()
       return
 
     case _: # if any other command not in the list is entered, then this output will be returned
@@ -101,28 +102,27 @@ def activeGameLoop():
   loop = True
 
   while (loop):
+    cls()
     loop = activeGame()
 
 # when an active game is in play
 def activeGame():
   global puzzle
   global puzzle_stats
-  time.sleep(.5)
   print_current_puzzle(puzzle_stats)
   userInput = input("Enter your guess. ").lower() #asks user for input to match
   if (userInput == ""):
     return True
   elif (userInput[0] != "/"):
-    return print_guess_outcome(puzzle_stats.get_check_guess(userInput, puzzle))
+    outcome = print_guess_outcome(puzzle_stats.get_check_guess(userInput, puzzle))
+    time.sleep(.5)
+    return outcome
   else:
     match userInput:
       case "/help":
         print_help()
         input()
         return True
-
-      case "/newgame":
-        start_new_game()
 
       case "/shuffle":
         puzzle_stats.shuffled_puzzle = ShuffleKey(puzzle.pangram, puzzle.required_letter)
@@ -150,8 +150,8 @@ def activeGame():
         return False
 
       case "/share":
-        # myList = ["a","b","c","d","e","f","g"] #temporary example of a list
-        print(f"Coming Soon.")
+        print(puzzle.encode_puzzle_key())
+        input("Press any key to continue...")
         return True
 
       case "/exit":
@@ -159,9 +159,12 @@ def activeGame():
         answer = input().lower()
         cls()
         return exit_game(answer)
+      
+      case "/refresh":
+        return True
 
       case _:
-        print("Command not recognized")
+        input("Command not recognized, press any key to continue...")
         return True
 
 def start_new_game():
@@ -217,5 +220,23 @@ def exit_game(answer):
 # Function to clear the console after a user input is taken in 
 def cls():
   os.system("cls" if os.name=="nt" else "clear") # now, to clear the screen
+
+def start_shared_game():
+  global puzzle
+  global puzzle_stats
+  print_shared_key_input()
+  shared_key = input().lower()
+  decoded_key = puzzle.decode_puzzle_key(shared_key)
+  puzzle = Puzzle()
   
+  if(puzzle.generate_puzzle_from_shared(decoded_key[1:], decoded_key[0]) == 1):
+    return 1
+
+  puzzle_stats = PuzzleStats(puzzle.total_points, ShuffleKey(puzzle.pangram, puzzle.required_letter))
+  puzzle_stats.score = 0
+  puzzle_stats.guesses = []
+  activeGameLoop()
+
+  
+
 main_menu_handler()

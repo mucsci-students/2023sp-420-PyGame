@@ -48,6 +48,13 @@ class Puzzle:
             self.total_points = check_value[2]
             self.current_word_list = check_value[3]
 
+    def generate_puzzle_from_shared(self, pangram, letter):
+        word = get_word_info_from_load(pangram, letter)
+        self.pangram = word[0]
+        self.required_letter = word[1]
+        self.total_points = word[2]
+        self.current_word_list = word[3]
+
     def check_valid_word(self, key):
         key = key.lower()
         unique_char = ''.join(set(key))
@@ -57,3 +64,20 @@ class Puzzle:
         if len(word) == 0:
             return 1
         return word
+    
+    def encode_puzzle_key(self):
+        encoded_string = ""
+        puzzle = self.required_letter + self.pangram
+        for char in puzzle:
+            encoded_char = chr((ord(char) + 5 - 97) % 26 + 97)
+            encoded_string += encoded_char
+        return encoded_string
+
+    
+    def decode_puzzle_key(self, code):
+        decoded_string = ""
+        for char in code:
+            decoded_char = chr((ord(char) - 5 - 97) % 26 + 97)
+            decoded_string += decoded_char
+        return decoded_string
+

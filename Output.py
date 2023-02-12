@@ -39,6 +39,7 @@ def print_current_puzzle(stats):
     six = stats.shuffled_puzzle[6]
 
     currentProgress = f"""
+    Puzzle:
         Rank: {stats.get_rank()}   
         Score: {stats.score} / {stats.maxScore} 
         Words Guessed: {prettyGuesses}
@@ -57,7 +58,12 @@ def print_current_puzzle(stats):
                \     /
                 "---"
 
-        Commands: /Help /Shuffle /ShowAll /Back /Share /SaveGame /Exit
+               Commands
+         ---------------------
+          /Help      /Shuffle 
+          /Back      /ShowAll 
+          /Share     /SaveGame 
+          /Exit      /Refresh
         
         """
     print(currentProgress)
@@ -88,11 +94,13 @@ def get_pretty_guesses(guesses):
 ## prints the main start up menu
 def print_main_menu():
     mainMenu = f"""
-/NewGame
-/LoadGame
-/StartFromKey
-/Help
-/Exit
+Main Menu
+    /NewGame
+    /LoadGame
+    /StartFromKey
+    /StartSharedGame
+    /Help
+    /Exit
 """
     print(mainMenu)
 
@@ -100,8 +108,8 @@ def print_main_menu():
 def print_exit():
     exit = f"""
 Confirm exit?
-y
-n
+Y
+N
 """
     print(exit)
 
@@ -109,8 +117,8 @@ n
 def print_game_save():
     gameSave = f"""
 Save Game?
-y
-n
+Y
+N
 """
     print(gameSave)
 
@@ -118,8 +126,8 @@ n
 def print_load_game():
     load = f"""
 Load Game?
-y
-n
+Y
+N
 """
     print(load)
 
@@ -250,3 +258,5 @@ def get_detailed_response(outcome):
             print("\n\t... Input has non-given letters ...")
 
     
+def print_shared_key_input():
+    print("Enter a shared game key: ")
