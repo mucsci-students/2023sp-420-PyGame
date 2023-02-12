@@ -4,7 +4,10 @@ import io
 import sys
 import os
 
-class TestSpellingBee(unittest.TestCase):
+#UNIT TEST CLASS FOR THE OUTPUT.PY FILE.
+class TestSpellingBeeOutput(unittest.TestCase):
+
+    # Unit test for the print_start_screen method
     def test_print_start_screen(self):
         captured_output = io.StringIO()
         sys.stdout = captured_output
