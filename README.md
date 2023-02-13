@@ -12,14 +12,14 @@
 - [Team](#Team-Members)
 ---
 
-<summary style="font-weight:bold;font-size:16.5pt;">Summary:</summary>
+**<summary style="font-weight:bold;font-size:16.5pt;">Summary:</summary>**
 
-A simple game where a player is to create english words using a number of given characters, but the word has to use the required character.
+A simple game where a player is to create English words using a number of given characters, but the word has to use the required character.
 
 ### Features
 - Large selection of randomly generated puzzles.
-- Ability to create your own puzzle by inputing a word with seven unique characters.
-- Word puzzles can be stored and accesed at a later time.
+- Ability to create your own puzzle by inputting a word with seven unique characters.
+- Word puzzles can be stored and accessed at a later time.
 - Share a puzzle with a friend by generating a sharable key unique to that puzzle.
 
 
@@ -42,15 +42,15 @@ A simple game where a player is to create english words using a number of given 
 
 <summary style="font-weight:bold;font-size:16.5pt;">How to Play:</summary>
 
-Create words using letters from the hive and try to get the maximum score. Words must have at least four letters and include the required letter (The letter in the center of the hive). The required letter is surounded by six letters that you use additialy (not requred). The six additional letter are the only other letters that you can use to create words, using letters not given will result in a wrong answer. Every letter can be used more than one time in a sigle guess. Word guesses can not contain hyphens, proper nouns, vulgarities, or obscure words. Each puzzle includes at least one “pangram” which uses all seven given letters at least once.
+Create words using letters from the hive and try to get the maximum score. Words must have at least four letters and include the required letter (The letter in the center of the hive). The required letter is surrounded by six letters that you can use (not required). Use the six additional letters along with the required letter to create words. Using letters that are not given result in a wrong answer. Every letter can be used more than within a single guess. Word guesses can not contain hyphens, proper nouns, vulgarities, or obscure words. Each puzzle includes at least one “pangram” which uses all seven given letters at least once.
 
 ---
 
 <details>
-<summary style="font-weight:bold;font-size:11.5pt;">Rewarded Points</summary>
+<summary style="font-weight:bold;font-size:11.5pt;">Rewarded Points:</summary>
 
 - 4-letter words are worth 1 point each.
-- if the entered word is longer than 4 letters than you get a point for the words character length
+- If the entered word is longer than 4 letters then you get a point for the words character length
 - Each puzzle includes at least one “pangram” which uses every letter at least once.
 - Words guesses that use all seven given letters earns double amount of points
 </details>
@@ -58,7 +58,7 @@ Create words using letters from the hive and try to get the maximum score. Words
 ---
 
 <details>
-<summary style="font-weight:bold;font-size:11.5pt;">Ranks</summary>
+<summary style="font-weight:bold;font-size:11.5pt;">Ranks:</summary>
 
 Every puzzle has eight ranks that will progress and change based on the percentage that the puzzle is completed
 
@@ -71,7 +71,7 @@ Every puzzle has eight ranks that will progress and change based on the percenta
     | Solid    |     35%     |
     | Nice     |     56%     |
     | Great    |     72%     |
-    | Amazing  |     92$     |
+    | Amazing  |     92%     |
 <br>
 </details>
 
