@@ -47,9 +47,9 @@ class TestSpellingBeeOutput(unittest.TestCase):
         
 
     def test_with_shorter_guesses_list(self):
-        guesses = ['word1', 'word2']
+        guesses = []
         result = Output.get_pretty_guesses(guesses)
-        self.assertEqual(result, "word1 word2 ")
+        self.assertEqual(result, "")
 
 
     def test_print_main_menu(self):

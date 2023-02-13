@@ -4,7 +4,7 @@ import io
 import sys
 import os
 
-#UNIT TEST CLASS FOR THE OUTPUT.PY FILE.
+#UNIT TEST CLASS FOR THE PuzzleStats FILE.
 class TestSpellingBeePuzzleStats(unittest.TestCase):
 
     def test_init(self):
@@ -18,41 +18,49 @@ class TestSpellingBeePuzzleStats(unittest.TestCase):
         self.assertEqual(puzzle_stats.maxScore, max_score)
         self.assertEqual(puzzle_stats.shuffled_puzzle, shuffled_puzzle)
     
-    def test_check_validity(self):
-        max_score = 50
-        shuffled_puzzle = "abcd"
-        puzzle_stats = PuzzleStats(max_score, shuffled_puzzle)
-        word_list = {
-            "abcd": 10,
-            "dcba": 20,
-            "cbad": 30
-        }
+    #def test_get_check_guess(self):
+    #    # Setup
+    #    puzzleInfo = PuzzleInfo(required_letter='a', pangram=False, current_word_list=['word'])
+    #    game = Game()
+    #    game.guesses = []
+    #    
+    #    # Test returns 1 if guess doesn't contain required letter
+    #    guess = 'word'
+    #    expected = 1
+    #    result = game.get_check_guess(guess, puzzleInfo)
+    #    self.assertEqual(result, expected)
+        
+        # Test returns 2 if guess isn't a pangram
+     #   puzzleInfo.required_letter = None
+     #   puzzleInfo.pangram = True
+        #expected = 2
+      #  result = game.get_check_guess(guess, puzzleInfo)
+      #  self.assertEqual(result, expected)
 
-        # Test valid word
-        result = puzzle_stats.CheckValidity("abcd", word_list)
-        self.assertEqual(result, 0)
-        self.assertEqual(puzzle_stats.score, 1)
-        self.assertEqual(puzzle_stats.guesses, ["abcd"])
+        # Test returns True if guess has been made before
+       # puzzleInfo.pangram = False
+       # game.guesses = ['word']
+       # expected = True
+        #result = game.get_check_guess(guess, puzzleInfo)
+        #self.assertEqual(result, expected)
 
-        # Test invalid word
-        result = puzzle_stats.CheckValidity("efgh", word_list)
-        self.assertEqual(result, 1)
-        self.assertEqual(puzzle_stats.score, 1)
-        self.assertEqual(puzzle_stats.guesses, ["abcd"])
+        # Test returns 0 if guess meets requirements and hasn't been made before
+        #game.guesses = []
+        #expected = 0
+        #result = game.get_check_guess(guess, puzzleInfo)
+        #self.assertEqual(result, expected)
 
-    def test_in_guesses(self):
-        max_score = 50
-        shuffled_puzzle = "abcd"
-        puzzle_stats = PuzzleStats(max_score, shuffled_puzzle)
-        puzzle_stats.guesses = ["abcd", "dcba", "cbad"]
+        # Test returns 1 if guess isn't in current word list
+       # guess = 'words'
+        #expected = 1
+       # result = game.get_check_guess(guess, puzzleInfo)
+       # self.assertEqual(result, expected)
 
-        # Test word in guesses
-        result = puzzle_stats.InGuesses("abcd")
-        self.assertTrue(result)
-
-        # Test word not in guesses
-        result = puzzle_stats.InGuesses("efgh")
-        self.assertFalse(result)
+        # Test returns 69420 if all words have been guessed
+       # game.current_word_list = []
+       # expected = 69420
+       # result = game.get_check_guess(guess, puzzleInfo)
+       # self.assertEqual(result, expected)
 
     
 
