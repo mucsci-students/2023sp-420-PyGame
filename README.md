@@ -47,7 +47,7 @@ Create words using letters from the hive and try to get the maximum score. Words
 <br>
 
 <details>
-<summary style="font-weight:bold;font-size:11.5pt;">Rewarded Points</summary>
+<summary style="font-weight:bold;font-size:11.5pt;">Rewarded Points:</summary>
 
 - 4-letter words are worth 1 point each.
 - If the entered word is longer than 4 letters then you get a point for the word's character length
@@ -58,7 +58,7 @@ Create words using letters from the hive and try to get the maximum score. Words
 <br>
 
 <details>
-<summary style="font-weight:bold;font-size:11.5pt;">Ranks</summary>
+<summary style="font-weight:bold;font-size:11.5pt;">Ranks:</summary>
 
 Every puzzle has eight ranks that will progress and change based on the percentage that the puzzle is completed
 
