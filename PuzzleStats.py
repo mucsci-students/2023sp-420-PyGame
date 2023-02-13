@@ -128,9 +128,9 @@ class PuzzleStats():
             return outcome
     
     """ 
-    # return_Rank takes in current_Points, and max_Points as parameters, then returns the correspending integer
-    # to the rank that the player is at.
-    # Must be between 0.00 and 1.00
+    return_Rank takes in current_Points, and max_Points as parameters, then returns the correspending integer
+    to the rank that the player is at.
+    Must be between 0.00 and 1.00
     """
     def RankIndex(self):
         difference = self.score/self.maxScore
@@ -152,7 +152,7 @@ class PuzzleStats():
             self.rank = 5 #Nice
         elif difference < .72:
             self.rank = 6 #Great
-        elif difference < 1:
+        elif difference < .92:
             self.rank = 7 #Amazing
         else:
             self.rank = 8 #Genius
