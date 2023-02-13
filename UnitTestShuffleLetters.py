@@ -35,6 +35,12 @@ class TestShuffleKeyFunctions(unittest.TestCase):
         self.assertEqual(len(result), 7)
         self.assertEqual(result[3], "v")
     
+    def test_LengthPrereq(self):
+        # Testing LengthPrereq function
+        self.assertEqual(shuffleLetters.LengthPrereq(""), 1)
+        self.assertEqual(shuffleLetters.LengthPrereq("abc"), 1)
+        self.assertEqual(shuffleLetters.LengthPrereq("abcdefg"), None)
+        self.assertEqual(shuffleLetters.LengthPrereq("abcdefgh"), 1)
 
 if __name__ == '__main__':
     unittest.main()
