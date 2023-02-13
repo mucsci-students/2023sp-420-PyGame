@@ -3,7 +3,7 @@
 
 ## Table of Contents
 - [Summary](#summary)
-    - [Features](###features)
+    - [Features](##Features)
 - [Setup](#setup)
 - [How to Run](#how-to-run)
 - [How to Play](#how-to-play)
