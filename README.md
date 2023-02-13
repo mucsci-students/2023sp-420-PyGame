@@ -9,7 +9,7 @@
 - [How to Play](#how-to-play)
     - [Point System](###Rewarded-points)
     - [Rank System](###Ranks)
-- [Team](#Team-Members)
+- [Team](##Team-Members)
 ---
 
 **<summary style="font-weight:bold;font-size:16.5pt;">Summary:</summary>**
