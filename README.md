@@ -44,7 +44,7 @@ A simple game where a player is to create english words using a number of given 
 
 Create words using letters from the hive and try to get the maximum score. Words must have at least four letters and include the required letter (The letter in the center of the hive). The required letter is surounded by six letters that you use additialy (not requred). The six additional letter are the only other letters that you can use to create words, using letters not given will result in a wrong answer. Every letter can be used more than one time in a sigle guess. Word guesses can not contain hyphens, proper nouns, vulgarities, or obscure words. Each puzzle includes at least one “pangram” which uses all seven given letters at least once.
 
----
+<br>
 
 <details>
 <summary style="font-weight:bold;font-size:11.5pt;">Rewarded Points</summary>
@@ -55,7 +55,7 @@ Create words using letters from the hive and try to get the maximum score. Words
 - Words guesses that use all seven given letters earns double amount of points
 </details>
 
----
+<br>
 
 <details>
 <summary style="font-weight:bold;font-size:11.5pt;">Ranks</summary>
@@ -74,6 +74,8 @@ Every puzzle has eight ranks that will progress and change based on the percenta
     | Amazing  |     92$     |
 <br>
 </details>
+
+<br>
 
 ---
 
