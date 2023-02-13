@@ -164,8 +164,7 @@ Score points to increase your rating.
 4-letter words are worth 1 point each.
 Longer words earn 1 point per letter. 
 Each puzzle includes at least one “pangram” which uses every letter. 
-These are worth 7 extra points!
-Feedback/File Bug Report: <custom url>
+These are worth double the points!
 
 Commands
 /NewGame         /Loads a new game
