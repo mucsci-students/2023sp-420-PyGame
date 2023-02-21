@@ -1,5 +1,7 @@
 import random # Used for shuffling letters
 import unittest
+import sys
+sys.path.insert(0, 'C:\\Users\\Bjlef\\Documents\\GitHub\\2023sp-420-PyGame')
 import shuffleLetters
 
 class TestShuffleKeyFunctions(unittest.TestCase):

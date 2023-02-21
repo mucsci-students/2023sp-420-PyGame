@@ -1,4 +1,7 @@
 import unittest
+import sys
+import io
+sys.path.insert(0, 'C:\\Users\\Bjlef\\Documents\\GitHub\\2023sp-420-PyGame')
 from Database.database import get_word_info_from_pangram, get_word_info_from_load, get_random_word_info
 from puzzle import Puzzle
 
