@@ -67,12 +67,14 @@ class Game:
 
         # Calculate position of the input box and dropdown menu.
         self.input_box_pos = (self.positions[5][0] - self.radius, self.positions[4][1] + self.radius)
-        # self.show_words_pos = (10,10)
         self.show_words_pos = (self.positions[5][0] - (self.radius * 3), self.positions[1][1] - self.radius * 1.75)
 
         # Calculate the size of the input box
         self.input_box_width = (self.radius * 5) + (self.radius * .5)
         self.input_box_height = int(0.08 * self.game_window_height)
+
+        self.shuffle_button_pos = (self.input_box_pos[0] + self.input_box_width + self.radius, self.input_box_pos[1])
+        self.shuffle_button_rectangle = pygame.Rect(self.shuffle_button_pos, (self.radius, self.radius))
 
         # Calculate the size of the "Show Words" button
         self.guessed_words_button_width = self.input_box_width * 1.75
@@ -104,7 +106,6 @@ class Game:
         # Give calculated values to pygame.Rect to draw the input box.
         self.input_box_rectangle = pygame.Rect(self.input_box_pos, (self.input_box_width, self.input_box_height))
         self.guessed_words_button = pygame.Rect(self.show_words_pos, (self.guessed_words_button_width, self.guessed_words_button_height))
-        # self.guessed_words_background_rectangle = pygame.Rect(self.show_words_pos[0], self.show_words_pos[1] + self.guessed_words_button_height, self.guessed_words_background_width, self.guessed_words_background_height)
         
         self.guessed_words_background_rectangle = pygame.Rect(self.show_words_pos[0], self.show_words_pos[1] + self.guessed_words_button_height, self.guessed_words_background_width, self.guessed_words_background_height)
         # Center the "Show Words" text
@@ -174,6 +175,9 @@ class Game:
 
         # Blit the modified surface onto the main surface
         self.game_window.blit(input_surface, input_rect)
+
+    def draw_shuffle_button(self):
+        pygame.draw.rect(self.game_window, self.WHITE, self.shuffle_button_rectangle)
     
     def draw_guessed_words_botton(self):
         pygame.draw.rect(self.game_window, self.WHITE, self.guessed_words_button)
@@ -223,13 +227,9 @@ class Game:
     def draw_screen(self):
         self.draw_hexagon()
         self.draw_input_box()
+        self.draw_shuffle_button()
         self.draw_guessed_words_botton()
         self.draw_guessed_words()
-
-    def update_fps(self):
-        fps = str(int(self.clock.get_fps()))
-        fps_text = self.font.render(fps, 1, self.WHITE)
-        return fps_text
 
     def run(self):
         while self.running:
