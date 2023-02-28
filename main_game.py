@@ -72,9 +72,7 @@ class Game:
         # Calculate the size of the input box
         self.input_box_width = (self.radius * 5) + (self.radius * .5)
         self.input_box_height = int(0.08 * self.game_window_height)
-
-        self.shuffle_button_pos = (self.input_box_pos[0] + self.input_box_width + self.radius, self.input_box_pos[1])
-        self.shuffle_button_rectangle = pygame.Rect(self.shuffle_button_pos, (self.radius, self.radius))
+        # self.shuffle_button_rectangle = pygame.Rect(self.shuffle_button_pos, (self.radius, self.radius))
 
         # Calculate the size of the "Show Words" button
         self.guessed_words_button_width = self.input_box_width * 1.75
@@ -106,8 +104,8 @@ class Game:
         # Give calculated values to pygame.Rect to draw the input box.
         self.input_box_rectangle = pygame.Rect(self.input_box_pos, (self.input_box_width, self.input_box_height))
         self.guessed_words_button = pygame.Rect(self.show_words_pos, (self.guessed_words_button_width, self.guessed_words_button_height))
-        
         self.guessed_words_background_rectangle = pygame.Rect(self.show_words_pos[0], self.show_words_pos[1] + self.guessed_words_button_height, self.guessed_words_background_width, self.guessed_words_background_height)
+        
         # Center the "Show Words" text
         self.guessed_words_text_rectangle = self.guessed_words_button_text.get_rect()
         self.guessed_words_text_rectangle.centerx = self.guessed_words_button.centerx
@@ -130,7 +128,7 @@ class Game:
         # Draw the letters and hexagons
         for i, pos in enumerate(self.positions):
             letter = self.letters[i]
-            points = [
+            hex_points = [
                 (pos[0] - self.radius, pos[1]),
                 (pos[0] - self.radius * 0.5, pos[1] - self.radius * 0.866),
                 (pos[0] + self.radius * 0.5, pos[1] - self.radius * 0.866),
@@ -145,10 +143,10 @@ class Game:
             
             if hex_rect.collidepoint(pygame.mouse.get_pos()):
                 self.HEXAGON_HOVER = self.HOVER_COLOR
-                pygame.draw.polygon(self.game_window, self.HEXAGON_HOVER, points)
+                pygame.draw.polygon(self.game_window, self.HEXAGON_HOVER, hex_points)
             else:
                 self.HEXAGON_HOVER = self.WHITE
-                pygame.draw.polygon(self.game_window, self.HEXAGON_HOVER, points, 4)
+                pygame.draw.polygon(self.game_window, self.HEXAGON_HOVER, hex_points, 4)
 
             letter_text = self.font.render(letter, True, self.BLACK)
             letter_text_rect = letter_text.get_rect(center=pos)
@@ -177,7 +175,21 @@ class Game:
         self.game_window.blit(input_surface, input_rect)
 
     def draw_shuffle_button(self):
-        pygame.draw.rect(self.game_window, self.WHITE, self.shuffle_button_rectangle)
+        # Set the (x,y) values of the shuffle letters button to be to the right of the input box.
+        self.shuffle_button_pos = (self.input_box_pos[0] + self.input_box_width + self.radius, self.input_box_pos[1])
+        
+        shuffle_letter_hex_points = [
+            (self.shuffle_button_pos[0], self.shuffle_button_pos[1] - (self.input_box_height * .5)),                                 
+            (self.shuffle_button_pos[0] + (self.input_box_height), self.input_box_rectangle.y),     
+            (self.shuffle_button_pos[0] + (self.input_box_height), self.input_box_rectangle.y + (self.input_box_height)),
+            (self.shuffle_button_pos[0], self.shuffle_button_pos[1] + (self.input_box_height * 1.5)),
+            (self.shuffle_button_pos[0] - (self.input_box_height), self.input_box_rectangle.y + self.input_box_height),    
+            (self.shuffle_button_pos[0] - (self.input_box_height), self.input_box_rectangle.y),   
+        ]
+
+        print(shuffle_letter_hex_points[0])
+        pygame.draw.polygon(self.game_window, self.WHITE, shuffle_letter_hex_points, 4)
+
     
     def draw_guessed_words_botton(self):
         pygame.draw.rect(self.game_window, self.WHITE, self.guessed_words_button)
