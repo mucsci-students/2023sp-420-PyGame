@@ -199,18 +199,16 @@ class PuzzleStats():
     }
     """
     def get_save_game(self, puzzleInfo, fileName):
-
         ## Creates the local file path, plus includes the file extension  
-        saveFileName = "Saves/" + fileName + ".json"
+        saveFileName = "MVC/Model/Saves/" + fileName + ".json"
 
         ## Create json object
         saveStat = {
-            "Score": self.score,
-            "Rank": self.rank,
-            "Guesses": self.guesses,
-            "Shuffle" : self.shuffled_puzzle,
-            "Letter" : puzzleInfo.required_letter,
-            "GameId": puzzleInfo.pangram,
+            "CurrentPoints": self.score,
+            "GuessedWords": self.guesses,
+            "WordList" : puzzleInfo.current_word_list,
+            "RequiredLetter" : puzzleInfo.required_letter,
+            "PuzzleLetters": puzzleInfo.pangram,
             "MaxPoints" : puzzleInfo.total_points
         }
         
@@ -258,11 +256,10 @@ class PuzzleStats():
         with open(saveFile, "r") as openfile:
             saveInfo = json.load(openfile)
 
-        self.score = saveInfo["Score"]
-        self.rank = saveInfo["Rank"]
-        self.guesses = saveInfo["Guesses"]
+        self.score = saveInfo["CurrentPoints"]
+        self.guesses = saveInfo["GuessedWords"]
         self.maxScore = saveInfo["MaxPoints"]
-        self.shuffled_puzzle = saveInfo["Shuffle"]
+        self.RankIndex()
 
         openfile.close()
 
