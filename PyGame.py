@@ -13,12 +13,11 @@ import os
 
 sys.path.append(os.getcwd()+"\\MVC\\Controller")
 sys.path.append(os.getcwd()+"\\MVC\\Model")
+sys.path.append(os.getcwd()+"\\MVC\\Model\\Database")
 sys.path.append(os.getcwd()+"\\MVC\\View_CLI")
 
 from CLI_controller import main_menu_handler
 
-
-print(os.getcwd())
 
 def placeHolder():
     return

@@ -199,8 +199,6 @@ class PuzzleStats():
     }
     """
     def get_save_game(self, puzzleInfo, fileName):
-        print(os.getcwd())
-        input()
         ## Creates the local file path, plus includes the file extension  
         saveFileName = "MVC/Model/Saves/" + fileName + ".json"
 

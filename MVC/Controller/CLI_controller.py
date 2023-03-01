@@ -82,10 +82,11 @@ def keyStart():
     cls()
     check_value = start_game_with_key(key)
     
+    if check_value == 1:
     # Turn into custom error call to Output.py with key
-    response = input("Invalid word, not a valid pangram. Return to main menu? Y/N \n").lower()
-    if(response == "y"):
-      main_menu_handler()
+      response = input("Invalid word, not a valid pangram. Return to main menu? Y/N \n").lower()
+      if(response == "y"):
+        main_menu_handler()
 
 # function to save game
 def saveGamePrompt():

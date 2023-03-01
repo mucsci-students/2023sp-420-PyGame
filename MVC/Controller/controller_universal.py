@@ -1,6 +1,5 @@
 import sys
 import os
-import time
 
 from model_PuzzleStats import PuzzleStats
 from model_puzzle import Puzzle
