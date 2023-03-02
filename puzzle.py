@@ -80,4 +80,3 @@ class Puzzle:
             decoded_char = chr((ord(char) - 5 - 97) % 26 + 97)
             decoded_string += decoded_char
         return decoded_string
-
