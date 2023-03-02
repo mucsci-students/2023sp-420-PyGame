@@ -290,9 +290,9 @@ class Game:
                 elif event.type == pygame.VIDEORESIZE:
                     # Set screen to minimum allowed width if resized too small
                     if event.w < self.game_window_minimum_width:
-                        print(f'event.w is: {event.w} self.game_window_minimum_width {self.game_window_minimum_width}')
+                        # print(f'event.w is: {event.w} self.game_window_minimum_width {self.game_window_minimum_width}')
                         self.game_window_width = self.game_window_minimum_width
-                        print(f'game_window_width: {event.w}')
+                        # print(f'game_window_width: {event.w}')
                     else:
                         self.game_window_width = event.w
                     
@@ -376,7 +376,7 @@ class Game:
                     
                     # Check if a letter key was pressed
                     elif event.unicode.isalpha():
-                        print("actually here")
+                        # print("actually here")
                         self.backspace_down = False
                         self.input_box_text += event.unicode.upper()
                 
@@ -386,7 +386,7 @@ class Game:
                         self.backspace_down = False
                     
                     elif event.key == pygame.K_RETURN:
-                        print("here")
+                        # print("here")
                         if (self.puzzle_stats.get_check_guess(self.input_box_text, self.puzzle)) == 0:
                             self.guessed_word_list = self.puzzle_stats.guesses
                             self.input_box_text = ''
