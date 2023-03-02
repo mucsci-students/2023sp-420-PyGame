@@ -99,6 +99,7 @@ def random_screen():
 # function is called when the "START FROM KEY" button is clicked on
 def key_screen():
     running = True
+    user_text = ''
     while running:
         screen.fill('white')
         draw_text('PLEASE ENTER KEY', font, ('black'), screen, 200, 200)
@@ -108,6 +109,10 @@ def key_screen():
         #creating buttons
         save = pygame.Rect(170, 450, 110, 50)
         clear = pygame.Rect(320, 450, 110, 50)
+<<<<<<< Updated upstream
+=======
+        input = pygame.Rect(240,300,110,40)
+>>>>>>> Stashed changes
     
         if save.collidepoint((mx, my)):
           if click:
@@ -126,9 +131,23 @@ def key_screen():
             if event.type == QUIT:
                 pygame.quit()
                 sys.exit()
+            
             if event.type == KEYDOWN:
+                if event.key == K_BACKSPACE:
+                    user_text = user_text[:-1]
+                else:
+                    user_text += event.unicode  
+
                 if event.key == K_ESCAPE:
-                    running = False
+                    running = False  
+  
+        # draws rectangle input with a border            
+        pygame.draw.rect(screen,('black'), input, 2)
+    
+        text_surface = font.render(user_text,True,(0,0,0))  
+        screen.blit(text_surface,(input.x + 5,input.y + 5))
+
+        input.w = max(150,text_surface.get_width() + 10)
        
         pygame.display.update()
         clock.tick(60)
@@ -136,6 +155,7 @@ def key_screen():
 # function is called when the "START FROM A CODE" button is clicked on
 def code_screen():
     running = True
+    user_text = ''
     while running:
         screen.fill('white')
         user_text = ''
