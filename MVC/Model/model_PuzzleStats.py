@@ -138,27 +138,29 @@ class PuzzleStats():
             ## Error
             return 1
 
-        if difference < .03:
+        if difference < .02:
             self.rank = 0 #Beginner
-        elif difference < .07:
-            self.rank = 1 #Novice
-        elif difference < .12:
-            self.rank = 2 #Okay
-        elif difference < .23:
+        elif difference < .05:
+            self.rank = 1 #Good Start
+        elif difference < .08:
+            self.rank = 2 #Moving up
+        elif difference < .15:
             self.rank = 3 #Good
-        elif difference < .35:
+        elif difference < .25:
             self.rank = 4 #Solid
-        elif difference < .56:
+        elif difference < .40:
             self.rank = 5 #Nice
-        elif difference < .72:
+        elif difference < .50:
             self.rank = 6 #Great
-        elif difference < .92:
+        elif difference < .70:
             self.rank = 7 #Amazing
-        else:
+        elif difference < 1:
             self.rank = 8 #Genius
+        else:
+            self.rank = 9 #Queen Bee
 
     def get_rank(self):
-        rankSteps = ["Beginner","Novice","Okay","Good","Solid","Nice","Great","Amazing","Genius"]
+        rankSteps = ["Beginner","Good Start","Moving Up","Good","Solid","Nice","Great","Amazing","Genius","Queen Bee"]
         return str(rankSteps[self.rank])
 
     def check_progress(self):
@@ -199,18 +201,16 @@ class PuzzleStats():
     }
     """
     def get_save_game(self, puzzleInfo, fileName):
-
         ## Creates the local file path, plus includes the file extension  
-        saveFileName = "Saves/" + fileName + ".json"
+        saveFileName = "MVC/Model/Saves/" + fileName + ".json"
 
         ## Create json object
         saveStat = {
-            "Score": self.score,
-            "Rank": self.rank,
-            "Guesses": self.guesses,
-            "Shuffle" : self.shuffled_puzzle,
-            "Letter" : puzzleInfo.required_letter,
-            "GameId": puzzleInfo.pangram,
+            "CurrentPoints": self.score,
+            "GuessedWords": self.guesses,
+            "WordList" : puzzleInfo.current_word_list,
+            "RequiredLetter" : puzzleInfo.required_letter,
+            "PuzzleLetters": puzzleInfo.pangram,
             "MaxPoints" : puzzleInfo.total_points
         }
         
@@ -258,11 +258,10 @@ class PuzzleStats():
         with open(saveFile, "r") as openfile:
             saveInfo = json.load(openfile)
 
-        self.score = saveInfo["Score"]
-        self.rank = saveInfo["Rank"]
-        self.guesses = saveInfo["Guesses"]
+        self.score = saveInfo["CurrentPoints"]
+        self.guesses = saveInfo["GuessedWords"]
         self.maxScore = saveInfo["MaxPoints"]
-        self.shuffled_puzzle = saveInfo["Shuffle"]
+        self.RankIndex()
 
         openfile.close()
 

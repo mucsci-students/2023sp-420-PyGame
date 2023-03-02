@@ -1,0 +1,36 @@
+{
+    "CurrentPoints": 0,
+    "GuessedWords": [],
+    "WordList": [
+        [
+            "opaqued"
+        ],
+        [
+            "quadded"
+        ],
+        [
+            "opaque"
+        ],
+        [
+            "queued"
+        ],
+        [
+            "aquae"
+        ],
+        [
+            "queue"
+        ],
+        [
+            "aqua"
+        ],
+        [
+            "quad"
+        ],
+        [
+            "quod"
+        ]
+    ],
+    "RequiredLetter": "q",
+    "PuzzleLetters": "opaqued",
+    "MaxPoints": 52
+}

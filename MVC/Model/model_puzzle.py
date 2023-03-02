@@ -2,7 +2,7 @@
     Author: Robert 2/7/23
 """
 
-from Database.database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
+from Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
 
 class Puzzle:
 
