@@ -1,22 +1,23 @@
 import pygame
+import subprocess
 
 pygame.init()
 
 # Set up the display window
 WINDOW_WIDTH = 600
 WINDOW_HEIGHT = 600
-DISPLAY_SURFACE = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.RESIZABLE)
+DISPLAY_SURFACE = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('Main Menu PYGAME')
 
 # Define some colors
-WHITE = (255, 255, 255)
+WHITE = (255, 0, 247)
 BLACK = (0, 0, 0)
 GRAY = (128, 128, 128)
 
 # Define the box dimensions and positions
-BOX_WIDTH = 150
+BOX_WIDTH = 250
 BOX_HEIGHT = 50
-BOX_SPACING = 20
+BOX_SPACING = 80
 BOX_X = (WINDOW_WIDTH - BOX_WIDTH) / 2
 BOX_Y_START = (WINDOW_HEIGHT - (BOX_HEIGHT * 4 + BOX_SPACING * 3)) / 2
 NEW_GAME_BOX_Y = BOX_Y_START
@@ -38,10 +39,20 @@ FONT = pygame.font.Font(None, FONT_SIZE)
 # Draw the boxes and text on the screen
 def draw_boxes():
     global new_game_box, load_game_box, help_box, exit_box
-    new_game_box = pygame.draw.rect(DISPLAY_SURFACE, GRAY, (BOX_X, NEW_GAME_BOX_Y, BOX_WIDTH, BOX_HEIGHT))
-    load_game_box = pygame.draw.rect(DISPLAY_SURFACE, GRAY, (BOX_X, LOAD_GAME_BOX_Y, BOX_WIDTH, BOX_HEIGHT))
-    help_box = pygame.draw.rect(DISPLAY_SURFACE, GRAY, (BOX_X, HELP_BOX_Y, BOX_WIDTH, BOX_HEIGHT))
-    exit_box = pygame.draw.rect(DISPLAY_SURFACE, GRAY, (BOX_X, EXIT_BOX_Y, BOX_WIDTH, BOX_HEIGHT))
+    half_width = BOX_WIDTH // 2
+    half_height = BOX_HEIGHT // 2
+    hexagon_points = [
+        (BOX_X + half_width, NEW_GAME_BOX_Y),
+        (BOX_X + BOX_WIDTH, NEW_GAME_BOX_Y + half_height),
+        (BOX_X + BOX_WIDTH, NEW_GAME_BOX_Y + half_height + BOX_HEIGHT),
+        (BOX_X + half_width, NEW_GAME_BOX_Y + BOX_HEIGHT + BOX_HEIGHT // 2),
+        (BOX_X, NEW_GAME_BOX_Y + half_height + BOX_HEIGHT),
+        (BOX_X, NEW_GAME_BOX_Y + half_height)
+    ]
+    new_game_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, hexagon_points)
+    load_game_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, BOX_HEIGHT + BOX_SPACING)) )) for point in hexagon_points])
+    help_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, 2 * BOX_HEIGHT + 2 * BOX_SPACING)) )) for point in hexagon_points])
+    exit_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, 3 * BOX_HEIGHT + 3 * BOX_SPACING)) )) for point in hexagon_points])
 
     title_text_surface = FONT.render(HEADER_TEXT, True, WHITE)
     title_text_rect = title_text_surface.get_rect(center=((WINDOW_WIDTH/2), BOX_Y_START/2))
@@ -76,11 +87,14 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if new_game_box.collidepoint(mouse_pos):
-                    print('Run New Game')
+                    subprocess.run(["python", "./MVC/view_GUI/newgamegui.py"])
+                    running = False
                 elif load_game_box.collidepoint(mouse_pos):
-                    print('Run Load Game')
+                    subprocess.run(["python", "./MVC/view_GUI/loadgamegui.py"])
+                    running = False
                 elif help_box.collidepoint(mouse_pos):
-                    print('Help clicked')
+                    subprocess.run(["python", "./MVC/view_GUI/helpgui.py"])
+                    running = False
                 elif exit_box.collidepoint(mouse_pos):
                     running = False
                 
@@ -89,7 +103,7 @@ def main():
                 WINDOW_WIDTH = w
                 WINDOW_HEIGHT = h
         # Draw the screen
-            DISPLAY_SURFACE.fill(BLACK)
+            DISPLAY_SURFACE.fill([150,150,150])
             draw_boxes()
             pygame.display.update()
 
