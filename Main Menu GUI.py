@@ -87,14 +87,14 @@ def main():
             elif event.type == pygame.MOUSEBUTTONDOWN:
                 mouse_pos = pygame.mouse.get_pos()
                 if new_game_box.collidepoint(mouse_pos):
-                    subprocess.run(["python", "./MVC/view_GUI/newgamegui.py"])
-                    running = False
+                    subprocess.run(["python", "./MVC/view_GUI/newgame.py"])
+                    
                 elif load_game_box.collidepoint(mouse_pos):
-                    subprocess.run(["python", "./MVC/view_GUI/loadgamegui.py"])
-                    running = False
+                    subprocess.run(["python", "./MVC/view_GUI/loadgame.py"])
+                    
                 elif help_box.collidepoint(mouse_pos):
                     subprocess.run(["python", "./MVC/view_GUI/helpgui.py"])
-                    running = False
+                    
                 elif exit_box.collidepoint(mouse_pos):
                     running = False
                 
