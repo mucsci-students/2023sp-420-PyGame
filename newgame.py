@@ -1,5 +1,9 @@
 #imports
 import pygame, sys
+
+#from gui_main_game.py import Game
+#from controller_universal import *
+
 from pygame.locals import *
 clock = pygame.time.Clock()
 
@@ -76,44 +80,28 @@ def load_game():
  
 # function is called when the "START FROM RANDOM" button is clicked on
 def random_screen():
-    running = True
-    while running:
-        screen.fill('white')
-       
-        draw_text('RANDOM GAME', font, ('black'), screen, 200, 150)
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == pygame.MOUSEBUTTONDOWN:
-              if input.collidepoint(event.pos):
-                active = True
-            if event.type == KEYDOWN:
-                if active == True:
-                  if event.key == K_ESCAPE:
-                    running = False
-       
-        pygame.display.update()
-        clock.tick(60)
+    prep_new_game()
+    game = Game()
+    game.run()
 
 # function is called when the "START FROM KEY" button is clicked on
 def key_screen():
     running = True
     user_text = ''
+    error_msg = ''
     while running:
         screen.fill('white')
         draw_text('PLEASE ENTER KEY', font, ('black'), screen, 200, 200)
+        draw_text(error_msg, font, ('red'), screen, 200, 375)
 
         mx, my = pygame.mouse.get_pos()
         
         #creating buttons
         save = pygame.Rect(170, 450, 110, 50)
         clear = pygame.Rect(320, 450, 110, 50)
-<<<<<<< Updated upstream
-=======
-        input = pygame.Rect(240,300,110,40)
->>>>>>> Stashed changes
     
+        input= pygame.Rect(240, 300, 110, 40)
+
         if save.collidepoint((mx, my)):
           if click:
             exist_screen()
@@ -127,6 +115,7 @@ def key_screen():
         draw_text('START', font, ('black'), screen, 195, 470)
         draw_text('CLEAR', font, ('black'), screen, 340, 470)
 
+
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -135,12 +124,19 @@ def key_screen():
             if event.type == KEYDOWN:
                 if event.key == K_BACKSPACE:
                     user_text = user_text[:-1]
-                else:
+                elif event.unicode.isalpha():
                     user_text += event.unicode  
 
                 if event.key == K_ESCAPE:
                     running = False  
-  
+            elif event.type == MOUSEBUTTONDOWN and event.button == 1:
+                if save.collidepoint(pygame.mouse.get_pos()):
+                    start_from_key(user_text)
+                    error_msg = "!!! You don't have the right amount of unique character !!!"
+
+                if clear.collidepoint(pygame.mouse.get_pos()):
+                    user_text = ""    
+                
         # draws rectangle input with a border            
         pygame.draw.rect(screen,('black'), input, 2)
     
@@ -156,18 +152,19 @@ def key_screen():
 def code_screen():
     running = True
     user_text = ''
+    error_msg = ''
     while running:
         screen.fill('white')
-        user_text = ''
         draw_text('PLEASE ENTER CODE', font, ('black'), screen, 180, 200)
-        
+        draw_text(error_msg, font, ('red'), screen, 200, 375)
+
         mx, my = pygame.mouse.get_pos()
         
         #creating buttons
         save = pygame.Rect(170, 450, 110, 50)
         clear = pygame.Rect(320, 450, 110, 50)
-        input = pygame.Rect(240,300,110,40)
-  
+        input = pygame.Rect(240, 300, 110, 40)
+        
       
         if save.collidepoint((mx, my)):
           if click:
@@ -183,7 +180,6 @@ def code_screen():
         draw_text('START', font, ('black'), screen, 195, 470)
         draw_text('CLEAR', font, ('black'), screen, 340, 470)
     
-      
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -196,7 +192,14 @@ def code_screen():
                     user_text += event.unicode  
 
                 if event.key == K_ESCAPE:
-                    running = False  
+                    running = False 
+            elif event.type == MOUSEBUTTONDOWN and event.button == 1:
+                if save.collidepoint(pygame.mouse.get_pos()):
+                    start_from_share(user_text)
+                    error_msg = "!!! Incorrect Code !!!"
+
+                if clear.collidepoint(pygame.mouse.get_pos()):
+                    user_text = ""
   
         # draws rectangle input with a border            
         pygame.draw.rect(screen,('black'), input, 2)
@@ -209,4 +212,22 @@ def code_screen():
         pygame.display.update()
         clock.tick(60)
       
+def start_from_key(key):    
+    prep_value = prep_game_with_key(key)
+
+    if type(prep_value) == int:
+        return 1
+
+    game = Game()
+    game.run(prep_value)
+
+def start_from_share(shared_key):    
+    prep_value = prep_game_from_share(shared_key)
+
+    if type(prep_value) == int:
+        return 1
+
+    game = Game()
+    game.run(prep_value)
+
 load_game()

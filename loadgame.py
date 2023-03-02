@@ -1,5 +1,5 @@
 #imports
-import pygame, sys
+import pygame, sys, os
 from pygame.locals import *
 clock = pygame.time.Clock()
 
@@ -24,36 +24,58 @@ click = False
  
 # main function
 def load_menu():
+    options = os.listdir("Saves")
+    option_count = len(options)
+    curr_count = 0
+    if not option_count > 0:
+        error_msg = '!!! No Files Found !!!'
+        file_name = ''
+    else: 
+        error_msg = ''
+        file_name = str(options[curr_count].replace(".json",""))
+
     while True:
- 
         screen.fill(('white'))
         draw_text('GAME FILES', font_title, ('black'), screen, 200, 100)
+        draw_text(file_name, font_title, ('black'), screen, 200, 250)
+        draw_text(error_msg, font_title, ('red'), screen, 125, 250)
  
         mx, my = pygame.mouse.get_pos()
 
         #creating buttons
         load = pygame.Rect(235, 532, 120, 50)
-        rename = pygame.Rect(40, 532, 120, 50)
-        delete = pygame.Rect(425, 532, 120, 50)
+        prev = pygame.Rect(40, 532, 120, 50)
+        next = pygame.Rect(425, 532, 120, 50)
 
         #defining functions when clicked on
         if load.collidepoint((mx, my)):
             if click:
-                exist_screen()
-        if rename.collidepoint((mx, my)):
+                load_game() ## load button / function call
+
+        if prev.collidepoint((mx, my)):
             if click:
-                rename_screen()
-        if delete.collidepoint((mx, my)):
+                if  option_count > 0:
+                    if curr_count == 0:
+                        curr_count = option_count
+                    curr_count = curr_count - 1
+                    file_name = str(options[curr_count].replace(".json",""))
+
+        if next.collidepoint((mx, my)):
             if click:
-                delete_screen()
+                if option_count > 0:
+                    if curr_count == option_count - 1:
+                        curr_count = -1
+                    curr_count = curr_count + 1
+                    file_name = str(options[curr_count].replace(".json",""))
+            
         pygame.draw.rect(screen, ('black'), load)
-        pygame.draw.rect(screen, ('black'), rename)
-        pygame.draw.rect(screen, ('black'), delete)
+        pygame.draw.rect(screen, ('black'), prev)
+        pygame.draw.rect(screen, ('black'), next)
  
         #writing text over button
         draw_text('LOAD', font, ('white'), screen, 265, 550)
-        draw_text('RENAME', font, ('white'), screen, 60, 550)
-        draw_text('DELETE', font, ('white'), screen, 450, 550)
+        draw_text('PREV', font, ('white'), screen, 60, 550)
+        draw_text('NEXT', font, ('white'), screen, 450, 550)
 
         # commands that lead to actions
         click = False
@@ -73,62 +95,14 @@ def load_menu():
         clock.tick(60)
  
 # function is called when the "LOAD" button is clicked on
-def exist_screen():
-    running = True
-    while running:
-        screen.fill('white')
-       
-        draw_text('Puzzle', font_title, ('black'), screen, 200, 150)
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    running = False
-       
-        pygame.display.update()
-        clock.tick(60)
+def load_game(file_name):
+    spacer = 0 
+    prep_value = prep_game_from_load(file_name)
+    if type(prep_value) == int:
+        return 1
+    prep_value = (prep_value, spacer)
+    activeGameLoop(prep_value)
 
-# function is called when the "RENAME" button is clicked on
-def rename_screen():
-    running = True
-    while running:
-        screen.fill('white')
-        draw_text('PLEASE ENTER NEW NAME', font, ('black'), screen, 170, 150)
-
-        mx, my = pygame.mouse.get_pos()
-        
-        #creating buttons
-        save = pygame.Rect(170, 450, 110, 50)
-        clear = pygame.Rect(350, 450, 110, 50)
-      
-        if save.collidepoint((mx, my)):
-          if click:
-            exist_screen()
-        if clear.collidepoint((mx, my)):
-          if click:
-            exist_screen()
-        pygame.draw.rect(screen, ('green'), save)
-        pygame.draw.rect(screen, ('red'), clear)  
-  
-        #writing text over button
-        draw_text('SAVE', font, ('black'), screen, 190, 470)
-        draw_text('CLEAR', font, ('black'), screen, 370, 470)
-
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.quit()
-                sys.exit()
-            if event.type == KEYDOWN:
-                if event.key == K_ESCAPE:
-                    running = False
-       
-        pygame.display.update()
-        clock.tick(60)
-
-# function is called when the "DELETE" button is clicked on
-def delete_screen():
     running = True
     while running:
         screen.fill('white')
