@@ -220,8 +220,8 @@ def start_new_game():
         if type(prep_value) == int:
             return 1
 
-        game = Game()
-        game.run(prep_value)
+        game = Game(prep_value[0], prep_value[1])
+        game.run()
 
     def start_from_share(shared_key):    
         puzzle, puzzle_stats = prep_game_from_share(shared_key)
