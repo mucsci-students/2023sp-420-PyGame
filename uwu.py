@@ -1,28 +1,21 @@
 import pygame
 from puzzle import Puzzle
 
-
 class Game:
     def __init__(self):
-    # def __init__(self, puzzle, puzzle_stats):
         pygame.init()
-        # self.actual_puzzle = puzzle
-        # self.puzzle_stats = puzzle_stats
         self.puzzle = Puzzle()
         self.puzzle.generate_random_puzzle()
 
         # Set up the main game game_window
         self.game_window_minimum_width, self.game_window_minimum_height = 800, 600
         self.game_window_width, self.game_window_height = self.game_window_minimum_width, self.game_window_minimum_height
-
+        
+        self.background_image = pygame.image.load("Background_Image.png")
+        self.game_window = pygame.display.set_mode((self.game_window_width, self.game_window_height), pygame.RESIZABLE)
+        self.game_window.blit(self.background_image, (0,0))
         pygame.display.set_caption("Main Game")
         self.backspace_down = False
-
-
-        self.game_window = pygame.display.set_mode((self.game_window_width, self.game_window_height), pygame.RESIZABLE)
-        # self.game_window.blit(self.background_image, (0,0))
-        self.background_image = pygame.image.load("Background_Image.png").convert()
-        self.scaled_background_image = self.background_image
 
         # Define the radius and center position of the hexagon
         self.center_x, self.center_y = self.game_window_width // 2, self.game_window_height // 2
@@ -30,16 +23,15 @@ class Game:
         # Set up the colors
         self.WHITE = (255, 255, 255)
         self.BLACK = (0, 0, 0)
-        self.ORANGE = (255, 189, 49)                # Orange
-        self.ARROW_COLOR = (155, 155, 155)          # Light Gray
-        self.INPUT_BACKGROUND = (224,224,224)       # Gray
+        self.ARROW_COLOR = (155, 155, 155)
+        self.INPUT_BACKGROUND = (224,224,224)     # Gray
+        self.HOVER_COLOR = (0, 255, 255, 150)       # Cyan
         self.VALID_COLOR = (68, 214, 44)            # Green
         self.INVALID_COLOR = (255, 0, 0)            # Red
         self.GAME_BACKGROUND = (255, 30, 231)       # Bright Pink
-        self.HOVER_COLOR = self.ORANGE              # Cyan
         self.SHOW_WORDS_HOVER = self.BLACK
         self.HEXAGON_HOVER = self.BLACK
-        self.SHUFFLE_HOVER = self.ORANGE
+        self.SHUFFLE_HOVER = self.WHITE
 
         # Define the letters to display
         self.letters = self.puzzle.pangram.upper()
@@ -157,8 +149,8 @@ class Game:
                 self.HEXAGON_HOVER = self.HOVER_COLOR
                 pygame.draw.polygon(self.game_window, self.HEXAGON_HOVER, hex_points)
             else:
-                self.HEXAGON_HOVER = self.BLACK
-                pygame.draw.polygon(self.game_window, self.HEXAGON_HOVER, hex_points, 5)
+                self.HEXAGON_HOVER = self.WHITE
+                pygame.draw.polygon(self.game_window, self.HEXAGON_HOVER, hex_points, 4)
 
             letter_text = self.font.render(letter, True, self.BLACK)
             letter_text_rect = letter_text.get_rect(center=pos)
@@ -193,7 +185,7 @@ class Game:
         ]
 
         self.shuffle_button = pygame.draw.polygon(self.game_window, self.SHUFFLE_HOVER, shuffle_letter_hex_points, 3)
-        shuffle_text = self.font.render("Shuffle", True, self.WHITE)
+        shuffle_text = self.font.render("Shuffle", True, self.BLACK)
         shuffle_text_rect = shuffle_text.get_rect(center=self.shuffle_button.center)
         self.game_window.blit(shuffle_text, shuffle_text_rect)
     
@@ -254,7 +246,7 @@ class Game:
             self.clock.tick(60)
             
             # Fill the background
-            self.game_window.blit(self.scaled_background_image, (0,0))
+            # self.game_window.fill(self.GAME_BACKGROUND)
             self.draw_screen()
 
             # Handle events
@@ -267,22 +259,18 @@ class Game:
                 elif event.type == pygame.VIDEORESIZE:
                     # Set screen to minimum allowed width if resized too small
                     if event.w < self.game_window_minimum_width:
-                        print(f'event.w is: {event.w} self.game_window_minimum_width {self.game_window_minimum_width}')
                         self.game_window_width = self.game_window_minimum_width
-                        print(f'game_window_width: {event.w}')
                     else:
                         self.game_window_width = event.w
-                    
                     
                     # Set screen to minimum allowed height if resized too small
                     if event.h < self.game_window_minimum_height:
                        self.game_window_height = self.game_window_minimum_height
                     else:
                         self.game_window_height = event.h
-                    
+
+                    # Set screen with new dimensions
                     self.game_window = pygame.display.set_mode((self.game_window_width, self.game_window_height), pygame.RESIZABLE)
-                    self.scaled_background_image = pygame.transform.scale(self.background_image, (self.game_window_width, self.game_window_height)).convert()
-                    
                 
                 if event.type == pygame.MOUSEMOTION:
                     # Change the button color when hovered
@@ -292,7 +280,7 @@ class Game:
                         self.SHOW_WORDS_HOVER = self.BLACK
                     
                     if self.shuffle_button.collidepoint(event.pos):
-                        self.SHUFFLE_HOVER = self.ORANGE
+                        self.SHUFFLE_HOVER = self.HOVER_COLOR
                     else:
                         self.SHUFFLE_HOVER = self.BLACK
                     
@@ -357,6 +345,8 @@ class Game:
                 self.input_box_text = self.input_box_text[:-1]
 
             self.scroll_position = max(0, min((len(self.guessed_word_list) // self.guessed_words_column_count) - 15, self.scroll_position + self.scroll_direction))
+            self.game_window = pygame.display.set_mode((self.game_window_width, self.game_window_height), pygame.RESIZABLE).convert()
+            self.game_window.blit(self.background_image, (0,0))
             self.draw_guessed_words()
             pygame.display.update()
         pygame.quit()
