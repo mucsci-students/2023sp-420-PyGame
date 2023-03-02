@@ -1,6 +1,7 @@
 #imports
 import pygame, sys, os
 from pygame.locals import *
+from gui_main_game import Game
 
 from controller_universal import *
 
@@ -60,7 +61,7 @@ def start_load():
             #defining functions when clicked on
             if load.collidepoint((mx, my)):
                 if click:
-                    load_game() ## load button / function call
+                    load_game(file_name) ## load button / function call
 
             if prev.collidepoint((mx, my)):
                 if click:
@@ -106,12 +107,14 @@ def start_load():
     
     # function is called when the "LOAD" button is clicked on
     def load_game(file_name):
+        print(file_name)
         spacer = 0 
-        prep_value = prep_game_from_load(file_name)
-        if type(prep_value) == int:
+        puzzle_info, puzzle_stats = prep_game_from_load(file_name)
+        print(puzzle_info)
+        print(puzzle_stats)
+
+        if type(puzzle_info) == int:
             return 1
-        prep_value = (prep_value, spacer)
-        activeGameLoop(prep_value)
 
         running = True
         while running:
@@ -124,13 +127,6 @@ def start_load():
             #creating buttons
             yes = pygame.Rect(190, 280, 60, 50)
             no = pygame.Rect(355, 280, 60, 50)
-        
-            if yes.collidepoint((mx, my)):
-                if click:
-                    exist_screen()
-            if no.collidepoint((mx, my)):
-                if click:
-                    exist_screen()
             pygame.draw.rect(screen, ('red'), yes)
             pygame.draw.rect(screen, ('green'), no)  
     
@@ -145,6 +141,13 @@ def start_load():
                 if event.type == KEYDOWN:
                     if event.key == K_ESCAPE:
                         running = False
+                if event.type == MOUSEBUTTONDOWN and event.button == 1:
+                    if yes.collidepoint((mx, my)):
+                        game = Game(puzzle_info, puzzle_stats)
+                        game.run()
+                        running = False
+                    if no.collidepoint((mx, my)):
+                        exist_screen()
         
             pygame.display.update()
             clock.tick(60)

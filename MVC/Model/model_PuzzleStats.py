@@ -195,9 +195,9 @@ class PuzzleStats():
     json format:
     {
         "Score": playerScore,
-        "Rank": playerRank,
-        "Guesses": playerGuesses,
-        "GameId": puzzleId 
+        "CurrentPoints": playerRank,
+        "GuessedWords": playerGuesses,
+        "PuzzleLetters": puzzleId 
     }
     """
     def get_save_game(self, puzzleInfo, fileName):
@@ -206,12 +206,12 @@ class PuzzleStats():
 
         ## Create json object
         saveStat = {
-            "CurrentPoints": self.score,
-            "GuessedWords": self.guesses,
-            "WordList" : puzzleInfo.current_word_list,
-            "RequiredLetter" : puzzleInfo.required_letter,
+            "RequiredLetter": puzzleInfo.required_letter,
             "PuzzleLetters": puzzleInfo.pangram,
-            "MaxPoints" : puzzleInfo.total_points
+            "CurrentPoints": self.score,
+            "MaxPoints" : puzzleInfo.total_points,
+            "GuessedWords": self.guesses,
+            "WordList" : puzzleInfo.current_word_list
         }
         
         json_object = json.dumps(saveStat, indent=4)
@@ -232,7 +232,7 @@ class PuzzleStats():
     """
     def get_check_file(self, fileName):
         check = bool
-        saveGames = os.listdir("Saves")
+        saveGames = os.listdir("MVC/Model/Saves/")
         check = (fileName + ".json") not in saveGames
         return check
 
@@ -252,7 +252,9 @@ class PuzzleStats():
             return 1
             
         ## Loads the local file path for the saved game
-        saveFile = "Saves/" + fileName + ".json"
+        # saveFile = "Saves/" + fileName + ".json"
+
+        saveFile = "MVC/Model/Saves/" + fileName + ".json"
         
         ## reads the json file as a Dict
         with open(saveFile, "r") as openfile:
@@ -266,4 +268,4 @@ class PuzzleStats():
         openfile.close()
 
         ## Passes the DB Object Id to the Load Puzzle function
-        return saveInfo["GameId"], saveInfo["Letter"]
+        return saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"]

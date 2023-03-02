@@ -42,12 +42,16 @@ generate the Puzzle and Puzzle_Stats objects from load
         - if passed returns puzzle
 """
 def prep_game_from_load(save_info):
+    print(save_info)
+    puzzle_stats = PuzzleStats(0,'')
+    puzzle_letters, required_letter = puzzle_stats.LoadGame(save_info)
+    print(f'kill me {puzzle_stats}')
     puzzle = Puzzle()
-    if(puzzle.generate_puzzle_from_load(save_info[0], save_info[1]) == 1):
+    if(puzzle.generate_puzzle_from_load(puzzle_letters, required_letter) == 1):
         return 1
 
     ShuffleKey(puzzle.pangram, puzzle.required_letter)
-    return puzzle
+    return (puzzle, puzzle_stats)
 
 """
 generate the Puzzle and Puzzle_Stats objects from shared game 
