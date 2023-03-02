@@ -1,14 +1,12 @@
-import pygame
-from puzzle import Puzzle
-
+import pygame, os
 
 class Game:
-    def __init__(self):
-    # def __init__(self, puzzle, puzzle_stats):
+    # def __init__(self):
+    def __init__(self, puzzle, puzzle_stats):
         pygame.init()
         # self.actual_puzzle = puzzle
-        # self.puzzle_stats = puzzle_stats
-        self.puzzle = Puzzle()
+        self.puzzle_stats = puzzle_stats
+        self.puzzle = puzzle
         self.puzzle.generate_random_puzzle()
 
         # Set up the main game game_window
@@ -17,11 +15,11 @@ class Game:
 
         pygame.display.set_caption("Main Game")
         self.backspace_down = False
-
+        self.image_file_path = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
+        self.background_image = pygame.image.load(os.path.join(self.image_file_path, "Background_Image.png")).convert()
 
         self.game_window = pygame.display.set_mode((self.game_window_width, self.game_window_height), pygame.RESIZABLE)
         # self.game_window.blit(self.background_image, (0,0))
-        self.background_image = pygame.image.load("Background_Image.png").convert()
         self.scaled_background_image = self.background_image
 
         # Define the radius and center position of the hexagon
@@ -43,8 +41,8 @@ class Game:
 
         # Define the letters to display
         self.letters = self.puzzle.pangram.upper()
-        self.current_word_list = [word[0] for word in self.puzzle.current_word_list]
-        self.guessed_word_list = self.current_word_list
+        self.current_word_list = puzzle.current_word_list
+        self.guessed_word_list = puzzle_stats.guesses
         
         print(self.guessed_word_list)
         print(self.puzzle.pangram)
@@ -109,7 +107,7 @@ class Game:
         self.arrow_down_rectangle = pygame.Rect(self.arrow_down_x, self.arrow_down_y, self.arrow_width, self.arrow_height)
 
         # Calculate the number of columns based on the width of the display area
-        self.word_width = self.font_size * max(len(word) for word in self.guessed_word_list)
+        self.word_width = self.font_size * max(len(word) for word in self.current_word_list)
         self.col_width = self.word_width + 5  # add some padding
         self.guessed_words_column_count = int(max(1, self.guessed_words_background_width // self.col_width))
         self.guessed_words_list_rows = len(self.guessed_word_list) // self.guessed_words_column_count + (len(self.guessed_word_list) % self.guessed_words_column_count != 0)
@@ -361,5 +359,5 @@ class Game:
             pygame.display.update()
         pygame.quit()
 
-game = Game()
-game.run()
+# game = Game()
+# game.run()
