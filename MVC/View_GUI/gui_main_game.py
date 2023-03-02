@@ -7,6 +7,7 @@ from model_PuzzleStats import *
 class Game:
     def __init__(self, puzzle, puzzle_stats):
         pygame.init()
+        pygame.time.wait(1000)
         # self.actual_puzzle = puzzle
         self.puzzle_stats = puzzle_stats
         self.puzzle = puzzle
