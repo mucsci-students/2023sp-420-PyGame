@@ -42,10 +42,8 @@ generate the Puzzle and Puzzle_Stats objects from load
         - if passed returns puzzle
 """
 def prep_game_from_load(save_info):
-    print(save_info)
     puzzle_stats = PuzzleStats(0,'')
     puzzle_letters, required_letter = puzzle_stats.LoadGame(save_info)
-    print(f'kill me {puzzle_stats}')
     puzzle = Puzzle()
     if(puzzle.generate_puzzle_from_load(puzzle_letters, required_letter) == 1):
         return 1
@@ -59,8 +57,10 @@ generate the Puzzle and Puzzle_Stats objects from shared game
     - returns a tuple : (puzzle, puzzle_stats)
 """
 def prep_game_from_share(shared_key):
-    decoded_key = puzzle.decode_puzzle_key(shared_key)
+    if len(shared_key) < 7:
+        return 1
     puzzle = Puzzle()
+    decoded_key = puzzle.decode_puzzle_key(shared_key)
     
     if(puzzle.generate_puzzle_from_shared(decoded_key[1:], decoded_key[0]) == 1):
         return 1

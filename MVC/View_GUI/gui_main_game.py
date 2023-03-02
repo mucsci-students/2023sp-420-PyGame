@@ -5,7 +5,6 @@ from model_puzzle import *
 from model_PuzzleStats import *
 
 class Game:
-    # def __init__(self):
     def __init__(self, puzzle, puzzle_stats):
         pygame.init()
         # self.actual_puzzle = puzzle
@@ -47,10 +46,11 @@ class Game:
         self.current_word_list = puzzle.current_word_list
         self.guessed_word_list = puzzle_stats.guesses
         
-        print(self.guessed_word_list)
-        print(self.puzzle.pangram)
-        print(self.puzzle.required_letter)
-        print(len(self.guessed_word_list))
+        # print(self.guessed_word_list)
+        # print(self.puzzle.pangram)
+        # print(self.puzzle.required_letter)
+        # print(self.letters)
+        # print(len(self.guessed_word_list))
 
         # Set up the scroll variables
         self.scroll_position = 0
@@ -111,10 +111,14 @@ class Game:
         self.arrow_down_rectangle = pygame.Rect(self.arrow_down_x, self.arrow_down_y, self.arrow_width, self.arrow_height)
 
         # Calculate the number of columns based on the width of the display area
-        self.word_width = self.font_size * max(len(word) for word in self.current_word_list)
-        self.col_width = self.word_width + 5  # add some padding
+        self.word_width = self.font_size * max(len(word) for word in self.puzzle.current_word_list)
+        # print(self.puzzle.current_word_list)
+        self.col_width = self.word_width + 30  # add some padding
         self.guessed_words_column_count = int(max(1, self.guessed_words_background_width // self.col_width))
-        self.guessed_words_list_rows = len(self.guessed_word_list) // self.guessed_words_column_count + (len(self.guessed_word_list) % self.guessed_words_column_count != 0)
+        # print(self.guessed_words_background_width // self.col_width)
+        # print (self.guessed_words_background_width)
+        # print(self.col_width)
+        self.guessed_words_list_rows = len(self.puzzle.current_word_list) // self.guessed_words_column_count + (len(self.puzzle.current_word_list) % self.guessed_words_column_count != 0)
         
         # Give calculated values to pygame.Rect to draw the input box.
         self.input_box_rectangle = pygame.Rect(self.input_box_pos, (self.input_box_width, self.input_box_height))
@@ -125,7 +129,7 @@ class Game:
         self.guessed_words_text_rectangle.centerx = self.guessed_words_button.centerx
         self.guessed_words_text_rectangle.centery = self.guessed_words_button.centery
     
-        self.menu_y = self.show_words_pos[1] + 10
+        self.menu_y = self.show_words_pos[1] + 15
         # If we have a puzzle
         if self.letters:
             # Get the width and height of a character in the current puzzle
@@ -168,7 +172,7 @@ class Game:
 
     def draw_input_box(self):
         # Draw the input box rectangle and a fancy border.
-        pygame.draw.rect(self.game_window, self.WHITE, self.input_box_rectangle, 0)
+        pygame.draw.rect(self.game_window, self.INPUT_BACKGROUND, self.input_box_rectangle, 0)
         pygame.draw.rect(self.game_window, self.BLACK, self.input_box_rectangle, 2)
 
         # Variable storing the rendered font
@@ -212,16 +216,32 @@ class Game:
         # Draw the dropdown box if it's visible
         if self.show_words_box_visible:
             # Draw the up and down arrows
-            pygame.draw.rect(self.game_window, self.INPUT_BACKGROUND, self.guessed_words_background_rectangle)
+            pygame.draw.rect(self.game_window, self.WHITE, self.guessed_words_background_rectangle)
             if self.scroll_position == 0:
                 pygame.draw.polygon(self.game_window, self.ARROW_COLOR, [[self.arrow_up_x, self.arrow_up_y], [self.arrow_up_x + self.arrow_width, self.arrow_up_y], [self.arrow_up_x + self.arrow_width // 2, self.arrow_up_y - self.arrow_height]])
             else:
                 pygame.draw.polygon(self.game_window, self.BLACK, [[self.arrow_up_x, self.arrow_up_y], [self.arrow_up_x + self.arrow_width, self.arrow_up_y], [self.arrow_up_x + self.arrow_width // 2, self.arrow_up_y - self.arrow_height]])
-    
+                    # Calculate the number of columns based on the width of the display area
+            self.word_width = self.font_size * max(len(word) for word in self.puzzle.current_word_list)
+            self.col_width = self.word_width + 30  # add some padding
+            self.guessed_words_column_count = int(max(1, self.guessed_words_background_width // self.col_width))
+            self.guessed_words_list_rows = len(self.puzzle.current_word_list) // self.guessed_words_column_count + (len(self.puzzle.current_word_list) % self.guessed_words_column_count != 0)
+            
+            # Give calculated values to pygame.Rect to draw the input box.
+            self.input_box_rectangle = pygame.Rect(self.input_box_pos, (self.input_box_width, self.input_box_height))
+            self.guessed_words_button = pygame.Rect(self.show_words_pos, (self.guessed_words_button_width, self.guessed_words_button_height))
+            self.guessed_words_background_rectangle = pygame.Rect(self.show_words_pos[0], self.show_words_pos[1] + self.guessed_words_button_height, self.guessed_words_background_width, self.guessed_words_background_height)
+            # Center the "Show Words" text
+            self.guessed_words_text_rectangle = self.guessed_words_button_text.get_rect()
+            self.guessed_words_text_rectangle.centerx = self.guessed_words_button.centerx
+            self.guessed_words_text_rectangle.centery = self.guessed_words_button.centery
+        
+            self.menu_y = self.show_words_pos[1] + 10
             # Draw the words
             for word_column in range(self.guessed_words_column_count):
                 word_column_x = self.show_words_pos[0] + word_column * self.col_width
                 for i in range(len(self.guessed_word_list)):
+                    # print(self.guessed_word_list)
                     if i % self.guessed_words_column_count == word_column:
                         word_y = self.menu_y + ((i // self.guessed_words_column_count) * 30) - (self.scroll_position * 30)
                         if word_y >= self.show_words_pos[1] and word_y + 30 <= self.show_words_pos[1] + self.guessed_words_background_height:
@@ -328,9 +348,15 @@ class Game:
                     if self.shuffle_button.collidepoint(event.pos) and not self.show_words_box_visible:
                         # Calls shuffle_letters
                         self.puzzle_stats.shuffled_puzzle = ShuffleKey(self.puzzle.pangram, self.puzzle.required_letter)
-                        print(self.puzzle_stats.shuffled_puzzle)
+                        # print(self.puzzle_stats.shuffled_puzzle)
+                        # print(f'Before: {self.letters}')
+                        # print(type(self.letters))
                         self.letters = self.puzzle_stats.shuffled_puzzle
-                        
+                        swapped = list(self.letters)
+                        swapped[0], swapped [3] = swapped[3], swapped[0]
+                        self.letters = ''.join(swapped).upper()
+                        # print(f'After    : {self.letters}')
+
                     # Check if user clicked inside a hex related to a letter.
                     for i, pos in enumerate(self.puzzle_letter_center_position):
                         hex_pos = (pos[0] - self.radius, pos[1] - self.radius * 0.866)
@@ -346,21 +372,31 @@ class Game:
                     # Check if the backspace key was pressed
                     if event.key == pygame.K_BACKSPACE:
                         self.backspace_down = True
+                    
                     # Check if a letter key was pressed
                     elif event.unicode.isalpha():
+                        print("actually here")
                         self.backspace_down = False
                         self.input_box_text += event.unicode.upper()
-                    # elif event.key == pygame.K_KP_ENTER:
-                        # Check if current string is valid word in word list.
+                
                 
                 elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_BACKSPACE:
                         self.backspace_down = False
+                    
+                    elif event.key == pygame.K_RETURN:
+                        print("here")
+                        if (self.puzzle_stats.get_check_guess(self.input_box_text, self.puzzle)) == 0:
+                            self.guessed_word_list = self.puzzle_stats.guesses
+                            self.input_box_text = ''
+                            self.INPUT_BACKGROUND = self.WHITE
+                        else:
+                            self.INPUT_BACKGROUND = self.INVALID_COLOR
             
             if self.backspace_down:
                 self.input_box_text = self.input_box_text[:-1]
 
-            self.scroll_position = max(0, min((len(self.guessed_word_list) // self.guessed_words_column_count) - 15, self.scroll_position + self.scroll_direction))
+            self.scroll_position = max(0, min((len(self.puzzle_stats.guesses) // self.guessed_words_column_count) - 15, self.scroll_position + self.scroll_direction))
             self.draw_guessed_words()
             pygame.display.update()
         pygame.quit()

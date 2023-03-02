@@ -233,12 +233,19 @@ def cls():
 def start_shared_game():
   global puzzle
   global puzzle_stats
+  cls()
   print_shared_key_input()
   shared_key = input().lower()
   
   prep_value = prep_game_from_share(shared_key)
+  
   if type(prep_value) == int:
-    return 1
+    print("Invalid Code Input, Press any key to continue...")
+    print("Press 'N' to quit to main menu...")
+    user_input = input()
+    if user_input.lower() == 'n':
+      return 1
+    return start_shared_game()
 
   puzzle = prep_value
   activeGameLoop()

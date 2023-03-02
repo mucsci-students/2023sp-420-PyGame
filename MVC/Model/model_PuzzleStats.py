@@ -112,16 +112,18 @@ class PuzzleStats():
         69420: Player guessed all words. Game over
     """
     def get_check_guess(self, guess, puzzleInfo):
-        wordReq = self.CheckWordReq(guess, puzzleInfo.required_letter, puzzleInfo.pangram)
+        print(puzzleInfo.current_word_list)
+        wordReq = self.CheckWordReq(guess.lower(), puzzleInfo.required_letter, puzzleInfo.pangram)
         if wordReq != 0:
             return int(wordReq)
         
         wordGuessed = self.InGuesses(guess) # Bool
         if wordGuessed:
             return wordGuessed 
-           
+        
         ## Returns 0 if valid; anything else if unvalid
         outcome = self.CheckValidity(guess, puzzleInfo.current_word_list)
+        print(puzzleInfo.current_word_list)
         if self.check_progress():
             return 69420
         else:
