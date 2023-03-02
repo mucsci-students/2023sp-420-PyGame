@@ -1,5 +1,5 @@
 import pygame
-
+import os
 # initializes pygame
 pygame.init()
 
@@ -26,11 +26,13 @@ class Button:
 
 
 # images of different help buttons
-htp_icon = pygame.image.load("helpicons/htp_icon.png")
+image_dir = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
+
+htp_icon = pygame.image.load(os.path.join(image_dir, 'htp_icon.png'))
 htp_icon = pygame.transform.scale(htp_icon, (100,55))
-ptsys_icon = pygame.image.load("helpicons/ptsys_icon.png")
+ptsys_icon = pygame.image.load(os.path.join(image_dir, 'ptsys_icon.png'))
 ptsys_icon = pygame.transform.scale(ptsys_icon, (100,55))
-ranks_icon = pygame.image.load("helpicons/ranks_icon.png")
+ranks_icon = pygame.image.load(os.path.join(image_dir, 'ranks_icon.png'))
 ranks_icon = pygame.transform.scale(ranks_icon, (100,55))
 
 # creates different buttons to be pressed
@@ -45,7 +47,7 @@ window = pygame.display.set_mode((winX, winY), pygame.RESIZABLE)
 
 # set window name and icon
 pygame.display.set_caption("Help")
-icon = pygame.image.load("helpicons/clubpenguin4.jpg")
+icon = pygame.image.load(os.path.join(image_dir, 'clubpenguin4.jpg'))
 pygame.display.set_icon(icon)
 
 # set visual text and font 
