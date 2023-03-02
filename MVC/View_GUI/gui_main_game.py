@@ -1,5 +1,9 @@
 import pygame, os
 
+from model_shuffleLetters import *
+from model_puzzle import *
+from model_PuzzleStats import *
+
 class Game:
     # def __init__(self):
     def __init__(self, puzzle, puzzle_stats):
@@ -7,7 +11,6 @@ class Game:
         # self.actual_puzzle = puzzle
         self.puzzle_stats = puzzle_stats
         self.puzzle = puzzle
-        self.puzzle.generate_random_puzzle()
 
         # Set up the main game game_window
         self.game_window_minimum_width, self.game_window_minimum_height = 800, 600
@@ -46,6 +49,7 @@ class Game:
         
         print(self.guessed_word_list)
         print(self.puzzle.pangram)
+        print(self.puzzle.required_letter)
         print(len(self.guessed_word_list))
 
         # Set up the scroll variables
@@ -323,7 +327,9 @@ class Game:
                     # If user clicked on "Shuffle".
                     if self.shuffle_button.collidepoint(event.pos) and not self.show_words_box_visible:
                         # Calls shuffle_letters
-                        print("Shuffling!")
+                        self.puzzle_stats.shuffled_puzzle = ShuffleKey(self.puzzle.pangram, self.puzzle.required_letter)
+                        print(self.puzzle_stats.shuffled_puzzle)
+                        self.letters = self.puzzle_stats.shuffled_puzzle
                         
                     # Check if user clicked inside a hex related to a letter.
                     for i, pos in enumerate(self.puzzle_letter_center_position):
