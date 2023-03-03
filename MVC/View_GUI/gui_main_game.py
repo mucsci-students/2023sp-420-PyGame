@@ -409,7 +409,7 @@ class Game:
         
         if self.good_timer_active:
             # Set new input box font size
-            self.input_box_font_size = int(self.input_box_height * .95)        
+            self.input_box_font_size = int(self.input_box_height * .80)        
             self.input_box_font = pygame.font.SysFont(None, self.input_box_font_size)
         else:
             # Set new input box font size
@@ -422,7 +422,32 @@ class Game:
 
 
     def handle_save_visuals(self):
-        self.puzzle_stats.get_save_game()
+        background_surface = pygame.Surface((self.game_window_width, self.game_window_height), pygame.SRCALPHA)
+        background_surface.fill((0, 0, 0, 128))
+
+
+
+        # while True:
+        #     self.game_window.blit(background_surface, (0, 0))
+        #     pygame.display.update()
+        #     event = pygame.event.wait()
+        #     if event.type == KEYDOWN:
+        #         if event.key == K_RETURN:
+        #             break
+        #         elif event.key == K_BACKSPACE:
+        #             input_text = input_text[:-1]
+        #         else:
+        #             input_text += event.unicode
+
+        #     # Render the text as a Surface and blit it onto the text display
+        #     text_surface = font.render(input_text, True, (0, 0, 0))
+        #     self.game_window.blit(background_surface, (0, 0))
+        #     pygame.draw.rect(self.game_window, input_box_color, input_box_rect)
+        #     self.game_window.blit(text_surface, (text_display_x, text_display_y))
+        #     pygame.draw.rect(screen, text_display_color, text_display_rect)
+        #     pygame.display.update()
+   
+        # self.puzzle_stats.get_save_game()
         
 
 
