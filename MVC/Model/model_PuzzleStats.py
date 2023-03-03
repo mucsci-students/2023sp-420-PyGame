@@ -176,7 +176,7 @@ class PuzzleStats():
         if length == 4:
             points = 1
         # If word is a pangram, worth length * 2
-        elif length == 7 and len(set(word) == 7):
+        elif length == 7 and len(set(word)) == 7:
             points = 7
         # Else word is worth its length
         else:

@@ -167,7 +167,7 @@ def get_total_points(puzzle_list):
     if length == 4:
       total_points += 1
     # If word is a pangram, worth length * 2
-    elif length == len(set(word[0])):
+    elif length == 7 and len(set(word)) == 7:
       total_points += (length)*2
     # Else word is worth its length
     else:
