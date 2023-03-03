@@ -14,7 +14,7 @@ def start_gui():
     pygame.display.set_caption('Main Menu PYGAME')
 
     # Define some colors
-    WHITE = (255, 0, 247)
+    WHITE = (255,255,255)
     BLACK = (0, 0, 0)
     GRAY = (128, 128, 128)
 
@@ -53,12 +53,12 @@ def start_gui():
             (BOX_X, NEW_GAME_BOX_Y + half_height + BOX_HEIGHT),
             (BOX_X, NEW_GAME_BOX_Y + half_height)
         ]
-        new_game_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, hexagon_points)
-        load_game_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, BOX_HEIGHT + BOX_SPACING)) )) for point in hexagon_points])
-        help_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, 2 * BOX_HEIGHT + 2 * BOX_SPACING)) )) for point in hexagon_points])
-        exit_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, 3 * BOX_HEIGHT + 3 * BOX_SPACING)) )) for point in hexagon_points])
+        new_game_box = pygame.draw.polygon(DISPLAY_SURFACE, BLACK, hexagon_points)
+        load_game_box = pygame.draw.polygon(DISPLAY_SURFACE, BLACK, [tuple(map(sum, zip(point, (0, BOX_HEIGHT + BOX_SPACING)) )) for point in hexagon_points])
+        help_box = pygame.draw.polygon(DISPLAY_SURFACE, BLACK, [tuple(map(sum, zip(point, (0, 2 * BOX_HEIGHT + 2 * BOX_SPACING)) )) for point in hexagon_points])
+        exit_box = pygame.draw.polygon(DISPLAY_SURFACE, BLACK, [tuple(map(sum, zip(point, (0, 3 * BOX_HEIGHT + 3 * BOX_SPACING)) )) for point in hexagon_points])
 
-        title_text_surface = FONT.render(HEADER_TEXT, True, WHITE)
+        title_text_surface = FONT.render(HEADER_TEXT, True, BLACK)
         title_text_rect = title_text_surface.get_rect(center=((WINDOW_WIDTH/2), BOX_Y_START/2))
         DISPLAY_SURFACE.blit(title_text_surface, title_text_rect)
 
@@ -110,7 +110,7 @@ def start_gui():
                     WINDOW_WIDTH = w
                     WINDOW_HEIGHT = h
             # Draw the screen
-            DISPLAY_SURFACE.fill([150,150,150])
+            DISPLAY_SURFACE.fill([255,255,255])
             draw_boxes()
             pygame.display.update()
 
