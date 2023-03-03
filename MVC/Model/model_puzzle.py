@@ -49,6 +49,9 @@ class Puzzle:
             self.current_word_list = check_value[3]
 
     def generate_puzzle_from_shared(self, pangram, letter):
+        check_value = self.check_valid_word(key)
+        if(check_value == 1):
+            return 1
         word = get_word_info_from_load(pangram, letter)
         self.pangram = word[0]
         self.required_letter = word[1]

@@ -15,6 +15,8 @@ class PuzzleStats():
         self.rank = 0
         ## All valid word guesses that has given points
         self.guesses = []
+        # All possible words in puzzle
+        self.wordList = []
         ## Total amount of points in the puzzle
         self.maxScore = max_score
         ## Current puzzle layout
@@ -42,7 +44,7 @@ class PuzzleStats():
                 self.guesses.append(guess)
                 self.score = self.score + self.get_word_points(guess)
                 self.RankIndex()
-                return 0 
+                return 0
         ## Word not valid
         return 1
 
@@ -112,16 +114,18 @@ class PuzzleStats():
         69420: Player guessed all words. Game over
     """
     def get_check_guess(self, guess, puzzleInfo):
-        wordReq = self.CheckWordReq(guess, puzzleInfo.required_letter, puzzleInfo.pangram)
+        # print(puzzleInfo.current_word_list)
+        wordReq = self.CheckWordReq(guess.lower(), puzzleInfo.required_letter, puzzleInfo.pangram)
         if wordReq != 0:
             return int(wordReq)
         
         wordGuessed = self.InGuesses(guess) # Bool
         if wordGuessed:
             return wordGuessed 
-           
+        
         ## Returns 0 if valid; anything else if unvalid
         outcome = self.CheckValidity(guess, puzzleInfo.current_word_list)
+        # print(puzzleInfo.current_word_list)
         if self.check_progress():
             return 69420
         else:
@@ -172,8 +176,8 @@ class PuzzleStats():
         if length == 4:
             points = 1
         # If word is a pangram, worth length * 2
-        elif length == len(set(word)):
-            points = (length)*2
+        elif length == 7 and len(set(word)) == 7:
+            points = 7
         # Else word is worth its length
         else:
             points = length
@@ -195,9 +199,9 @@ class PuzzleStats():
     json format:
     {
         "Score": playerScore,
-        "Rank": playerRank,
-        "Guesses": playerGuesses,
-        "GameId": puzzleId 
+        "CurrentPoints": playerRank,
+        "GuessedWords": playerGuesses,
+        "PuzzleLetters": puzzleId 
     }
     """
     def get_save_game(self, puzzleInfo, fileName):
@@ -206,12 +210,12 @@ class PuzzleStats():
 
         ## Create json object
         saveStat = {
-            "CurrentPoints": self.score,
-            "GuessedWords": self.guesses,
-            "WordList" : puzzleInfo.current_word_list,
-            "RequiredLetter" : puzzleInfo.required_letter,
+            "RequiredLetter": puzzleInfo.required_letter,
             "PuzzleLetters": puzzleInfo.pangram,
-            "MaxPoints" : puzzleInfo.total_points
+            "CurrentPoints": self.score,
+            "MaxPoints" : puzzleInfo.total_points,
+            "GuessedWords": self.guesses,
+            "WordList" : puzzleInfo.current_word_list
         }
         
         json_object = json.dumps(saveStat, indent=4)
@@ -232,7 +236,7 @@ class PuzzleStats():
     """
     def get_check_file(self, fileName):
         check = bool
-        saveGames = os.listdir("Saves")
+        saveGames = os.listdir("MVC/Model/Saves/")
         check = (fileName + ".json") not in saveGames
         return check
 
@@ -252,7 +256,9 @@ class PuzzleStats():
             return 1
             
         ## Loads the local file path for the saved game
-        saveFile = "Saves/" + fileName + ".json"
+        # saveFile = "Saves/" + fileName + ".json"
+
+        saveFile = "MVC/Model/Saves/" + fileName + ".json"
         
         ## reads the json file as a Dict
         with open(saveFile, "r") as openfile:
@@ -261,9 +267,10 @@ class PuzzleStats():
         self.score = saveInfo["CurrentPoints"]
         self.guesses = saveInfo["GuessedWords"]
         self.maxScore = saveInfo["MaxPoints"]
+        self.wordList = saveInfo["WordList"]
         self.RankIndex()
 
         openfile.close()
 
         ## Passes the DB Object Id to the Load Puzzle function
-        return saveInfo["GameId"], saveInfo["Letter"]
+        return saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"]

@@ -27,7 +27,6 @@ class Button:
 
 # images of different help buttons
 image_dir = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
-
 htp_icon = pygame.image.load(os.path.join(image_dir, 'htp_icon.png'))
 htp_icon = pygame.transform.scale(htp_icon, (100,55))
 ptsys_icon = pygame.image.load(os.path.join(image_dir, 'ptsys_icon.png'))
