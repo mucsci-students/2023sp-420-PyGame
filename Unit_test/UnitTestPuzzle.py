@@ -1,52 +1,60 @@
 import unittest
 import sys
-import io
-sys.path.insert(0, 'C:\\Users\\Bjlef\\Documents\\GitHub\\2023sp-420-PyGame')
-from Database.database import get_word_info_from_pangram, get_word_info_from_load, get_random_word_info
-from puzzle import Puzzle
+import os
+from unittest.mock import patch
+module_dir = os.path.abspath(
+    os.path.join(os.path.dirname(__file__), '..', 'MVC', 'Model')
+)
 
-class TestPuzzle(unittest.TestCase):
+# Add the directory to the system path
+sys.path.insert(0, module_dir)
+from model_puzzle import Puzzle
+
+class TestPuzzleInit(unittest.TestCase):
 
     def setUp(self):
         self.puzzle = Puzzle()
 
+    def test_init(self):
+        self.assertEqual(self.puzzle.pangram, "")
+        self.assertEqual(self.puzzle.required_letter, "")
+        self.assertEqual(self.puzzle.total_points, 0)
+        self.assertEqual(self.puzzle.current_word_list, {})
     def test_generate_random_puzzle(self):
-        self.puzzle.generate_random_puzzle()
-        self.assertIsInstance(self.puzzle.pangram, str)
-        self.assertIsInstance(self.puzzle.required_letter, str)
-        self.assertIsInstance(self.puzzle.total_points, int)
-        self.assertIsInstance(self.puzzle.current_word_list, list)
+        p = Puzzle()
+        p.generate_random_puzzle()
+        self.assertTrue(isinstance(p.pangram, str))
+        self.assertTrue(len(p.pangram) == 7)
+        self.assertTrue(isinstance(p.required_letter, str))
+        self.assertTrue(len(p.required_letter) == 1)
+        self.assertTrue(isinstance(p.total_points, int))
+        self.assertTrue(isinstance(p.current_word_list, list))
 
     def test_generate_puzzle_from_load(self):
-        pangram = "abcdefg"
-        letter = "a"
-        self.puzzle.generate_puzzle_from_load(pangram, letter)
-        self.assertEqual(self.puzzle.pangram, pangram)
-        self.assertEqual(self.puzzle.required_letter, letter)
-        self.assertIsInstance(self.puzzle.total_points, int)
-        self.assertIsInstance(self.puzzle.current_word_list, list)
+        p = Puzzle()
+        p.generate_puzzle_from_load("inconveniencing", "e")
+        self.assertEqual(p.pangram, "inconveniencing")
+        self.assertEqual(p.required_letter, "e")
+        self.assertEqual(p.total_points, 496)
+        self.assertTrue(isinstance(p.current_word_list, list))
 
-    def test_generate_puzzle_from_base_valid_key(self):
-        key = "abcdefg"
-        self.puzzle.generate_puzzle_from_base(key)
-        self.assertIsInstance(self.puzzle.required_letter, str)
-        self.assertIsInstance(self.puzzle.total_points, int)
-        self.assertIsInstance(self.puzzle.current_word_list, list)
+    def test_generate_puzzle_from_base(self):
+        p = Puzzle()
+        p.generate_puzzle_from_base("unequipped")
+        self.assertTrue(isinstance(p.current_word_list, list))
 
-    def test_generate_puzzle_from_base_invalid_key(self):
-        key = "abcde"
-        self.assertEqual(self.puzzle.generate_puzzle_from_base(key), 1)
 
-    def test_check_valid_word_valid_key(self):
-        key = "abcdefg"
-        result = self.puzzle.check_valid_word(key)
-        self.assertIsInstance(result, list)
-        self.assertEqual(len(result), 4)
+    def test_generate_puzzle_from_shared(self):
+        p = Puzzle()
+        p.generate_puzzle_from_shared("horsing", "l")
+        self.assertEqual(p.pangram, "horsing")
+        self.assertEqual(p.required_letter, "l")
+        self.assertEqual(p.total_points, 96)
+        self.assertTrue(isinstance(p.current_word_list, list))
 
-    def test_check_valid_word_invalid_key(self):
-        key = "abcde"
-        self.assertEqual(self.puzzle.check_valid_word(key), 1)
+if __name__ == '__main__':
+    unittest.main()
 
-    
+
 if __name__ == '__main__':
     unittest.main()
