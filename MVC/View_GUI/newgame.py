@@ -106,10 +106,10 @@ def start_new_game():
 
             if save.collidepoint((mx, my)):
                 if click:
-                    exist_screen()
+                    print(f'newgame.py - def key_screen(): save does not exist.')
             if clear.collidepoint((mx, my)):
                 if click:
-                    exist_screen()
+                    print(f'newgame.py - def key_screen(): Does not exist.')
             pygame.draw.rect(screen, ('green'), save)
             pygame.draw.rect(screen, ('red'), clear)  
     
@@ -170,10 +170,10 @@ def start_new_game():
         
             if save.collidepoint((mx, my)):
                 if click:
-                    exist_screen()
+                    print(f'Does not exist')
             if clear.collidepoint((mx, my)):
                 if click:
-                    exist_screen()
+                    print(f'Does not exist')
                 
             pygame.draw.rect(screen, ('green'), save)
             pygame.draw.rect(screen, ('red'), clear)  
@@ -224,12 +224,12 @@ def start_new_game():
         game.run()
 
     def start_from_share(shared_key):    
-        puzzle, puzzle_stats = prep_game_from_share(shared_key)
+        prep_value = prep_game_from_share(shared_key)
 
         if type(prep_value) == int:
             return 1
 
-        game = Game(puzzle, puzzle_stats)
-        game.run(prep_value)
+        game = Game(prep_value[0], prep_value[1])
+        game.run()
 
     load_game()

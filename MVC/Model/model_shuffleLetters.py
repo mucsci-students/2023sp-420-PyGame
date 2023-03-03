@@ -19,6 +19,7 @@ Rundown:
 """
 
 def ShuffleKey(current_puzzle, required_letter):
+    print(f'model_shuffleLetters.py - def ShuffleKey(current_puzzle, required_letter): Input: {current_puzzle, required_letter}')
     current_puzzle = current_puzzle.lower()
     uniqueSet = list(set(current_puzzle))
     uniqueSet = "".join(uniqueSet)
@@ -27,9 +28,10 @@ def ShuffleKey(current_puzzle, required_letter):
 
     result = uniqueSet.replace(requiredKey, "")
     result = random.sample(result, len(result))
-    result.insert(3, requiredKey)
+    result.insert(0, requiredKey)
     result = "".join(result)
 
+    print(f'model_shuffleLetters.py - def ShuffleKey(current_puzzle, required_letter): Output: {result}')
     return result
 
 """

@@ -42,13 +42,13 @@ generate the Puzzle and Puzzle_Stats objects from load
         - if passed returns puzzle
 """
 def prep_game_from_load(save_info):
-    puzzle_stats = PuzzleStats(0,'')
+    puzzle_stats = PuzzleStats(-1,'')
     puzzle_letters, required_letter = puzzle_stats.LoadGame(save_info)
     puzzle = Puzzle()
     if(puzzle.generate_puzzle_from_load(puzzle_letters, required_letter) == 1):
         return 1
-
-    ShuffleKey(puzzle.pangram, puzzle.required_letter)
+    shuffled_puzzle = ShuffleKey(puzzle.pangram, puzzle.required_letter)
+    puzzle_stats = PuzzleStats(puzzle.total_points, shuffled_puzzle)
     return (puzzle, puzzle_stats)
 
 """

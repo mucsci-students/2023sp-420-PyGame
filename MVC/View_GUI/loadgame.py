@@ -107,15 +107,12 @@ def start_load():
     
     # function is called when the "LOAD" button is clicked on
     def load_game(file_name):
-        print(file_name)
+        print(f'loadgame.py - def load_game(file_name): Selected filename is: {file_name}')
         spacer = 0 
-        puzzle_info, puzzle_stats = prep_game_from_load(file_name)
-        print(puzzle_info)
-        print(puzzle_stats)
+        prep_value = prep_game_from_load(file_name)
 
-        if type(puzzle_info) == int:
+        if type(prep_value) == int:
             return 1
-
         running = True
         while running:
             screen.fill('white')
@@ -143,11 +140,10 @@ def start_load():
                         running = False
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:
                     if yes.collidepoint((mx, my)):
-                        game = Game(puzzle_info, puzzle_stats)
+                        game = Game(prep_value[0], prep_value[1])
                         game.run()
-                        running = False
                     if no.collidepoint((mx, my)):
-                        exist_screen()
+                        print(f'loadgame.py - def load_game(file_name): This function does not exist.')
         
             pygame.display.update()
             clock.tick(60)

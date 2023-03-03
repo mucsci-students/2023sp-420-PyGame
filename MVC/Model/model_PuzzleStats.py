@@ -15,6 +15,8 @@ class PuzzleStats():
         self.rank = 0
         ## All valid word guesses that has given points
         self.guesses = []
+        # All possible words in puzzle
+        self.wordList = []
         ## Total amount of points in the puzzle
         self.maxScore = max_score
         ## Current puzzle layout
@@ -42,7 +44,7 @@ class PuzzleStats():
                 self.guesses.append(guess)
                 self.score = self.score + self.get_word_points(guess)
                 self.RankIndex()
-                return 0 
+                return 0
         ## Word not valid
         return 1
 
@@ -174,8 +176,8 @@ class PuzzleStats():
         if length == 4:
             points = 1
         # If word is a pangram, worth length * 2
-        elif length == len(set(word)):
-            points = (length)*2
+        elif length == 7 and len(set(word) == 7):
+            points = 7
         # Else word is worth its length
         else:
             points = length
@@ -265,6 +267,7 @@ class PuzzleStats():
         self.score = saveInfo["CurrentPoints"]
         self.guesses = saveInfo["GuessedWords"]
         self.maxScore = saveInfo["MaxPoints"]
+        self.wordList = saveInfo["WordList"]
         self.RankIndex()
 
         openfile.close()
