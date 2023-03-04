@@ -1,138 +1,152 @@
-import pygame
-import os
-# initializes pygame
-pygame.init()
+import pygame, os, math
+from gui_main_menu import *
 
-# button class, used to click and show different texts in the window
-class Button:
-    # initializes the button, creates rectangle, sets pivot
-    def __init__(self, x, y, icon_name):
-        self.img = icon_name
-        self.rect = self.img.get_rect()
-        self.rect.topleft = (x, y)
-        self.clicked = False
+def start_help():
 
-    # reacts to the button being pressed (or not being pressed)
-    def draw(self, word_list_name):
-        cursor_pos = pygame.mouse.get_pos()
-        if self.rect.collidepoint(cursor_pos):
-            if pygame.mouse.get_pressed()[0] and not self.clicked:
-                self.clicked = True
-                assign_list(word_list_name)
-                wrap_text()
-            if not pygame.mouse.get_pressed()[0]:
-                self.clicked = False
-        window.blit(self.img, (self.rect.x, self.rect.y))
+    # initializes pygame
+    pygame.init()
 
+    # create window dimensions, and minimum window dimensions (when window is resized)
+    winX, winY = 600, 400
+    minX, minY = 450, 400
+    window = pygame.display.set_mode((winX, winY), pygame.RESIZABLE)
 
-# images of different help buttons
-image_dir = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
-htp_icon = pygame.image.load(os.path.join(image_dir, 'htp_icon.png'))
-htp_icon = pygame.transform.scale(htp_icon, (100,55))
-ptsys_icon = pygame.image.load(os.path.join(image_dir, 'ptsys_icon.png'))
-ptsys_icon = pygame.transform.scale(ptsys_icon, (100,55))
-ranks_icon = pygame.image.load(os.path.join(image_dir, 'ranks_icon.png'))
-ranks_icon = pygame.transform.scale(ranks_icon, (100,55))
+    # set window name and icon
+    pygame.display.set_caption("Help")
+    image_dir = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
+    icon = pygame.image.load(os.path.join(image_dir, 'clubpenguin4.jpg'))
+    pygame.display.set_icon(icon)
 
-# creates different buttons to be pressed
-button_htp = Button(10, 30, htp_icon)
-button_ptsys = Button(10, 130, ptsys_icon)
-button_ranks = Button(10, 230, ranks_icon)
+    # set visual text and font
+    font = pygame.font.Font(None, 21)
 
-# create window dimensions, and minimum window dimensions (when window is resized)
-winX, winY = 600, 375
-minX, minY = 400, 350
-window = pygame.display.set_mode((winX, winY), pygame.RESIZABLE)
+    # create hexagon points (NOT the lines between the points)
+    hex_radius = 50 # change this for bigger hexagons, considered midpoint
+    hex_points = []
+    for i in range(6):
+        hex_angle = (math.pi / 180) * (60 * i) # converts from degrees to radians
+        hex_x = hex_radius * math.cos(hex_angle) + 70 # the + 70 changes x position
+        hex_y = hex_radius * math.sin(hex_angle) + 70
+        hex_points.append((hex_x, hex_y))
 
-# set window name and icon
-pygame.display.set_caption("Help")
-icon = pygame.image.load(os.path.join(image_dir, 'clubpenguin4.jpg'))
-pygame.display.set_icon(icon)
+    # create back arrow points
+    arrow_vertices = [(10, 15), (5, 20), (10, 25), (5, 20), (22, 20), (5, 20), (10, 25)]
+    arrow_rect_vertices = [(0, 0), (0, 25), (30, 25), (30, 0)]
 
-# set visual text and font 
-font = pygame.font.SysFont("None", 21)
+    # text shown in window before a hexagonal button is clicked
+    intro_text = "Click an option for more information."
 
-# text shown in window before a button is clicked
-intro_text = "Click an option for more information."
+    # text shown in window when "How to Play" button is clicked
+    htp_text = """
+    How to Play:
+    *** ***
+    ~ Create words using letters from the hive, move up the ranks, and try to get the maximum score ***
+    ~ You must use only the letters in the hive to create words ***
+    ~ Each word much use the required letter in the center of the hive ***
+    ~ Words must be at least four letters long ***
+    ~ Letters can be used more than once in a single guess ***
+    ~ Guesses cannot contain hyphens, proper nouns, vulgarities, or obscure words ***
+    ~ Each puzzle includes at least one "pangram", which uses all seven given letters at least once
+    """
 
-# text shown in window when "How to Play" button is clicked
-htp_text = """
-How to Play:
-*** ***
-~ Create words using letters from the hive, move up the ranks, and try to get the maximum score ***
-~ You must use only the letters in the hive to create words ***
-~ Each word much use the required letter in the center of the hive ***
-~ Words must be at least four letters long ***
-~ Letters can be used more than once in a single guess ***
-~ Guesses cannot contain hyphens, proper nouns, vulgarities, or obscure words ***
-~ Each puzzle includes at least one "pangram", which uses all seven given letters at least once
-"""
+    # text shown in window when "Point System" button is clicked
+    ptsys_text = """
+    Point System:
+    *** ***
+    ~ 4-letter words are worth 1 point each. ***
+    ~ If the entered word is longer than 4 letters then you get a point for the word's character length ***
+    ~ Each puzzle includes at least one “pangram” which uses every letter at least once. ***
+    ~ Words guesses that use all seven given letters will earn double amount of points
+    """
 
-# text shown in window when "Point System" button is clicked
-ptsys_text = """
-Point System:
-*** ***
-~ 4-letter words are worth 1 point each. ***
-~ If the entered word is longer than 4 letters then you get a point for the word's character length ***
-~ Each puzzle includes at least one “pangram” which uses every letter at least once. ***
-~ Words guesses that use all seven given letters will earn double amount of points
-"""
+    # text shown in window when "Rank System" Button is clicked
+    ranks_text = """
+    Rank System:
+    *** ***
+    Every puzzle has 10 ranks that will progress and change based on the percentage that the puzzle is completed.
+    *** ***
+    0% - Beginner    ***
+    2% - Good Start  ***
+    5% - Moving Up   ***
+    8% - Good        ***
+    15% - Solid      ***
+    25% - Nice       ***
+    40% - Great      ***
+    50% - Amazing    ***
+    70% - Genius     ***
+    100% - Queen Bee  
+    """
 
-# text shown in window when "Rank System" Button is clicked
-ranks_text = """
-Rank System:
-*** ***
-Every puzzle has 10 ranks that will progress and change based on the percentage that the puzzle is completed.
-*** ***
-0% - Beginner    ***
-2% - Good Start  ***
-5% - Moving Up   ***
-8% - Good        ***
-15% - Solid      ***
-25% - Nice       ***
-40% - Great      ***
-50% - Amazing    ***
-70% - Genius     ***
-100% - Queen Bee  
-"""
+    # sets the updated text to new_text, to funnel all possible informational texts into one variable
+    new_text = intro_text
+    show_text = font.render(intro_text, 1, ("black"))
 
-# different word lists for each section (used for text wrapping)
-htp_word_list = htp_text.split()
-ptsys_word_list = ptsys_text.split()
-ranks_word_list = ranks_text.split()
-
-# other variables (used for text wrapping)
-wordList = intro_text.split() # splits the intro string into a list of words (the list will change when a button is pressed)
-lines = [] # list of all words that can fit on a line within the current window-space
-curr_line = "" # current line that is able to fit within the current window-space
-
-# padding for adding text in window (used for text wrapping and adding elements to the window)
-paddingX = 130  # blank space from top left corner, accounting for where buttons are
-paddingY = 20 # blank space from top left corner
-
-# for frame limiter
-fps = 60
-
-
-################################### FUNCTIONS ###################################
-
-
-# main function called when help button is clicked (through main menu or active puzzle)
-def main_help():
-    global window
-
-    wrap_text()
+    # for frame limiter
+    fps = 60
     clock = pygame.time.Clock()
-    running = True
 
+    # window fill, draw hexagons, draw back arrow, write hexagon text
+    def add_elements():
+        
+        # make window background white
+        window.fill("white")
+        
+        # draw hexagons in the window
+        pygame.draw.polygon(window, ("black"), hex_points, 3)
+        pygame.draw.polygon(window, ("black"), [(hex_x, hex_y + 125) for hex_x, hex_y in hex_points], 3)
+        pygame.draw.polygon(window, ("black"), [(hex_x, hex_y + 250) for hex_x, hex_y in hex_points], 3)
+
+        # draw the back arrow in the window
+        pygame.draw.polygon(window, ("black"), arrow_vertices, 0)
+        pygame.draw.polygon(window, ("white"), arrow_rect_vertices, 1)
+
+        # write the text on top of the hexagons
+        window.blit(font.render("How to Play", 1, ("black")), (32, 63))
+        window.blit(font.render("Points", 1, ("black")), (50, 188))
+        window.blit(font.render("Ranks", 1, ("black")), (50, 313))
+
+    # when resizing window, text should be wrapped so that all text is visible to the user (not going outside the window)
+    def wrap_text(info_text):
+        wordList = info_text.split() # splits the intro string into a list of words (the list will change when a button is pressed)
+        lines = []
+        curr_line = "" # current line that is able to fit within the current window-space
+
+        max_text_line = window.get_width() - 200
+        lines.clear()
+        curr_line = ""
+
+        for word in wordList:
+            if word == "***":
+                lines.append(curr_line)
+                curr_line = ""
+                continue
+
+            if font.size(curr_line + word)[0] < max_text_line:
+                curr_line += f"{word} "
+            else:
+                lines.append(curr_line)
+                curr_line = f"{word} "
+        lines.append(curr_line)
+        
+        for i, line in enumerate(lines):
+            text_surface = font.render(line, 1, pygame.Color('black'))
+            text_padX = 150  # set the x position to the left padding
+            text_padY = 50 + i * (font.get_linesize())  # add padding and spacing between each line
+            window.blit(text_surface, (text_padX, text_padY))
+
+    # *** ACTIVE HELP LOOP ***
+    running = True
     while running:
         clock.tick(fps)
 
         for event in pygame.event.get():
+
+            # if the user exits the window
             if event.type == pygame.QUIT:
                 running = False
-
-            elif event.type == pygame.VIDEORESIZE:
+            
+            # if the window is resized
+            if event.type == pygame.VIDEORESIZE:
                 if event.w < minX and event.h < minY:
                     window = pygame.display.set_mode((minX, minY), pygame.RESIZABLE)
                 elif event.w < minX:
@@ -141,62 +155,25 @@ def main_help():
                     window = pygame.display.set_mode((event.w, minY), pygame.RESIZABLE)
                 else:
                     window = pygame.display.set_mode(event.size, pygame.RESIZABLE)
-                wrap_text()
+            
+            # if the user left-clicks on a hexagon
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                if pygame.draw.polygon(window, ("white"), hex_points).collidepoint(event.pos):
+                    new_text = htp_text
+                elif pygame.draw.polygon(window, ("white"), [(x, y + 125) for x, y in hex_points]).collidepoint(event.pos):
+                    new_text = ptsys_text
+                elif pygame.draw.polygon(window, ("white"), [(x, y + 250) for x, y in hex_points]).collidepoint(event.pos):
+                    new_text = ranks_text
+                elif pygame.draw.polygon(window, ("white"), arrow_rect_vertices).collidepoint(event.pos):
+                    running = False
 
-        add_window_elements()
+        add_elements()
+        wrap_text(new_text)
+        
+        # update display
         pygame.display.update()
 
-
-# adds the background color, buttons, and (wrapped) text on the screen
-def add_window_elements():
-    window.fill((0,128,128))
-
-    button_htp.draw(htp_word_list)
-    button_ptsys.draw(ptsys_word_list)
-    button_ranks.draw(ranks_word_list)
-
-    for i, line in enumerate(lines):
-            text_surface = font.render(line, 1, pygame.Color('white'))
-            text_padX = paddingX  # set the x position to the left padding
-            text_padY = paddingY + i * (font.get_linesize())  # add padding and spacing between each line
-            window.blit(text_surface, (text_padX, text_padY))
-
-
-# creates lines of text, so that the maximum amount of words can fit in the visible window-space (left-to-right)
-def wrap_text():
-    global lines
-    global curr_line
-
-    max_text_line = window.get_width() - (paddingX - 50) * 2
-    lines.clear()
-    curr_line = ""
-
-    for word in wordList:
-        if word == "***":
-            lines.append(curr_line)
-            curr_line = ""
-            continue
-
-        if font.size(curr_line + word)[0] < max_text_line:
-            curr_line += f"{word} "
-        else:
-            lines.append(curr_line)
-            curr_line = f"{word} "
-    lines.append(curr_line)
-
-
-# assigns the correct word list, depending on which button is pressed (accessed through Button class)
-def assign_list(name):
-    global wordList
-
-    if name == htp_word_list:
-        wordList = htp_word_list
-    elif name == ptsys_word_list:
-        wordList = ptsys_word_list
-    elif name == ranks_word_list:
-        wordList = ranks_word_list
-
-
-# when help button is clicked/accessed
-if __name__ == "__main__":
-    main_help()
+    # when running is False, reset the window size to the gui_main_menu window size
+    window = pygame.display.set_mode((600, 600), pygame.RESIZABLE)
+    return
+    pygame.quit()

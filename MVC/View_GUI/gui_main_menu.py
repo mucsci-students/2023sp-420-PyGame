@@ -99,8 +99,8 @@ def start_gui():
                         start_load()
                         
                     elif help_box.collidepoint(mouse_pos):
-                        subprocess.run(["python", "./MVC/view_GUI/helpgui.py"])
-                        # start_help()
+                        # subprocess.run(["python", "./MVC/view_GUI/helpgui.py"])
+                        start_help()
                         
                     elif exit_box.collidepoint(mouse_pos):
                         running = False
