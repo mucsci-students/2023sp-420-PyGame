@@ -1,5 +1,5 @@
 #imports
-import pygame, sys
+import pygame, sys,math
 
 from pygame.locals import *
 from gui_main_game import Game
@@ -18,7 +18,20 @@ def start_new_game():
     font_title = pygame.font.SysFont(None, 50)
     font = pygame.font.SysFont(None, 30)
 
-    
+
+    # create hexagon points (NOT the lines between the points)
+    hex_radius = 70 # change this for bigger hexagons, considered midpoint
+    hex_points = []
+    for i in range(6):
+        hex_angle = (math.pi / 180) * (60 * i) # converts from degrees to radians
+        hex_x = hex_radius * math.cos(hex_angle) + 70 # the + 70 changes x position
+        hex_y = hex_radius * math.sin(hex_angle) + 70
+        hex_points.append((hex_x, hex_y))
+
+    # create back arrow points
+    arrow_vertices = [(10, 15), (5, 20), (10, 25), (5, 20), (22, 20), (5, 20), (10, 25)]
+    arrow_rect_vertices = [(0, 0), (0, 25), (30, 25), (30, 0)]
+
     # function that writes text onto the screen and buttons
     def draw_text(text, font, color, surface, x, y):
         textobj = font.render(text, 1, color)
@@ -34,15 +47,15 @@ def start_new_game():
         while True:
     
             screen.fill(('white'))
-            draw_text('NEW GAME OPTIONS', font_title, ('black'), screen, 100, 70)
+            draw_text('START GAME FROM:', font_title, ('black'), screen, 130, 70)
     
             mx, my = pygame.mouse.get_pos()
             active = False
 
             #creating buttons
-            random = pygame.Rect(150, 150, 260, 50)
-            key = pygame.Rect(150, 280, 260, 50)
-            code = pygame.Rect(150, 410, 260, 50)
+            random = pygame.draw.polygon(screen, ('black'), [(hex_x + 230, hex_y + 150) for hex_x, hex_y in hex_points], 3)
+            key = pygame.draw.polygon(screen, ('black'), [(hex_x + 230, hex_y + 300) for hex_x, hex_y in hex_points], 3)
+            code = pygame.draw.polygon(screen, ('black'), [(hex_x + 230, hex_y + 450) for hex_x, hex_y in hex_points], 3)
 
             #defining functions when clicked on
             if random.collidepoint((mx, my)):
@@ -54,14 +67,18 @@ def start_new_game():
             if code.collidepoint((mx, my)):
                 if click:
                     code_screen()
-            pygame.draw.rect(screen, ('black'), random)
-            pygame.draw.rect(screen, ('black'), key)
-            pygame.draw.rect(screen, ('black'), code)
-    
+            if pygame.draw.polygon(screen, ("white"), arrow_rect_vertices).collidepoint(mx,my):
+                if click:
+                    return
+
+            # draw the back arrow in the window
+            pygame.draw.polygon(screen, ("black"), arrow_vertices, 0)
+            pygame.draw.polygon(screen, ("white"), arrow_rect_vertices, 1)
+
             #writing text over button
-            draw_text('START FROM RANDOM', font, ('white'), screen, 166, 170)
-            draw_text('START FROM A KEY', font, ('white'), screen, 180, 300)
-            draw_text('START FROM A CODE', font, ('white'), screen, 175, 431)
+            draw_text('RANDOM', font, ('black'), screen, 257, 213)
+            draw_text('BASE', font, ('black'), screen, 270, 362)
+            draw_text('SHARED', font, ('black'), screen, 260, 513)
 
             # commands that lead to actions
             click = False
@@ -76,7 +93,6 @@ def start_new_game():
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
                         click = True
-    
             pygame.display.update()
             clock.tick(60)
     
@@ -91,6 +107,11 @@ def start_new_game():
         running = True
         user_text = ''
         error_msg = ''
+    
+        # create back arrow points
+        arrow_vertices = [(10, 15), (5, 20), (10, 25), (5, 20), (22, 20), (5, 20), (10, 25)]
+        arrow_rect_vertices = [(0, 0), (0, 25), (30, 25), (30, 0)]
+
         while running:
             screen.fill('white')
             draw_text('PLEASE ENTER KEY', font, ('black'), screen, 200, 200)
@@ -101,7 +122,6 @@ def start_new_game():
             #creating buttons
             save = pygame.Rect(170, 450, 110, 50)
             clear = pygame.Rect(320, 450, 110, 50)
-        
             input= pygame.Rect(240, 300, 110, 40)
 
             if save.collidepoint((mx, my)):
@@ -110,9 +130,17 @@ def start_new_game():
             if clear.collidepoint((mx, my)):
                 if click:
                     print(f'newgame.py - def key_screen(): Does not exist.')
+            if pygame.draw.polygon(screen, ("white"), arrow_rect_vertices).collidepoint(mx,my):
+                if click:
+                    return
+
             pygame.draw.rect(screen, ('green'), save)
             pygame.draw.rect(screen, ('red'), clear)  
     
+            # draw the back arrow in the window
+            pygame.draw.polygon(screen, ("black"), arrow_vertices, 0)
+            pygame.draw.polygon(screen, ("white"), arrow_rect_vertices, 1)
+
             #writing text over button
             draw_text('START', font, ('black'), screen, 195, 470)
             draw_text('CLEAR', font, ('black'), screen, 340, 470)
@@ -139,6 +167,7 @@ def start_new_game():
                     if clear.collidepoint(pygame.mouse.get_pos()):
                         user_text = ""    
                     
+
             # draws rectangle input with a border            
             pygame.draw.rect(screen,('black'), input, 2)
         
@@ -155,6 +184,11 @@ def start_new_game():
         running = True
         user_text = ''
         error_msg = ''
+
+        # create back arrow points
+        arrow_vertices = [(10, 15), (5, 20), (10, 25), (5, 20), (22, 20), (5, 20), (10, 25)]
+        arrow_rect_vertices = [(0, 0), (0, 25), (30, 25), (30, 0)]
+
         while running:
             screen.fill('white')
             draw_text('PLEASE ENTER CODE', font, ('black'), screen, 180, 200)
@@ -174,10 +208,17 @@ def start_new_game():
             if clear.collidepoint((mx, my)):
                 if click:
                     print(f'Does not exist')
+            if pygame.draw.polygon(screen, ("white"), arrow_rect_vertices).collidepoint(mx,my):
+                if click:
+                    return
                 
             pygame.draw.rect(screen, ('green'), save)
             pygame.draw.rect(screen, ('red'), clear)  
     
+            # draw the back arrow in the window
+            pygame.draw.polygon(screen, ("black"), arrow_vertices, 0)
+            pygame.draw.polygon(screen, ("white"), arrow_rect_vertices, 1)
+
             #writing text over button
             draw_text('START', font, ('black'), screen, 195, 470)
             draw_text('CLEAR', font, ('black'), screen, 340, 470)
@@ -202,7 +243,7 @@ def start_new_game():
 
                     if clear.collidepoint(pygame.mouse.get_pos()):
                         user_text = ""
-    
+                    
             # draws rectangle input with a border            
             pygame.draw.rect(screen,('black'), input, 2)
         

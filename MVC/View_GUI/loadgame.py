@@ -1,7 +1,8 @@
 #imports
-import pygame, sys, os
+import pygame, sys, os, math
 from pygame.locals import *
 from gui_main_game import Game
+
 
 from controller_universal import *
 
@@ -16,6 +17,19 @@ def start_load():
     pygame.display.set_caption('Load A Game')
     font_title = pygame.font.SysFont(None, 50)
     font = pygame.font.SysFont(None, 30)
+
+    # create hexagon points (NOT the lines between the points)
+    hex_radius = 50 # change this for bigger hexagons, considered midpoint
+    hex_points = []
+    for i in range(6):
+        hex_angle = (math.pi / 180) * (60 * i) # converts from degrees to radians
+        hex_x = hex_radius * math.cos(hex_angle) + 70 # the + 70 changes x position
+        hex_y = hex_radius * math.sin(hex_angle) + 70
+        hex_points.append((hex_x, hex_y))
+
+    # create back arrow points
+    arrow_vertices = [(10, 15), (5, 20), (10, 25), (5, 20), (22, 20), (5, 20), (10, 25)]
+    arrow_rect_vertices = [(0, 0), (0, 25), (30, 25), (30, 0)]
     
     # function that writes text onto the screen and buttons
     def draw_text(text, font, color, surface, x, y):
@@ -31,7 +45,7 @@ def start_load():
     def load_menu():
         save_path = ''
         for path in sys.path:
-            if "\Saves" in path:
+            if "/Saves" in path:
                 save_path = path
                 break 
 
@@ -54,9 +68,9 @@ def start_load():
             mx, my = pygame.mouse.get_pos()
 
             #creating buttons
-            load = pygame.Rect(235, 532, 120, 50)
-            prev = pygame.Rect(40, 532, 120, 50)
-            next = pygame.Rect(425, 532, 120, 50)
+            load = pygame.draw.polygon(screen, ('black'), [(hex_x + 230, hex_y + 450) for hex_x, hex_y in hex_points], 3)
+            prev = pygame.draw.polygon(screen, ('black'), [(hex_x + 50, hex_y + 450) for hex_x, hex_y in hex_points], 3)
+            next = pygame.draw.polygon(screen, ('black'), [(hex_x + 400, hex_y + 450) for hex_x, hex_y in hex_points], 3)
 
             #defining functions when clicked on
             if load.collidepoint((mx, my)):
@@ -79,14 +93,18 @@ def start_load():
                         curr_count = curr_count + 1
                         file_name = str(options[curr_count].replace(".json",""))
                 
-            pygame.draw.rect(screen, ('black'), load)
-            pygame.draw.rect(screen, ('black'), prev)
-            pygame.draw.rect(screen, ('black'), next)
+            if pygame.draw.polygon(screen, ("white"), arrow_rect_vertices).collidepoint(mx,my):
+                if click:
+                    return
+
+             # draw the back arrow in the window
+            pygame.draw.polygon(screen, ("black"), arrow_vertices, 0)
+            pygame.draw.polygon(screen, ("white"), arrow_rect_vertices, 1)
     
             #writing text over button
-            draw_text('LOAD', font, ('white'), screen, 265, 550)
-            draw_text('PREV', font, ('white'), screen, 60, 550)
-            draw_text('NEXT', font, ('white'), screen, 450, 550)
+            draw_text('LOAD', font, ('black'), screen, 270, 513)
+            draw_text('PREV', font, ('black'), screen, 92, 513)
+            draw_text('NEXT', font, ('black'), screen, 442, 513)
 
             # commands that lead to actions
             click = False
@@ -101,7 +119,8 @@ def start_load():
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
                         click = True
-    
+                
+
             pygame.display.update()
             clock.tick(60)
     
@@ -124,8 +143,8 @@ def start_load():
             #creating buttons
             yes = pygame.Rect(190, 280, 60, 50)
             no = pygame.Rect(355, 280, 60, 50)
-            pygame.draw.rect(screen, ('red'), yes)
-            pygame.draw.rect(screen, ('green'), no)  
+            pygame.draw.rect(screen, ('green'), yes)
+            pygame.draw.rect(screen, ('red'), no)  
     
             #writing text over button
             draw_text('YES', font, ('black'), screen, 200, 300)
@@ -143,7 +162,8 @@ def start_load():
                         game = Game(prep_value[0], prep_value[1])
                         game.run()
                     if no.collidepoint((mx, my)):
-                        print(f'loadgame.py - def load_game(file_name): This function does not exist.')
+                        return
+                    
         
             pygame.display.update()
             clock.tick(60)
