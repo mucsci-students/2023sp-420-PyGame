@@ -106,7 +106,6 @@ class Game:
         self.input_box_text = ''
         
         self.running = True
-        self.backspace_down = False
         self.show_words_box_visible = False
         
 
@@ -392,10 +391,10 @@ class Game:
             else:
                 self.input_box_text = f'+ {self.puzzle_stats.get_word_points(self.input_box_text)} points!'
         else:
+            self.INPUT_BACKGROUND = self.INVALID_COLOR
             self.SUBMIT_BUTTON = self.INVALID_COLOR
             self.SUBMIT_HOVER = self.INVALID_COLOR
             self.SHUFFLE_HOVER = self.INVALID_COLOR
-            self.INPUT_BACKGROUND = self.INVALID_COLOR
             self.SAVE_HOVER = self.INVALID_COLOR
             self.SAVE_BUTTON = self.INVALID_COLOR
             self.bad_timer_active = True
@@ -421,35 +420,66 @@ class Game:
         self.guessed_word_button_font = pygame.font.SysFont(None, self.guessed_word_button_font_size)  
 
 
+    def leave_game(self):
+        button_text = self.guessed_word_button_font.render("Leave Game", True, (0, 0, 0))
+        self.exit_button_rect = button_text.get_rect()
+        self.exit_button_rect.topleft = (10, self.guessed_words_button.y)
+        pygame.draw.rect(self.game_window, self.ORANGE, self.exit_button_rect)
+        self.game_window.blit(button_text, self.exit_button_rect)
+
+
     def handle_save_visuals(self):
-        background_surface = pygame.Surface((self.game_window_width, self.game_window_height), pygame.SRCALPHA)
-        background_surface.fill((0, 0, 0, 128))
-
-
-
-        # while True:
-        #     self.game_window.blit(background_surface, (0, 0))
-        #     pygame.display.update()
-        #     event = pygame.event.wait()
-        #     if event.type == KEYDOWN:
-        #         if event.key == K_RETURN:
-        #             break
-        #         elif event.key == K_BACKSPACE:
-        #             input_text = input_text[:-1]
-        #         else:
-        #             input_text += event.unicode
-
-        #     # Render the text as a Surface and blit it onto the text display
-        #     text_surface = font.render(input_text, True, (0, 0, 0))
-        #     self.game_window.blit(background_surface, (0, 0))
-        #     pygame.draw.rect(self.game_window, input_box_color, input_box_rect)
-        #     self.game_window.blit(text_surface, (text_display_x, text_display_y))
-        #     pygame.draw.rect(screen, text_display_color, text_display_rect)
-        #     pygame.display.update()
-   
-        # self.puzzle_stats.get_save_game()
+        semi_transparent_color = (0, 0, 0, 160)
         
+        message_box_width = self.input_box_width
+        message_box_height = self.input_box_height
+        message_box_x = (self.game_window_width - message_box_width) // 2
+        message_box_y = (self.game_window_height - message_box_height) // 2 - 100
+        message_box_rectangle = pygame.Rect(message_box_x, message_box_y, message_box_width, message_box_height)
 
+        file_input_width = self.input_box_width
+        file_input_height = self.input_box_height * 1.1
+        file_input_x = (self.game_window_width - file_input_width) // 2
+        file_input_y = (self.game_window_height - file_input_height) // 2 + 100
+        file_input_rectangle = pygame.Rect(file_input_x, file_input_y, file_input_width, file_input_height)
+
+        message_text_surface = self.input_box_font.render(f'Enter filename: ', True, self.NEON_ORANGE)
+
+        hide_background_surface = pygame.Surface((self.game_window_width, self.game_window_height), pygame.SRCALPHA)
+        message_display = pygame.Surface((message_box_width, message_box_height), pygame.SRCALPHA)
+        message_display.fill(semi_transparent_color)
+        hide_background_surface.fill(semi_transparent_color)
+        
+        # Create a Font object
+        font = pygame.font.SysFont(None, 32)
+
+        message_text_rect = message_text_surface.get_rect(center=message_box_rectangle.center)
+        self.game_window.blit(hide_background_surface, (0, 0))
+        self.game_window.blit(message_display, (message_box_x, message_box_y))
+        self.game_window.blit(message_text_surface, (message_text_rect))
+
+        input_text = ''
+        while True:
+            event = pygame.event.wait()
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_RETURN:
+                    if input_text != '':
+                        print(f'gui_main_game.py - def handle_save_visuals(): Save has not implemented required letter.')
+                        # self.puzzle_stats.get_save_game(self.puzzle_stats, input_text)     
+                        break
+                elif event.key == pygame.K_BACKSPACE:
+                    input_text = input_text[:-1]
+                elif event.unicode.isalpha():
+                    input_text += event.unicode
+                elif event.key == pygame.K_ESCAPE:
+                    break
+            
+            pygame.draw.rect(self.game_window, self.WHITE, file_input_rectangle)
+            # Render the text as a Surface and blit it onto the text display
+            text_surface = font.render(input_text, True, (0, 0, 0))
+            self.game_window.blit(text_surface, (file_input_x, file_input_y))
+            pygame.display.update()
+        
 
     # Draw all screen elements
     def draw_screen(self):
@@ -461,6 +491,7 @@ class Game:
         self.draw_guessed_words()
         self.draw_rank()
         self.scale_font()
+        self.leave_game()
 
     def run(self):
         pygame.time.wait(500)
@@ -468,10 +499,13 @@ class Game:
         while self.running:
             # Limit framerate
             self.clock.tick(60)
-            
             # Fill the background
             self.game_window.blit(self.scaled_background_image, (0,0))
             self.draw_screen()
+
+            if self.puzzle_stats.check_progress():
+                self.running = False
+
             if self.bad_timer_active:
                 # Check if the timer has expired
                 if pygame.time.get_ticks() - self.timer_start_time >= self.timer_duration:
@@ -497,7 +531,6 @@ class Game:
                     self.SAVE_HOVER = self.BLACK
                     self.SAVE_BUTTON = self.BLACK
 
-    
             # Handle events
             for event in pygame.event.get():
                 # Quit the game
@@ -583,6 +616,10 @@ class Game:
                     elif self.save_button.collidepoint(event.pos) and not self.show_words_box_visible:
                         self.handle_save_visuals()
 
+                    elif self.exit_button_rect.collidepoint(event.pos):
+                        self.running = False
+                
+
                     # Check if user clicked inside a hex related to a letter.
                     for i, pos in enumerate(self.puzzle_letter_center_position):
                         hex_pos = (pos[0] - self.radius, pos[1] - self.radius * 0.866)
@@ -599,26 +636,19 @@ class Game:
                     print (key, "Key is pressed")
                     # Check if the backspace key was pressed
                     if event.key == pygame.K_BACKSPACE:
-                        self.backspace_down = True
+                        self.input_box_text = self.input_box_text[:-1]
                     
                     # Check if a letter key was pressed
                     elif event.unicode.isalpha() and event.unicode in self.puzzle.pangram:
                         if len(self.input_box_text) < self.input_box_max_length:
-                            self.backspace_down = False
                             self.input_box_text += event.unicode.upper()
                 
-                elif event.type == pygame.KEYUP:
-                    if event.key == pygame.K_BACKSPACE:
-                        self.backspace_down = False
-                    
+                elif event.type == pygame.KEYUP: 
                     if event.key == pygame.K_RETURN and not self.good_timer_active:
                         if self.input_box_text != '':
                             self.handle_guess_visuals()
-                
-            if self.backspace_down:
-                self.input_box_text = self.input_box_text[:-1]
 
             self.scroll_position = max(0, min((len(self.guessed_word_list) // self.guessed_words_column_count) - 15, self.scroll_position + self.scroll_direction))
             self.draw_guessed_words()
             pygame.display.update()
-        pygame.quit()
+        # pygame.quit()
