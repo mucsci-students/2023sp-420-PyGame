@@ -103,6 +103,13 @@ def saveGamePrompt():
 
 #Loops thru the active game screens
 def activeGameLoop():
+  # count = -1
+  # for i in puzzle.pangram:
+  #   ++count
+  #   if puzzle.pangram[i] == puzzle.required_letter:
+  #     puzzle[0] == puzzle[count]
+
+
   loop = True
   while (loop):
     cls()
@@ -197,13 +204,17 @@ def start_game_with_key(key):
 def start_game_with_key_from_load(save_info):
   global puzzle
   global puzzle_stats
-  
-  prep_value = prep_game_from_load(save_info)
-  if type(prep_value) == int:
-    return 1
+  print(save_info)
 
-  puzzle = prep_value
-  activeGameLoop()
+  if save_info != 1:
+    activeGameLoop()
+  
+  # prep_value = prep_game_from_load(save_info)
+  # if type(prep_value) == int:
+  #   return 1
+
+  # puzzle = prep_value
+    
 
 # creates a save file (saves current game)
 def save_current_game(filename):

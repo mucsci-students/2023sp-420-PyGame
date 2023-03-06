@@ -1,4 +1,5 @@
 import os
+import sys
 
 ## prints the start up "Loading" screen
 def print_start_screen():
@@ -223,8 +224,14 @@ def print_all_guesses(stats):
 
 ## Returns a list of all save files able to load (load options)
 def get_load_options():
-        options = os.listdir("Saves")
-        return options
+    save_path = ''
+    for path in sys.path:
+        if "\Saves" in path:
+            save_path = path
+            break
+    options = os.listdir(save_path)
+    print(options)
+    return options
 
 ## prints a detatiled "Invalid Guess" given a passed value from print_guess_outcome()
 """

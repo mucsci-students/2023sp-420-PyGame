@@ -10,7 +10,7 @@ class Puzzle:
         self.pangram = ""
         self.required_letter = ""
         self.total_points = 0
-        self.current_word_list = {}
+        self.current_word_list = []
 
     """ 
         Author: Robert 2/7/23
@@ -25,11 +25,15 @@ class Puzzle:
         self.current_word_list = random_puzzle[3]
 
     def generate_puzzle_from_load(self, pangram, letter):
-        word = get_word_info_from_load(pangram, letter)
-        self.pangram = word[0]
-        self.required_letter = word[1]
-        self.total_points = word[2]
-        self.current_word_list = word[3]
+        check_value = self.check_valid_word(pangram)
+        if(check_value == 1):
+            return 1
+        else:
+            word = get_word_info_from_load(pangram, letter)
+            self.pangram = word[0]
+            self.required_letter = word[1]
+            self.total_points = word[2]
+            self.current_word_list = word[3]
 
     """ 
         Author: Robert 2/7/23
@@ -49,7 +53,7 @@ class Puzzle:
             self.current_word_list = check_value[3]
 
     def generate_puzzle_from_shared(self, pangram, letter):
-        check_value = self.check_valid_word(key)
+        check_value = self.check_valid_word(pangram)
         if(check_value == 1):
             return 1
         word = get_word_info_from_load(pangram, letter)

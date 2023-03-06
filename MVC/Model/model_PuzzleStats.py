@@ -135,31 +135,35 @@ class PuzzleStats():
     Must be between 0.00 and 1.00
     """
     def RankIndex(self):
-        difference = self.score/self.maxScore
-        if difference < 0 or difference > 1:
-            ## Error
-            return 1
-
-        if difference < .02:
-            self.rank = 0 #Beginner
-        elif difference < .05:
-            self.rank = 1 #Good Start
-        elif difference < .08:
-            self.rank = 2 #Moving up
-        elif difference < .15:
-            self.rank = 3 #Good
-        elif difference < .25:
-            self.rank = 4 #Solid
-        elif difference < .40:
-            self.rank = 5 #Nice
-        elif difference < .50:
-            self.rank = 6 #Great
-        elif difference < .70:
-            self.rank = 7 #Amazing
-        elif difference < 1:
-            self.rank = 8 #Genius
+        if self.score == 0:
+            self.rank = 0
+            return
         else:
-            self.rank = 9 #Queen Bee
+            difference = self.score/self.maxScore
+            if difference < 0 or difference > 1:
+                ## Error
+                return 1
+
+            if difference < .02:
+                self.rank = 0 #Beginner
+            elif difference < .05:
+                self.rank = 1 #Good Start
+            elif difference < .08:
+                self.rank = 2 #Moving up
+            elif difference < .15:
+                self.rank = 3 #Good
+            elif difference < .25:
+                self.rank = 4 #Solid
+            elif difference < .40:
+                self.rank = 5 #Nice
+            elif difference < .50:
+                self.rank = 6 #Great
+            elif difference < .70:
+                self.rank = 7 #Amazing
+            elif difference < 1:
+                self.rank = 8 #Genius
+            else:
+                self.rank = 9 #Queen Bee
 
     def get_rank(self):
         rankSteps = ["Beginner","Good Start","Moving Up","Good","Solid","Nice","Great","Amazing","Genius","Queen Bee"]
@@ -233,6 +237,7 @@ class PuzzleStats():
         Case 2: FileName is in use; Return Flase 
     """
     def get_check_file(self, fileName):
+        # print(f'filename is: {fileName}')
         check = bool
         saveGames = os.listdir("MVC/Model/Saves/")
         check = (fileName + ".json") not in saveGames
@@ -249,6 +254,7 @@ class PuzzleStats():
     Returns a "1" if the file name couldn"t be found
     """
     def LoadGame(self, fileName):
+        # print(fileName)
         ## Check if name is valid
         if self.get_check_file(fileName):
             return 1
