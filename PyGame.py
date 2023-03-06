@@ -11,13 +11,24 @@ This file is the main controller for the Spelling Bee Game
 import sys
 import os
 
-sys.path.append(os.getcwd()+"\\MVC")
-sys.path.append(os.getcwd()+"\\MVC\\Controller")
-sys.path.append(os.getcwd()+"\\MVC\\Model")
-sys.path.append(os.getcwd()+"\\MVC\\Model\\Saves")
-sys.path.append(os.getcwd()+"\\MVC\\Model\\Database")
-sys.path.append(os.getcwd()+"\\MVC\\View_CLI")
-sys.path.append(os.getcwd()+"\\MVC\\View_GUI")
+## nt = windows
+if os.name!="nt": 
+    sys.path.append(os.getcwd()+"/MVC")
+    sys.path.append(os.getcwd()+"/MVC/Controller")
+    sys.path.append(os.getcwd()+"/MVC/Model")
+    sys.path.append(os.getcwd()+"/MVC/Model/Saves")
+    sys.path.append(os.getcwd()+"/MVC/Model/Database")
+    sys.path.append(os.getcwd()+"/MVC/View_CLI")
+    sys.path.append(os.getcwd()+"/MVC/View_GUI")  
+else:
+    sys.path.append(os.getcwd()+"\\MVC")
+    sys.path.append(os.getcwd()+"\\MVC\\Controller")
+    sys.path.append(os.getcwd()+"\\MVC\\Model")
+    sys.path.append(os.getcwd()+"\\MVC\\Model\\Saves")
+    sys.path.append(os.getcwd()+"\\MVC\\Model\\Database")
+    sys.path.append(os.getcwd()+"\\MVC\\View_CLI")
+    sys.path.append(os.getcwd()+"\\MVC\\View_GUI")
+
 
 from CLI_controller import main_menu_handler
 from loadgame import *
