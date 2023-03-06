@@ -19,7 +19,7 @@ Rundown:
 """
 
 def ShuffleKey(current_puzzle, required_letter):
-    print(f'model_shuffleLetters.py - def ShuffleKey(current_puzzle, required_letter): Input: {current_puzzle, required_letter}')
+    # print(f'model_shuffleLetters.py - def ShuffleKey(current_puzzle, required_letter): Input: {current_puzzle, required_letter}')
     current_puzzle = current_puzzle.lower()
     uniqueSet = list(set(current_puzzle))
     uniqueSet = "".join(uniqueSet)

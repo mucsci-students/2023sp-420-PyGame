@@ -165,6 +165,7 @@ def start_load():
                     if yes.collidepoint((mx, my)):
                         game = Game(prep_value[0], prep_value[1])
                         game.run()
+                        running = False
                     if no.collidepoint((mx, my)):
                         return
                     
