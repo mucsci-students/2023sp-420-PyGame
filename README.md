@@ -29,8 +29,12 @@ A simple game where a player is to create English words using a number of given 
 ## Setup:
 
 1. Download and install [Python 3.11.1](https://www.python.org/downloads/). 
-2. Install [PyGame](https://www.pygame.org/wiki/GettingStarted) `pip install pygame --pre` and [Win32 API](https://learn.microsoft.com/en-us/windows/win32/apiindex/windows-api-list) (For Window Users) `python -m pip install --upgrade pywin32`
 2. Clone the main branch of [PyGame's repository](https://github.com/mucsci-students/2023sp-420-PyGame) from Github to your local machine.
+3. Install priject dependencies go to the directory for the repo and run the following commands:
+    - Mac:
+    ``` pip3 install -r mac_requirements.txt ```
+    - Windows:
+    ``` pip install -r win_requirements.txt ```
 
 ---
 
@@ -38,6 +42,7 @@ A simple game where a player is to create English words using a number of given 
 
 1. Open your terminal or command interface and navigate to your `2023sp-420-PyGame` directory.
 2. Once you are in the `2023sp-420-PyGame` directory, type ```python -- cli``` to launch our game in CLI for Window Users or ```python3 pygame -- cli``` for Mac Users, and ```pygame pygame.py``` to launch our game in GUI. 
+    - if you want to run test run the following argument after pygame ``` ---test--- ``
 3. If you are lost and need any help once the game is launched, type `/help` for more details
 
 
