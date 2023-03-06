@@ -1,12 +1,12 @@
 import pygame, os, random
 import platform
-import win32api     # Needed for Windows
-# import AppKit       # Needed for macOS
-import subprocess   # Need for Linux
+if os.name =="nt":
+    import win32api
 
 from model_shuffleLetters import *
 from model_puzzle import *
 from model_PuzzleStats import *
+from you_win_leave import *
 
 class Game:
     def __init__(self, puzzle, puzzle_stats):
@@ -120,17 +120,17 @@ class Game:
             self.game_window_height = win32api.GetSystemMetrics(1) // 2
         
         # Get the size of the primary monitor on macOS
-        elif platform.system() == "Darwin":
-            screen_size = AppKit.NSScreen.mainScreen().frame().size
-            self.game_window_width = win32api.GetSystemMetrics(0) // 2
-            self.game_window_height = win32api.GetSystemMetrics(1) // 2
+        #elif platform.system() == "Darwin":
+        #    screen_size = AppKit.NSScreen.mainScreen().frame().size
+        #    self.game_window_width = win32api.GetSystemMetrics(0) // 2
+        #    self.game_window_height = win32api.GetSystemMetrics(1) // 2
         
         # Get the size of the primary monitor on Linux
-        elif platform.system() == "Linux":
-            output = subprocess.check_output(["xrandr"]).decode("utf-8")
-            primary_line = [line for line in output.splitlines() if " primary " in line][0]
-            screen_size = primary_line.split()[3]
-            self.game_window_width, self.game_window_height = map(int, screen_size.split("x")) // 2
+        #elif platform.system() == "Linux":
+        #    output = subprocess.check_output(["xrandr"]).decode("utf-8")
+        #    primary_line = [line for line in output.splitlines() if " primary " in line][0]
+        #    screen_size = primary_line.split()[3]
+        #    self.game_window_width, self.game_window_height = map(int, screen_size.split("x")) // 2
         
         # Minimum size
         else:
@@ -465,7 +465,8 @@ class Game:
                 if event.key == pygame.K_RETURN:
                     if input_text != '':
                         print(f'gui_main_game.py - def handle_save_visuals(): Save has not implemented required letter.')
-                        # self.puzzle_stats.get_save_game(self.puzzle_stats, input_text)     
+                        # self.puzzle_stats.get_save_game(self.puzzle_stats, input_text)
+                        # return 0 or 1, if true, run self.puzzle_stats ; false, return    
                         break
                 elif event.key == pygame.K_BACKSPACE:
                     input_text = input_text[:-1]
@@ -535,6 +536,8 @@ class Game:
             for event in pygame.event.get():
                 # Quit the game
                 if event.type == pygame.QUIT:
+                    # changes game window to match the main menu screen
+                    self.game_window = pygame.display.set_mode((600, 600))
                     self.running = False
                 
                 # If user resized game_window, set new dimensions
@@ -616,8 +619,24 @@ class Game:
                     elif self.save_button.collidepoint(event.pos) and not self.show_words_box_visible:
                         self.handle_save_visuals()
 
+                    # If user clicked on "Leave Game"
                     elif self.exit_button_rect.collidepoint(event.pos):
-                        self.running = False
+
+                        # ask_leave and ask_save are bools, returned through leave_game_options()
+                        ask_leave, ask_save = leave_game_options(self.game_window_width, self.game_window_height)
+
+                        # if the user DOES NOT want to leave game
+                        if ask_leave == True and ask_save == False:
+                            break
+                        # if the user DOES want to leave game
+                        elif ask_leave == True and ask_save == True:
+                            # if the user WANTS to save game (falls through otherwise)
+                            self.handle_save_visuals()
+                        elif ask_leave == False:
+                            self.running = False
+                    
+                            
+                        
                 
 
                     # Check if user clicked inside a hex related to a letter.
