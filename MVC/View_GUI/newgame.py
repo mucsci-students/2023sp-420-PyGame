@@ -1,11 +1,11 @@
-#imports
+# imports
 import pygame, sys,math
-
 from pygame.locals import *
 from gui_main_game import Game
 from controller_universal import *
 from pygame.locals import *
 
+# starting new game screen
 def start_new_game():
     clock = pygame.time.Clock()
 
@@ -45,10 +45,12 @@ def start_new_game():
     # main function
     def load_game():
         while True:
-    
+            
+            # creates screen and title
             screen.fill(('white'))
             draw_text('START GAME FROM:', font_title, ('black'), screen, 130, 70)
     
+            # gets mouse position
             mx, my = pygame.mouse.get_pos()
             active = False
 
@@ -75,12 +77,12 @@ def start_new_game():
             pygame.draw.polygon(screen, ("black"), arrow_vertices, 0)
             pygame.draw.polygon(screen, ("white"), arrow_rect_vertices, 1)
 
-            #writing text over button
+            # writing text over button
             draw_text('RANDOM', font, ('black'), screen, 257, 213)
             draw_text('BASE', font, ('black'), screen, 270, 362)
             draw_text('SHARED', font, ('black'), screen, 260, 513)
 
-            # commands that lead to actions
+            # defining statements when clicked on 
             click = False
             for event in pygame.event.get():
                 if event.type == QUIT:
@@ -112,6 +114,7 @@ def start_new_game():
         arrow_vertices = [(10, 15), (5, 20), (10, 25), (5, 20), (22, 20), (5, 20), (10, 25)]
         arrow_rect_vertices = [(0, 0), (0, 25), (30, 25), (30, 0)]
 
+        # creates screen and title
         while running:
             screen.fill('white')
             draw_text('PLEASE ENTER KEY', font, ('black'), screen, 200, 200)
@@ -124,6 +127,7 @@ def start_new_game():
             clear = pygame.Rect(320, 450, 110, 50)
             input= pygame.Rect(240, 300, 110, 40)
 
+            # defining if statements when buttons are clicked on 
             if save.collidepoint((mx, my)):
                 if click:
                     print(f'newgame.py - def key_screen(): save does not exist.')
@@ -134,6 +138,7 @@ def start_new_game():
                 if click:
                     return
 
+            # draws green and red buttons
             pygame.draw.rect(screen, ('green'), save)
             pygame.draw.rect(screen, ('red'), clear)  
     
@@ -145,7 +150,7 @@ def start_new_game():
             draw_text('START', font, ('black'), screen, 195, 470)
             draw_text('CLEAR', font, ('black'), screen, 340, 470)
 
-
+            # defining statements when clickd on 
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
@@ -170,7 +175,8 @@ def start_new_game():
 
             # draws rectangle input with a border            
             pygame.draw.rect(screen,('black'), input, 2)
-        
+
+            # creates surface 
             text_surface = font.render(user_text,True,(0,0,0))  
             screen.blit(text_surface,(input.x + 5,input.y + 5))
 
@@ -189,6 +195,7 @@ def start_new_game():
         arrow_vertices = [(10, 15), (5, 20), (10, 25), (5, 20), (22, 20), (5, 20), (10, 25)]
         arrow_rect_vertices = [(0, 0), (0, 25), (30, 25), (30, 0)]
 
+        # creates screen and title
         while running:
             screen.fill('white')
             draw_text('PLEASE ENTER CODE', font, ('black'), screen, 180, 200)
@@ -201,7 +208,7 @@ def start_new_game():
             clear = pygame.Rect(320, 450, 110, 50)
             input = pygame.Rect(240, 300, 110, 40)
             
-        
+            # defining statements when clicked on 
             if save.collidepoint((mx, my)):
                 if click:
                     print(f'Does not exist')
@@ -212,6 +219,7 @@ def start_new_game():
                 if click:
                     return
                 
+            # draws the green and button buttons
             pygame.draw.rect(screen, ('green'), save)
             pygame.draw.rect(screen, ('red'), clear)  
     
@@ -223,6 +231,7 @@ def start_new_game():
             draw_text('START', font, ('black'), screen, 195, 470)
             draw_text('CLEAR', font, ('black'), screen, 340, 470)
         
+            # definining statements when clicked on 
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
@@ -247,6 +256,7 @@ def start_new_game():
             # draws rectangle input with a border            
             pygame.draw.rect(screen,('black'), input, 2)
         
+            #creates surface
             text_surface = font.render(user_text,True,(0,0,0))  
             screen.blit(text_surface,(input.x + 5,input.y + 5))
 
@@ -254,7 +264,8 @@ def start_new_game():
 
             pygame.display.update()
             clock.tick(60)
-        
+
+    # function start from key   
     def start_from_key(key):    
         prep_value = prep_game_with_key(key)
 
@@ -263,7 +274,8 @@ def start_new_game():
 
         game = Game(prep_value[0], prep_value[1])
         game.run()
-
+    
+    #function start from share
     def start_from_share(shared_key):    
         prep_value = prep_game_from_share(shared_key)
 

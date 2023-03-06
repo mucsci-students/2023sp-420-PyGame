@@ -1,15 +1,14 @@
-#imports
+# imports
 import pygame, sys, os, math
 from pygame.locals import *
 from gui_main_game import Game
-
-
 from controller_universal import *
 
+# load start screen
 def start_load():
     clock = pygame.time.Clock()
 
-    #settings
+    # settings
     pygame.init()
     width = 600
     height = 600
@@ -60,6 +59,7 @@ def start_load():
             file_name = str(options[curr_count].replace(".json",""))
 
         while True:
+            # creates screen and titles
             screen.fill(('white'))
             draw_text('GAME FILES', font_title, ('black'), screen, 200, 100)
             draw_text(file_name, font_title, ('black'), screen, 200, 250)
@@ -67,15 +67,15 @@ def start_load():
     
             mx, my = pygame.mouse.get_pos()
 
-            #creating buttons
+            # creating buttons
             load = pygame.draw.polygon(screen, ('black'), [(hex_x + 230, hex_y + 450) for hex_x, hex_y in hex_points], 3)
             prev = pygame.draw.polygon(screen, ('black'), [(hex_x + 50, hex_y + 450) for hex_x, hex_y in hex_points], 3)
             next = pygame.draw.polygon(screen, ('black'), [(hex_x + 400, hex_y + 450) for hex_x, hex_y in hex_points], 3)
 
-            #defining functions when clicked on
+            # defining statements when clicked on
             if load.collidepoint((mx, my)):
                 if click:
-                    load_game(file_name) ## load button / function call
+                    load_game(file_name) # load button / function call
 
             if prev.collidepoint((mx, my)):
                 if click:
@@ -92,16 +92,17 @@ def start_load():
                             curr_count = -1
                         curr_count = curr_count + 1
                         file_name = str(options[curr_count].replace(".json",""))
-                
+
+            # if statement for back arrow    
             if pygame.draw.polygon(screen, ("white"), arrow_rect_vertices).collidepoint(mx,my):
                 if click:
                     return
 
-             # draw the back arrow in the window
+            # draws the back arrow in the window
             pygame.draw.polygon(screen, ("black"), arrow_vertices, 0)
             pygame.draw.polygon(screen, ("white"), arrow_rect_vertices, 1)
     
-            #writing text over button
+            # writing text over buttons
             draw_text('LOAD', font, ('black'), screen, 270, 513)
             draw_text('PREV', font, ('black'), screen, 92, 513)
             draw_text('NEXT', font, ('black'), screen, 442, 513)
@@ -135,9 +136,11 @@ def start_load():
         running = True
         while running:
             screen.fill('white')
-    
+
+            # prints out title
             draw_text('ARE YOU SURE?', font, ('black'), screen, 220, 150)
-                    
+
+            #gets mouse position        
             mx, my = pygame.mouse.get_pos()
             
             #creating buttons
@@ -150,6 +153,7 @@ def start_load():
             draw_text('YES', font, ('black'), screen, 200, 300)
             draw_text('NO', font, ('black'), screen, 370, 300)
 
+            # functions called when clicked on
             for event in pygame.event.get():
                 if event.type == QUIT:
                     pygame.quit()
@@ -164,7 +168,7 @@ def start_load():
                     if no.collidepoint((mx, my)):
                         return
                     
-        
+            # updates the screen
             pygame.display.update()
             clock.tick(60)
         
