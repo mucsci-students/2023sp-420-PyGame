@@ -15,10 +15,12 @@ class PuzzleStats():
         self.rank = 0
         ## All valid word guesses that has given points
         self.guesses = []
+        # All possible words in puzzle
+        self.wordList = []
         ## Total amount of points in the puzzle
         self.maxScore = max_score
         ## Current puzzle layout
-        self.shuffled_puzzle = shuffled_puzzle 
+        self.shuffled_puzzle = shuffled_puzzle
 
     ## ----------------------------------------------------------
     ## Start of Class functions
@@ -42,7 +44,7 @@ class PuzzleStats():
                 self.guesses.append(guess)
                 self.score = self.score + self.get_word_points(guess)
                 self.RankIndex()
-                return 0 
+                return 0
         ## Word not valid
         return 1
 
@@ -112,14 +114,14 @@ class PuzzleStats():
         69420: Player guessed all words. Game over
     """
     def get_check_guess(self, guess, puzzleInfo):
-        wordReq = self.CheckWordReq(guess, puzzleInfo.required_letter, puzzleInfo.pangram)
+        wordReq = self.CheckWordReq(guess.lower(), puzzleInfo.required_letter, puzzleInfo.pangram)
         if wordReq != 0:
             return int(wordReq)
         
         wordGuessed = self.InGuesses(guess) # Bool
         if wordGuessed:
             return wordGuessed 
-           
+        
         ## Returns 0 if valid; anything else if unvalid
         outcome = self.CheckValidity(guess, puzzleInfo.current_word_list)
         if self.check_progress():
@@ -133,32 +135,38 @@ class PuzzleStats():
     Must be between 0.00 and 1.00
     """
     def RankIndex(self):
-        difference = self.score/self.maxScore
-        if difference < 0 or difference > 1:
-            ## Error
-            return 1
-
-        if difference < .03:
-            self.rank = 0 #Beginner
-        elif difference < .07:
-            self.rank = 1 #Novice
-        elif difference < .12:
-            self.rank = 2 #Okay
-        elif difference < .23:
-            self.rank = 3 #Good
-        elif difference < .35:
-            self.rank = 4 #Solid
-        elif difference < .56:
-            self.rank = 5 #Nice
-        elif difference < .72:
-            self.rank = 6 #Great
-        elif difference < .92:
-            self.rank = 7 #Amazing
+        if self.score == 0:
+            self.rank = 0
+            return
         else:
-            self.rank = 8 #Genius
+            difference = self.score/self.maxScore
+            if difference < 0 or difference > 1:
+                ## Error
+                return 1
+
+            if difference < .02:
+                self.rank = 0 #Beginner
+            elif difference < .05:
+                self.rank = 1 #Good Start
+            elif difference < .08:
+                self.rank = 2 #Moving up
+            elif difference < .15:
+                self.rank = 3 #Good
+            elif difference < .25:
+                self.rank = 4 #Solid
+            elif difference < .40:
+                self.rank = 5 #Nice
+            elif difference < .50:
+                self.rank = 6 #Great
+            elif difference < .70:
+                self.rank = 7 #Amazing
+            elif difference < 1:
+                self.rank = 8 #Genius
+            else:
+                self.rank = 9 #Queen Bee
 
     def get_rank(self):
-        rankSteps = ["Beginner","Novice","Okay","Good","Solid","Nice","Great","Amazing","Genius"]
+        rankSteps = ["Beginner","Good Start","Moving Up","Good","Solid","Nice","Great","Amazing","Genius","Queen Bee"]
         return str(rankSteps[self.rank])
 
     def check_progress(self):
@@ -170,8 +178,8 @@ class PuzzleStats():
         if length == 4:
             points = 1
         # If word is a pangram, worth length * 2
-        elif length == len(set(word)):
-            points = (length)*2
+        elif length == 7 and len(set(word)) == 7:
+            points = 7
         # Else word is worth its length
         else:
             points = length
@@ -193,25 +201,23 @@ class PuzzleStats():
     json format:
     {
         "Score": playerScore,
-        "Rank": playerRank,
-        "Guesses": playerGuesses,
-        "GameId": puzzleId 
+        "CurrentPoints": playerRank,
+        "GuessedWords": playerGuesses,
+        "PuzzleLetters": puzzleId 
     }
     """
     def get_save_game(self, puzzleInfo, fileName):
-
         ## Creates the local file path, plus includes the file extension  
-        saveFileName = "Saves/" + fileName + ".json"
+        saveFileName = "MVC/Model/Saves/" + fileName + ".json"
 
         ## Create json object
         saveStat = {
-            "Score": self.score,
-            "Rank": self.rank,
-            "Guesses": self.guesses,
-            "Shuffle" : self.shuffled_puzzle,
-            "Letter" : puzzleInfo.required_letter,
-            "GameId": puzzleInfo.pangram,
-            "MaxPoints" : puzzleInfo.total_points
+            "RequiredLetter": puzzleInfo.required_letter,
+            "PuzzleLetters": puzzleInfo.pangram,
+            "CurrentPoints": self.score,
+            "MaxPoints" : puzzleInfo.total_points,
+            "GuessedWords": self.guesses,
+            "WordList" : puzzleInfo.current_word_list
         }
         
         json_object = json.dumps(saveStat, indent=4)
@@ -231,8 +237,9 @@ class PuzzleStats():
         Case 2: FileName is in use; Return Flase 
     """
     def get_check_file(self, fileName):
+        # print(f'filename is: {fileName}')
         check = bool
-        saveGames = os.listdir("Saves")
+        saveGames = os.listdir("MVC/Model/Saves/")
         check = (fileName + ".json") not in saveGames
         return check
 
@@ -247,24 +254,27 @@ class PuzzleStats():
     Returns a "1" if the file name couldn"t be found
     """
     def LoadGame(self, fileName):
+        # print(fileName)
         ## Check if name is valid
         if self.get_check_file(fileName):
             return 1
             
         ## Loads the local file path for the saved game
-        saveFile = "Saves/" + fileName + ".json"
+        # saveFile = "Saves/" + fileName + ".json"
+
+        saveFile = "MVC/Model/Saves/" + fileName + ".json"
         
         ## reads the json file as a Dict
         with open(saveFile, "r") as openfile:
             saveInfo = json.load(openfile)
 
-        self.score = saveInfo["Score"]
-        self.rank = saveInfo["Rank"]
-        self.guesses = saveInfo["Guesses"]
+        self.score = saveInfo["CurrentPoints"]
+        self.guesses = saveInfo["GuessedWords"]
         self.maxScore = saveInfo["MaxPoints"]
-        self.shuffled_puzzle = saveInfo["Shuffle"]
+        self.wordList = saveInfo["WordList"]
+        self.RankIndex()
 
         openfile.close()
 
         ## Passes the DB Object Id to the Load Puzzle function
-        return saveInfo["GameId"], saveInfo["Letter"]
+        return saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"]

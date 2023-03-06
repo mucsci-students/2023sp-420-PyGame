@@ -1,8 +1,12 @@
 import unittest
-import Output
 import io
 import sys
 import os
+
+sys.path.insert(0, 'C:\\Users\\Bjlef\\Documents\\GitHub\\2023sp-420-PyGame')
+
+# Import the "Output" module
+import Output
 
 #UNIT TEST CLASS FOR THE OUTPUT.PY FILE.
 class TestSpellingBeeOutput(unittest.TestCase):
@@ -225,27 +229,14 @@ class TestSpellingBeeOutput(unittest.TestCase):
         self.assertEqual(captured_output.getvalue(), expected_output)
 
     def test_get_load_options(self):
-        # First, create a "Saves" directory in the current working directory
-        os.mkdir("SavesTest")
-
-        # Next, create a few sample files in the "Saves" directory
-        with open("Saves/save1.txt", "w") as f:
-            f.write("Sample save data")
-        with open("Saves/save2.txt", "w") as f:
-            f.write("Sample save data")
-        with open("Saves/save3.txt", "w") as f:
-            f.write("Sample save data")
 
         # Call the `get_load_options` function to retrieve a list of the save files
         options = Output.get_load_options()
 
         # Assert that the `options` list contains the correct filenames
-        self.assertIn("save1.txt", options)
-        self.assertIn("save2.txt", options)
-        self.assertIn("save3.txt", options)
+        self.assertIn("fileforunittest.json", options)
 
-        # Finally, clean up by removing the "Saves" directory and its contents
-        os.rmdir("SavesTest")
+        
 
         
     def test_get_detailed_response(self):
