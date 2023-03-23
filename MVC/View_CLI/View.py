@@ -126,6 +126,7 @@ N
 ## Promtps user if he wants to load the game or not
 def print_load_game():
     load = f"""
+    
 Load Game?
 Y
 N
@@ -183,7 +184,7 @@ Commands
 /Help            /get instructions and commands 
 /Exit            /exits the game
 
-Enter any key to continue...
+Press the space key to continue...
 """ 
     print(help)
 
@@ -268,5 +269,5 @@ def print_shared_key_input():
 
 ## prints out the sharable key
 def print_shared_key_output(key):
-    print("\tYour Share Key is: " + str(key))
-    print("\n\tPress any key to continue...")
+    print("\n\tYour Share Key is: " + str(key))
+    print("\n\tPress the space key to continue...")
