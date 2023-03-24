@@ -7,18 +7,19 @@
 
 
 """
-    generateHints Takes Two Parameters
+    generateHints Takes Three Parameters
         Words: List of words from puzzle
         Letters: Array of letters from the model
+        Points: Total points in the puzzle
 
     Returns an array of letters and word lengths  
     # 1d array of [letters, word_count, points, pangram_count], 2d array of letter counts  with letters and word lengths, 
     and dictionary Of First Two Letters with the letters as the key and count as the pair
 """
-def generateHints(words, letters): 
+def generateHints(words, letters, points): 
     word_count = 0
     pangram_count = 0
-    points = 0#some function call
+    #points = 0#some function call
     dictOfFirstTwoLetters = {}
     
     if(words == [] or len(letters) < 7):
@@ -39,16 +40,18 @@ def generateHints(words, letters):
     # 
     # Initialize array
     
-    letterCountArray2d = [8][maxLength - 2] #Vectorize  #changed to -3 from -4 
-    letterCountArray2d[0][0] = ""
+    letterCountArray2d = [[0]*(maxLength - 1)]*9 #[0maxLength - 2] #Vectorize  #changed to -3 from -4 
+    
+    
+    letterCountArray2d[0][0] = 0
     letter_index = 1
     for i in letters:
-        letterCountArray2d[letter_index [0]] = i
+        letterCountArray2d[letter_index][0] = i
         letter_index += 1
     letterCountArray2d[8][0] = "tot"
     
     for i in range(1, maxLength - 2):
-        letterCountArray2d[0][i] = i
+        letterCountArray2d[0][i] = str(i)
     letterCountArray2d[0][maxLength - 2] = "tot"
     
     
@@ -76,13 +79,13 @@ def generateHints(words, letters):
             #twoLetters_counts.append(0)
         dictOfFirstTwoLetters[twoLetters] += 1
         #twoLetters_counts[dictOfFirstTwoLetters.index(twoLetters)] += 1        
-
+        
         #print(f"{word} first letter {i}, length  {l}")
-        letterCountArray2d[letters.index(first_letter) + 1][current_word_length - 3] += 1 #Check syntax here 
+        letterCountArray2d[letters.index(first_letter) + 1][current_word_length - 3] = int(letterCountArray2d[letters.index(first_letter) + 1][current_word_length - 3]) + 1 #Check syntax here 
 #    total_score = some function
     '''
-    output = letters  #bold  required letter
-    output += f"words: {word_count} points:  pangrams: {pangram_count}\nLetter Matrix:\n"
+    #output = letters  #bold  required letter
+    # output += f"words: {word_count} points:  pangrams: {pangram_count}\nLetter Matrix:\n"
     '''
 
 #LETTER MATRIX
@@ -91,29 +94,31 @@ def generateHints(words, letters):
         #row_str = letter + "\t"
         row_total = 0
         for i in range(1, maxLength - 2):#uninclusive end
-            #count = letterCountArray2d[letters.index(letter)[i]] 
-            row_total += letterCountArray2d[letters.index(letter) + 1][i] 
-        letterCountArray2d [letters.index(letter) + 1][maxLength - 2] = row_total
+            #count = letterCountArray2d[letters.index(letter)][i] 
+            row_total += int(letterCountArray2d[letters.index(letter) + 1][i])
+        letterCountArray2d [letters.index(letter) + 1][maxLength - 2] = str(row_total)
     # Totals Columns
     for j in range(1, maxLength - 1):#uninclusive end
         count = 0 
         for i in range(1,8):
-            count += letterCountArray2d[i][j]
-        letterCountArray2d [8][j] = count
+            count += int(letterCountArray2d[i][j])
+        letterCountArray2d [8][j] = str(count)
 #ASSEMBLES 2 LETTER COUNTS
     dictOfFirstTwoLetters = sorted(dictOfFirstTwoLetters)
     '''
-    str_two_letter_list = f"{dictOfFirstTwoLetters[0]}: {twoLetters_counts[0]} " 
-    for i in range(1, len(dictOfFirstTwoLetters)): 
+    #str_two_letter_list = f"{dictOfFirstTwoLetters[0]}: {twoLetters_counts[0]} " 
+    #for i in range(1, len(dictOfFirstTwoLetters)): 
        
         #compares first letter in 2 letters to previous print, if different, new line
-        if((dictOfFirstTwoLetters[i])[0] != (dictOfFirstTwoLetters[i - 1])[0]):
-            str_two_letter_list += '\n'
-        str_two_letter_list += f"{dictOfFirstTwoLetters[i]}: {twoLetters_counts[i]} " 
-    output += str_two_letter_list
+    #    if((dictOfFirstTwoLetters[i])[0] != (dictOfFirstTwoLetters[i - 1])[0]):
+    #        str_two_letter_list += '\n'
+    #    str_two_letter_list += f"{dictOfFirstTwoLetters[i]}: {twoLetters_counts[i]} " 
+    #output += str_two_letter_list
     '''
-    #print(output)
+    #print(output)    
+    #return [letters, {"Word Count: " : word_count}, {"Points: " : points}, {"Number of pangrams: " : pangram_count}], letterCountArray2d, dictOfFirstTwoLetters#, twoLetters_counts
     return [letters, word_count, points, pangram_count], letterCountArray2d, dictOfFirstTwoLetters#, twoLetters_counts
+'''
 def generalStats():
     if(word_count == 0):
         return 1
@@ -126,4 +131,7 @@ def LetterCountArray2d():
     if(letterCountArray2d == []):
         return 1
     return letterCountArray2d
-generateHints(["whiskey", "whisk"], "whiskey")
+
+'''
+
+generateHints(["whiskey", "whisk"], "whiskey", 2)
