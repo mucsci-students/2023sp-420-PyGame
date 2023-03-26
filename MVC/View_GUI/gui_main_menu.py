@@ -110,7 +110,7 @@ def start_gui():
                     WINDOW_WIDTH = w
                     WINDOW_HEIGHT = h
             # Draw the screen
-            DISPLAY_SURFACE.fill([150,150,150])
+            DISPLAY_SURFACE.fill(WHITE)
             draw_boxes()
             pygame.display.update()
 
