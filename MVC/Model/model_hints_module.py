@@ -40,13 +40,13 @@ def generateHints(words, letters, points):
     # 
     # Initialize array
     
-    letterCountArray2d = [[0]*(maxLength - 1)]*9 #[0maxLength - 2] #Vectorize  #changed to -3 from -4 
+    letterCountArray2d = [[str(0)]*(maxLength - 1)]*9 #[0maxLength - 2] #Vectorize  #changed to -3 from -4 
     
     
-    letterCountArray2d[0][0] = 0
+    #letterCountArray2d[0][0] = str(0) #redundant
     letter_index = 1
     for i in letters:
-        letterCountArray2d[letter_index][0] = i
+        letterCountArray2d[letter_index][0] = str(i)
         letter_index += 1
     letterCountArray2d[8][0] = "tot"
     
@@ -117,6 +117,9 @@ def generateHints(words, letters, points):
     '''
     #print(output)    
     #return [letters, {"Word Count: " : word_count}, {"Points: " : points}, {"Number of pangrams: " : pangram_count}], letterCountArray2d, dictOfFirstTwoLetters#, twoLetters_counts
+    
+    
+    # returns array of letters word count points and pangram, then a list[list[str]] of the letters and count array, then a dictionary of the two letters words start with
     return [letters, word_count, points, pangram_count], letterCountArray2d, dictOfFirstTwoLetters#, twoLetters_counts
 '''
 def generalStats():
@@ -134,4 +137,4 @@ def LetterCountArray2d():
 
 '''
 
-generateHints(["whiskey", "whisk"], "whiskey", 2)
+#generateHints(["whiskey", "whisk"], "whiskey", 2)
