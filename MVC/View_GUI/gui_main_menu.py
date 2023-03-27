@@ -45,14 +45,26 @@ def start_gui():
         global new_game_box, load_game_box, help_box, exit_box
         half_width = BOX_WIDTH // 2
         half_height = BOX_HEIGHT // 2
-        hexagon_points = [
+        
+        '''hexagon_points = [
             (BOX_X + half_width, NEW_GAME_BOX_Y),
             (BOX_X + BOX_WIDTH, NEW_GAME_BOX_Y + half_height),
             (BOX_X + BOX_WIDTH, NEW_GAME_BOX_Y + half_height + BOX_HEIGHT),
             (BOX_X + half_width, NEW_GAME_BOX_Y + BOX_HEIGHT + BOX_HEIGHT // 2),
             (BOX_X, NEW_GAME_BOX_Y + half_height + BOX_HEIGHT),
             (BOX_X, NEW_GAME_BOX_Y + half_height)
-        ]
+        ]'''
+            # create hexagon points (NOT the lines between the points)
+        hex_radius = 70 # change this for bigger hexagons, considered midpoint
+        hexagon_points = []
+        for i in range(6):
+            hex_angle = (math.pi / 180) * (60 * i) # converts from degrees to radians
+            hex_x = hex_radius * math.cos(hex_angle) + 300 # the + changes x position
+            hex_y = hex_radius * math.sin(hex_angle) + 120 # the + changes y position
+            hexagon_points.append((hex_x, hex_y))
+
+        
+        
         new_game_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, hexagon_points)
         load_game_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, BOX_HEIGHT + BOX_SPACING)) )) for point in hexagon_points])
         help_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, 2 * BOX_HEIGHT + 2 * BOX_SPACING)) )) for point in hexagon_points])
