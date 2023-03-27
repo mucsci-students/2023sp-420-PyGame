@@ -10,12 +10,20 @@ from Database.model_database import get_random_word_info, get_word_info_from_pan
 
 ## Super Class
 class Puzzle():
+    _instance = None
+    
+    def __new__(cls):
+        if cls._instance is None:
+            print("cls._self is none!")
+            cls._instance = super().__new__(cls)
+            cls.pangram = ""
+            cls.required_letter = ""
+            cls.total_points = 0
+            cls.current_word_list = []
 
-    def __init__(self):
-        self.pangram = ""
-        self.required_letter = ""
-        self.total_points = 0
-        self.current_word_list = []
+        return cls._instance
+    
+
 
     """ 
         Author: Robert 2/7/23
@@ -95,21 +103,32 @@ class Puzzle():
 
 ## Sub Class
 class PuzzleStats(Puzzle):
+    _instance = None
+
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.score = 0
+            cls._instance.rank = 0
+            cls._instance.guesses = []
+            cls._instance.wordList = []
+            cls._instance.shuffled_puzzle = ""
+        return cls._instance
 
     def __init__(self):
         ## Declare the Super class
         super().__init__()
 
-        ## Total amount of points recieved from valid guesses
-        self.score = 0
-        ## Holds the index of the rank the player is at
-        self.rank = 0
-        ## All valid word guesses that has given points
-        self.guesses = []
-        # All possible words in puzzle
-        self.wordList = []
-        ## Current puzzle layout
-        self.shuffled_puzzle = ""
+        # ## Total amount of points recieved from valid guesses
+        # self.score = 0
+        # ## Holds the index of the rank the player is at
+        # self.rank = 0
+        # ## All valid word guesses that has given points
+        # self.guesses = []
+        # # All possible words in puzzle
+        # self.wordList = []
+        # ## Current puzzle layout
+        # self.shuffled_puzzle = ""
 
     ## ----------- Function Block for Checking Guess Req's ----------- ##
 
@@ -374,3 +393,16 @@ class PuzzleStats(Puzzle):
         ## Passes the DB Object Id to the Load Puzzle function
         return saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"]
 
+# create two instances of PuzzleStats
+puz1 = PuzzleStats()
+puz2 = PuzzleStats()
+
+puz1.generate_random_puzzle()
+
+print(puz1.pangram)
+print(puz2.pangram)
+
+print(puz1.current_word_list)
+print(puz2.current_word_list)
+
+print(id(puz1) == id(puz2))
