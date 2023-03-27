@@ -3,7 +3,7 @@
 import sys
 import os
 import time
-import keyboard #new
+import keyboard
 
 from model_PuzzleStats import PuzzleStats
 from model_puzzle import Puzzle
@@ -20,37 +20,36 @@ puzzle_stats = PuzzleStats(-1,"")
 ### ------------MAIN CLI Controller--------------- ###
 
 # auto completes the command name when the TAB key is pressed
-def tab_completion_main_menu():
-  commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/help', '/exit']
-  current_text = keyboard.get_typed_strings()
-  if len(current_text) == 0:
-      return
-  last_word = current_text[-1]
-  matches = [c for c in commands if c.startswith(last_word)]
+def tab_completion(typed_string, command_set):
+
+  # checks to see if the current input can be autocompleted
+  if len(typed_string) == 0 or not typed_string.startswith('/'):
+      return typed_string, ''
+  
+  commands = []
+
+  if command_set == 1:
+    commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/help', '/exit']
+  elif command_set == 2:
+    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/refresh']
+
+  matches = [c for c in commands if c.startswith(typed_string)]
+
   if len(matches) == 1:
-      keyboard.write(matches[0][len(last_word):] + ' ')
-  elif len(matches) > 1:
-      print('\n'.join(matches))
-
-def tab_completion_active_game():
-  commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/refresh']
-  current_text = keyboard.get_typed_strings()
-  if len(current_text) == 0:
-      return
-  last_word = current_text[-1]
-  matches = [c for c in commands if c.startswith(last_word)]
-  if len(matches) == 1:
-      keyboard.write(matches[0][len(last_word):] + ' ')
-  elif len(matches) > 1:
-      print('\n'.join(matches))
+    old_string = typed_string
+    typed_string = matches[0]
+    inputted_part, removed_part, ending_letters = typed_string.partition(old_string)
+    return typed_string, ending_letters
+  else:
+    return typed_string, ''
 
 
-def user_input():
+def user_input(command_set):
     # initialize an empty list to store the typed letters
     typed_letters = []
 
     # listens to key presses
-    keyboard.on_press(lambda event: on_press(event, typed_letters))
+    keyboard.on_press(lambda event: on_key_press(event, typed_letters, command_set))
     
     # wait for keyboard events until Enter key is pressed
     while True:
@@ -63,11 +62,17 @@ def user_input():
             
 
 
-def on_press(event, typed_letters):
+def on_key_press(event, typed_letters, command_num):
     # if the tab key is pressed
     if event.name == 'tab':
-        print("tab key pressed")
-        # return tab_completion_main_menu()
+        ending_string = ""
+        typed_string = ''.join(typed_letters)
+        typed_string, ending_string = tab_completion(typed_string, command_num)
+        
+        if ending_string != '':
+          typed_letters.append(ending_string)
+
+        print(typed_string, end = '\r')
 
     # if the enter key is pressed
     elif event.name == 'enter':
@@ -80,7 +85,7 @@ def on_press(event, typed_letters):
             typed_letters.pop()
             print("\033[K", end = "")
     
-    # if a single character or "/" is pressed (like: a, b, c; not like: shift, backspace)
+    # if a single alpha character or "/" is pressed (like: /, a, b; not like: shift, backspace)
     elif (event.name.isalpha() and len(event.name) == 1) or event.name == '/':
         typed_letters.append(event.name)
 
@@ -93,12 +98,13 @@ def on_press(event, typed_letters):
 
 # starts the cli main menu
 def main_menu_handler():
+  command_set = 1
   while (True):
     cls()
     print_start_screen()
     print_main_menu()
     print("Select a command.")
-    userInput = user_input().lower()
+    userInput = user_input(command_set).lower()
     main_response(userInput)
 
 
@@ -141,9 +147,9 @@ def main_response(userInput):
 def load_save_game():
   global puzzle_stats
   print_load_options()
-  file_name = user_input()
+  file_name = user_input(0)
   print_load_game()
-  answer = user_input().lower()
+  answer = user_input(0).lower()
   match answer:
     case "y":
       start_game_with_key_from_load(puzzle_stats.LoadGame(file_name))
@@ -160,7 +166,7 @@ def keyStart():
   while(check_value == 1):
     cls()
     print_base_input()
-    key = user_input().lower()
+    key = user_input(0).lower()
     
     check_value = start_game_with_key(key)
     
@@ -168,7 +174,7 @@ def keyStart():
     # Turn into custom error call to Output.py with key
       cls()
       print("Invalid word, not a valid pangram. Return to main menu? Y/N \n")
-      response = user_input().lower()
+      response = user_input(0).lower()
       if(response == "y"):
         main_menu_handler()
 
@@ -179,7 +185,7 @@ def saveGamePrompt():
 
     while(True):
       print("Enter title to save game as:")
-      userInput = user_input().lower() #asks user for an input
+      userInput = user_input(0).lower() #asks user for an input
       cls()
       puzzle_stats.get_save_game(puzzle, userInput)
       print(f"{userInput} has been saved.")
@@ -203,9 +209,11 @@ def activeGameLoop():
 def activeGame():
   global puzzle
   global puzzle_stats
+  command_set = 2
+
   print_current_puzzle(puzzle_stats)
   print("Enter your guess.")
-  userInput = user_input().lower() #asks user for input to match
+  userInput = user_input(command_set).lower() #asks user for input to match
   if (userInput == ""):
     return True
   elif (userInput[0] != "/"):
@@ -236,21 +244,27 @@ def active_game_commands(userInput):
 
     case "/savegame":
       print(f"Enter filename: ")
-      file_name = user_input().lower()
+      file_name = user_input(0).lower()
       cls()
       save_current_game(file_name)
       return True
     
     case "/showall":
       print_all_guesses(puzzle_stats)
-      input()
+      
+      # user must press space to exit help screen
+      while True:
+        event = keyboard.read_event()
+        if event.name == 'space':
+          break
+      
       return True
     
     case "/back":
       print_game_save()
-      if(input().lower() == "y"):
+      if(user_input(0).lower() == "y"):
         print(f"Enter filename: ")
-        file_name = input().lower()
+        file_name = user_input(0).lower()
         cls()
         save_current_game(file_name)
       return False
@@ -276,7 +290,8 @@ def active_game_commands(userInput):
       return True
 
     case _:
-      input("Command not recognized, press any key to continue...")
+      print("Command Not Recognized")
+      time.sleep(1)
       return True
 
 # starts a new game from randomly selected puzzle
@@ -322,10 +337,11 @@ def save_current_game(filename):
 
 # closes the CLI
 def exit_game():
-  answer = user_input().lower()
+  answer = user_input(0).lower()
 
   match answer:
     case "y": 
+      cls()
       sys.exit()
 
     case "n":
@@ -347,7 +363,7 @@ def start_shared_game():
 
   cls()
   print_shared_key_input()
-  shared_key = user_input().lower()
+  shared_key = user_input(0).lower()
   
   prep_value = prep_game_from_share(shared_key)
   
