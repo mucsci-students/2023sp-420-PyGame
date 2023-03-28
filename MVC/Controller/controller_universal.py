@@ -28,6 +28,7 @@ def prep_game_with_key(key):
 
     puzzle.ShuffleKey()
     return 0 
+
 """
 generate the Puzzle and Puzzle_Stats objects from load 
     - Paramater: tuple -> save info 
@@ -37,8 +38,6 @@ generate the Puzzle and Puzzle_Stats objects from load
 """
 def prep_game_from_load(save_info):
     puzzle = PuzzleStats()
-    print(save_info)
-    input()
     if puzzle.LoadGame(save_info) == 1:
         return 1
     

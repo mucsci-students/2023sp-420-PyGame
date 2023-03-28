@@ -309,8 +309,6 @@ def start_game_with_key(key):
 # start game from a saved .json file
 def start_game_with_key_from_load(file_name):
   ## From Universal Controller
-  print(file_name)
-  input()
   prep_value = prep_game_from_load(file_name)
 
   ## Checks to see if a puzzle was loaded correctly 

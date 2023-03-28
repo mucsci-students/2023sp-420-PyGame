@@ -348,9 +348,7 @@ class PuzzleStats(Puzzle):
         # print(f'filename is: {fileName}')
         check = bool
         saveGames = os.listdir("MVC/Model/Saves/")
-        print( fileName + "--------" + str(saveGames))
-        input()
-        check = (fileName + ".json") not in saveGames
+        check = (fileName + ".json") in saveGames
         return check
 
     """
@@ -364,11 +362,8 @@ class PuzzleStats(Puzzle):
     Returns a "1" if the file name couldn"t be found
     """
     def LoadGame(self, fileName):
-        print(fileName)
         ## Check if name is valid
-        print(self.get_check_file(fileName))
-        input()
-        if self.get_check_file(fileName):
+        if not self.get_check_file(fileName):
             return 1
             
         ## Loads the local file path for the saved game
@@ -380,8 +375,6 @@ class PuzzleStats(Puzzle):
         with open(saveFile, "r") as openfile:
             saveInfo = json.load(openfile)
 
-        print(saveInfo)
-        input()
 
         self.score = saveInfo["CurrentPoints"]
         self.guesses = saveInfo["GuessedWords"]
