@@ -1,5 +1,5 @@
 """
-    generateHints 
+    generateHints: must be called first
     Takes Three Parameters
         Words: List of words from puzzle
         Letters: Array of letters from the model
@@ -9,11 +9,22 @@
          letters and word lengths in the rows and columns, 
          and dictionary Of First Two Letters with the letters as the key and count as the pair
 """
+
+m_letters = []
+m_word_count = 0
+m_points = 0
+m_pangram_count = 0
+m_letterMatrix = [[str()]]
+m_twoLetterDictionary = {}
+
 def generateHints(words, letters, points): 
+    m_letters = letters
+    
     word_count = 0
     pangram_count = 0
     #points = 0#some function call
-    dictOfFirstTwoLetters = {}
+    twoLetterDictionary = {}
+    
     
     if(words == [] or len(letters) < 7):
         return 1
@@ -21,24 +32,25 @@ def generateHints(words, letters, points):
     maxLength = len(max(words, key=len))   
     if(maxLength < 7):
         return 1
-    # Initialize letterCountArray2d 
+    # Initialize letterMatrix 
     # (maxLength - 1) for maxLength -3 for lengths + total + column label
     # 9 is for 7 letters + total + row label
-    letterCountArray2d = [[str(0)]*(maxLength - 1)]*9 
+    letterMatrix = [[str(0)]*(maxLength - 1)]*9 
     letter_index = 1
     for i in letters:
-        letterCountArray2d[letter_index][0] = str(i)
+        letterMatrix[letter_index][0] = str(i)
         letter_index += 1
-    letterCountArray2d[8][0] = "tot"
+    letterMatrix[8][0] = "tot"
     
     for i in range(1, maxLength - 2):
-        letterCountArray2d[0][i] = str(i)
-    letterCountArray2d[0][maxLength - 2] = "tot"
+        letterMatrix[0][i] = str(i)
+    letterMatrix[0][maxLength - 2] = "tot"
     
     
     # total words at [7][maxlength - 4] is total words
     # count the total number of words 
     for word in words:
+    # Word Count
         word_count += 1
         current_word_length = len(word)
         # Boilerplate  for indexing string
@@ -56,12 +68,12 @@ def generateHints(words, letters, points):
         #adds entry to 2 letter dict
         
     #  Collect and count starting 2 letters 
-        if twoLetters not in dictOfFirstTwoLetters: 
-            dictOfFirstTwoLetters[twoLetters] = 0
-        dictOfFirstTwoLetters[twoLetters] += 1
+        if twoLetters not in twoLetterDictionary: 
+            twoLetterDictionary[twoLetters] = 0
+        twoLetterDictionary[twoLetters] += 1
     # Counts letter into matrix
-        letterCountArray2d[letters.index(first_letter) + 1][current_word_length - 3] = \
-            int(letterCountArray2d[letters.index(first_letter) + 1][current_word_length - 3]) + 1 
+        letterMatrix[letters.index(first_letter) + 1][current_word_length - 3] = \
+            int(letterMatrix[letters.index(first_letter) + 1][current_word_length - 3]) + 1 
 
 
 #LETTER MATRIX
@@ -69,22 +81,43 @@ def generateHints(words, letters, points):
     for letter in letters:
         row_total = 0
         for i in range(1, maxLength - 2):#uninclusive end
-            row_total += int(letterCountArray2d[letters.index(letter) + 1][i])
-        letterCountArray2d [letters.index(letter) + 1][maxLength - 2] = str(row_total)
+            row_total += int(letterMatrix[letters.index(letter) + 1][i])
+        letterMatrix [letters.index(letter) + 1][maxLength - 2] = str(row_total)
     # Totals Columns
     for j in range(1, maxLength - 1):#uninclusive end
         count = 0 
         for i in range(1,8):
-            count += int(letterCountArray2d[i][j])
-        letterCountArray2d [8][j] = str(count)
+            count += int(letterMatrix[i][j])
+        letterMatrix [8][j] = str(count)
 #ASSEMBLES 2 LETTER COUNTS
-    dictOfFirstTwoLetters = sorted(dictOfFirstTwoLetters)
+    twoLetterDictionary = sorted(twoLetterDictionary)
     
     letters = str(letters)
     word_count = str(word_count)
     points = str(points)
     pangram_count = str(pangram_count)
+    
+    m_letters = letters
+    m_word_count = word_count
+    m_points = points
+    m_pangram_count = pangram_count
+    m_letterMatrix = letterMatrix
+    m_twoLetterDictionary = twoLetterDictionary
+    
     # returns array of letters word count points and pangram, then a list[list[str]] of the letters and count array, 
     # then a dictionary of the two letters words start with
-    return [letters, word_count, points, pangram_count], letterCountArray2d, dictOfFirstTwoLetters#, twoLetters_counts
+    return 0 #[letters, word_count, points, pangram_count], letterMatrix, twoLetterDictionary#, twoLetters_counts
+
+def getLetters():
+    return m_letters
+def getWordCount():
+    return m_word_count
+def getPoints():
+    return m_points
+def getPangramCount():
+    return m_pangram_count
+def getLetterMatrix():
+    return m_letterMatrix
+def geTwoLetterDictionary():
+    return m_twoLetterDictionary
 
