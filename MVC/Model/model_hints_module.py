@@ -25,7 +25,6 @@ def generateHints(words, letters, points):
     # (maxLength - 1) for maxLength -3 for lengths + total + column label
     # 9 is for 7 letters + total + row label
     letterCountArray2d = [[str(0)]*(maxLength - 1)]*9 
-    
     letter_index = 1
     for i in letters:
         letterCountArray2d[letter_index][0] = str(i)
@@ -41,26 +40,28 @@ def generateHints(words, letters, points):
     # count the total number of words 
     for word in words:
         word_count += 1
-#        length = word
-        # check if the word is a pangram
         current_word_length = len(word)
         # Boilerplate  for indexing string
         if current_word_length < 2:
             return "Hint Calc error: word not long enough"
-        # count the starting letters of the word
+        # Get the starting letters of the word
         first_letter = word[0]
-        twoLetters = word[0:2]         
+        twoLetters = word[0:2]     
+    # Pangram Check   
         if(current_word_length >= 7 ):
             if all(letter in word for letter in letters):
                 pangram_count += 1
         
-        # Check 2 letter directory, give it 2 letters, to count the words of each unique combo, 
-        #adds entry to 2 letter dict 
+        # Check 2s letter directory, give it 2 letters, to count the words of each unique combo, 
+        #adds entry to 2 letter dict
+        
+    #  Collect and count starting 2 letters 
         if twoLetters not in dictOfFirstTwoLetters: 
             dictOfFirstTwoLetters[twoLetters] = 0
         dictOfFirstTwoLetters[twoLetters] += 1
+    # Counts letter into matrix
         letterCountArray2d[letters.index(first_letter) + 1][current_word_length - 3] = \
-            int(letterCountArray2d[letters.index(first_letter) + 1][current_word_length - 3]) + 1 #Check syntax here 
+            int(letterCountArray2d[letters.index(first_letter) + 1][current_word_length - 3]) + 1 
 
 
 #LETTER MATRIX
