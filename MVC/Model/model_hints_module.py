@@ -183,11 +183,16 @@ def getTwoLetterDictionary(words):
 
     return twoLetterDictionary
 
+#Looks at the totals for each letter in rows of the letter matrix, 
+# and returns if bingo (collective of letters all used once to start words)
 def getBingo(letterMatrix):
     index = []
     for i in range(1,8):
         index.append(int(letterMatrix[i][-1]))
-    return max(index)
+   
+    if(min(index) < 1):
+        return 0
+    return 1
     
     
 
