@@ -14,7 +14,7 @@ def start_gui():
     pygame.display.set_caption('Main Menu PYGAME')
 
     # Define some colors
-    WHITE = (255, 0, 247)
+    WHITE = (255, 255, 255)
     BLACK = (0, 0, 0)
     GRAY = (128, 128, 128)
 
@@ -45,36 +45,48 @@ def start_gui():
         global new_game_box, load_game_box, help_box, exit_box
         half_width = BOX_WIDTH // 2
         half_height = BOX_HEIGHT // 2
-        hexagon_points = [
+        
+        '''hexagon_points = [
             (BOX_X + half_width, NEW_GAME_BOX_Y),
             (BOX_X + BOX_WIDTH, NEW_GAME_BOX_Y + half_height),
             (BOX_X + BOX_WIDTH, NEW_GAME_BOX_Y + half_height + BOX_HEIGHT),
             (BOX_X + half_width, NEW_GAME_BOX_Y + BOX_HEIGHT + BOX_HEIGHT // 2),
             (BOX_X, NEW_GAME_BOX_Y + half_height + BOX_HEIGHT),
             (BOX_X, NEW_GAME_BOX_Y + half_height)
-        ]
+        ]'''
+            # create hexagon points (NOT the lines between the points)
+        hex_radius = 70 # change this for bigger hexagons, considered midpoint
+        hexagon_points = []
+        for i in range(6):
+            hex_angle = (math.pi / 180) * (60 * i) # converts from degrees to radians
+            hex_x = hex_radius * math.cos(hex_angle) + 300 # the + changes x position
+            hex_y = hex_radius * math.sin(hex_angle) + 120 # the + changes y position
+            hexagon_points.append((hex_x, hex_y))
+
+        
+        
         new_game_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, hexagon_points)
         load_game_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, BOX_HEIGHT + BOX_SPACING)) )) for point in hexagon_points])
         help_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, 2 * BOX_HEIGHT + 2 * BOX_SPACING)) )) for point in hexagon_points])
         exit_box = pygame.draw.polygon(DISPLAY_SURFACE, GRAY, [tuple(map(sum, zip(point, (0, 3 * BOX_HEIGHT + 3 * BOX_SPACING)) )) for point in hexagon_points])
 
-        title_text_surface = FONT.render(HEADER_TEXT, True, WHITE)
+        title_text_surface = FONT.render(HEADER_TEXT, True, BLACK)
         title_text_rect = title_text_surface.get_rect(center=((WINDOW_WIDTH/2), BOX_Y_START/2))
         DISPLAY_SURFACE.blit(title_text_surface, title_text_rect)
 
-        new_game_text_surface = FONT.render(NEW_GAME_TEXT, True, WHITE)
+        new_game_text_surface = FONT.render(NEW_GAME_TEXT, True, BLACK)
         new_game_text_rect = new_game_text_surface.get_rect(center=new_game_box.center)
         DISPLAY_SURFACE.blit(new_game_text_surface, new_game_text_rect)
 
-        load_game_text_surface = FONT.render(LOAD_GAME_TEXT, True, WHITE)
+        load_game_text_surface = FONT.render(LOAD_GAME_TEXT, True, BLACK)
         load_game_text_rect = load_game_text_surface.get_rect(center=load_game_box.center)
         DISPLAY_SURFACE.blit(load_game_text_surface, load_game_text_rect)
 
-        help_text_surface = FONT.render(HELP_TEXT, True, WHITE)
+        help_text_surface = FONT.render(HELP_TEXT, True, BLACK)
         help_text_rect = help_text_surface.get_rect(center=help_box.center)
         DISPLAY_SURFACE.blit(help_text_surface, help_text_rect)
 
-        exit_text_surface = FONT.render(EXIT_TEXT, True, WHITE)
+        exit_text_surface = FONT.render(EXIT_TEXT, True, BLACK)
         exit_text_rect = exit_text_surface.get_rect(center=exit_box.center)
         DISPLAY_SURFACE.blit(exit_text_surface, exit_text_rect)
 
@@ -110,7 +122,7 @@ def start_gui():
                     WINDOW_WIDTH = w
                     WINDOW_HEIGHT = h
             # Draw the screen
-            DISPLAY_SURFACE.fill([150,150,150])
+            DISPLAY_SURFACE.fill(WHITE)
             draw_boxes()
             pygame.display.update()
 
