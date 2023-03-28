@@ -3,10 +3,7 @@ import platform
 import win32api     # Needed for Windows
 # import AppKit       # Needed for macOS
 import subprocess   # Need for Linux
-
-from model_shuffleLetters import *
 from model_puzzle import *
-from model_PuzzleStats import *
 
 class Game:
     def __init__(self, puzzle, puzzle_stats):

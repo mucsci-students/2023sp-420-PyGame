@@ -1,6 +1,8 @@
 import os
 import sys
 
+from model_puzzle import *
+
 ## prints the start up "Loading" screen
 def print_start_screen():
     startingScreen = f"""
@@ -28,21 +30,27 @@ Parameters: 2
     requiredLetter; str
     Remaining Letters; list
 """
-def print_current_puzzle(stats):
-    prettyGuesses = get_pretty_guesses(stats.guesses)
+def print_current_puzzle():
+    puzzle = PuzzleStats()
+    print(puzzle.shuffled_puzzle)
+    print(puzzle.pangram)
+    print(puzzle.required_letter)
+    
+    prettyGuesses = get_pretty_guesses(puzzle.guesses)
     # variables to store each letter 
-    req = stats.shuffled_puzzle[3]
-    fir = stats.shuffled_puzzle[0]
-    sec = stats.shuffled_puzzle[1]
-    thi = stats.shuffled_puzzle[2]
-    fou = stats.shuffled_puzzle[4]
-    fif = stats.shuffled_puzzle[5]
-    six = stats.shuffled_puzzle[6]
+
+    req = puzzle.shuffled_puzzle[0]
+    fir = puzzle.shuffled_puzzle[3]
+    sec = puzzle.shuffled_puzzle[1]
+    thi = puzzle.shuffled_puzzle[2]
+    fou = puzzle.shuffled_puzzle[4]
+    fif = puzzle.shuffled_puzzle[5]
+    six = puzzle.shuffled_puzzle[6]
 
     currentProgress = f"""
     Puzzle:
-        Rank: {stats.get_rank()}   
-        Score: {stats.score} / {stats.maxScore} 
+        Rank: {puzzle.get_rank()}   
+        Score: {puzzle.score} / {puzzle.total_points} 
         Words Guessed: {prettyGuesses}
         
                 ,---.
