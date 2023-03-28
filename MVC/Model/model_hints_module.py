@@ -183,6 +183,14 @@ def getTwoLetterDictionary(words):
 
     return twoLetterDictionary
 
+def getBingo(letterMatrix):
+    index = []
+    for i in range(1,8):
+        index.append(int(letterMatrix[i][-1]))
+    return max(index)
+    
+    
+
 puzzle = Puzzle()
 puzzle.generate_random_puzzle()
 generateHints(puzzle.current_word_list, puzzle.pangram, puzzle.total_points)
