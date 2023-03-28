@@ -61,10 +61,10 @@ def print_current_puzzle(stats):
 
                Commands
          ---------------------
-          /Help      /Shuffle 
-          /Back      /ShowAll 
-          /Share     /SaveGame 
-          /Exit      /Refresh
+          /help      /shuffle 
+          /back      /showall 
+          /share     /savegame 
+          /exit      /refresh
         
         """
     print(currentProgress)
@@ -96,12 +96,12 @@ def get_pretty_guesses(guesses):
 def print_main_menu():
     mainMenu = f"""
 Main Menu
-    /NewGame
-    /LoadGame
-    /StartFromKey
-    /StartSharedGame
-    /Help
-    /Exit
+    /newgame
+    /loadgame
+    /startfromkey
+    /startsharedgame
+    /help
+    /exit
 """
     print(mainMenu)
 
@@ -126,6 +126,7 @@ N
 ## Promtps user if he wants to load the game or not
 def print_load_game():
     load = f"""
+    
 Load Game?
 Y
 N
@@ -164,26 +165,35 @@ def print_help():
 
 Instructions
 
-Create words using letters from the hive and try to get the maximum score. 
-Words must have at least four letters and include the center letter in brackets.
-All optional letters will be surrounding the required center letter.   
-Letters can be used more than once. 
-Words with hyphens, proper nouns, vulgarities, and especially obscure words are not in the word list. 
-Score points to increase your rating. 
-4-letter words are worth 1 point each.
-Longer words earn 1 point per letter. 
-Each puzzle includes at least one “pangram” which uses every letter. 
-These are worth double the points!
+~ Create words using letters from the hive and try to get the maximum score. 
+~ Words must have at least four unique letters and include the center letter in brackets.
+~ All optional letters will be surrounding the required center letter.   
+~ Letters can be used more than once. 
+~ Words with hyphens, proper nouns, vulgarities, and especially obscure words are not in the word list. 
+~ Score points to increase your rating.
+~ 4-letter words are worth 1 point each.
+~ Longer words earn 1 point per letter. 
+~ Each puzzle includes at least one “pangram” which uses every letter, which are worth double points.
 
-Commands
-/NewGame         /Loads a new game
-/LoadGame        /Loads a saved game
-/StartFromKey    /Enter a 7 letter key to start a new puzzle
-/Share           /copies the key to your clipboard
-/Help            /get instructions and commands 
-/Exit            /exits the game
+Main Menu Commands:
+/NewGame          Loads a new game
+/LoadGame         Loads a saved game
+/StartFromKey     Enter a 7 letter key to start a new puzzle
+/StartSharedGame  Copies the key to your clipboard
+/Help             Get instructions and commands 
+/Exit             Exits the program
 
-Enter any key to continue...
+In-Game Commands:
+/Help             Get instructions and commands
+/Back             Go back to the main menu screen
+/Share            Shows a sharable key (usable for CLI and GUI)
+/Exit             Exits the program
+/Shuffle          Shuffles the outer letters of the hive
+/ShowAll          Prints a list of correct guessed words
+/SaveGame         Saves the current state of the game
+/Refresh          Refreshes the window
+
+Press the space key to continue...
 """ 
     print(help)
 
@@ -210,7 +220,7 @@ def print_game_over():
 ## Prints all the players correct word guesses 
 ## Layout: four coulmns and N amount of rows depending on the list size
 def print_all_guesses(stats):
-    print("\t SHOW ALL GUESSES")
+    print("\n\t WORDS CORRECTLY GUESSED:")
     prettyGuesses = "\t\t"
     counter = 0
     for guess in stats.guesses:
@@ -220,7 +230,7 @@ def print_all_guesses(stats):
             prettyGuesses = prettyGuesses + "\n\t\t"
             counter = 0
     print(prettyGuesses)
-    print("\t Enter any key to continue...")
+    print("\t Press the space key to continue...")
 
 ## Returns a list of all save files able to load (load options)
 def get_load_options():
@@ -268,5 +278,5 @@ def print_shared_key_input():
 
 ## prints out the sharable key
 def print_shared_key_output(key):
-    print("\tYour Share Key is: " + str(key))
-    print("\n\tPress any key to continue...")
+    print("\n\tYour Share Key is: " + str(key))
+    print("\n\tPress the space key to continue...")
