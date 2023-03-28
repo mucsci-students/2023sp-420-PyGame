@@ -4,16 +4,10 @@ import sys
 import os
 import time
 
-from model_PuzzleStats import PuzzleStats
-from model_puzzle import Puzzle
-from model_shuffleLetters import ShuffleKey
+from model_puzzle import *
 from controller_universal import *
 from View import *
 
-### ------------Global Var--------------- ###
-
-puzzle = Puzzle()
-puzzle_stats = PuzzleStats(-1,"")
 
 
 ### ------------MAIN CLI Controller--------------- ###
@@ -52,7 +46,7 @@ def user_input(command_set):
     key = get_os_name()
     # if the enter/return key is pressed, return the full typed string; else, figure out the key pressed
     if key == '\r' or key == '\n':
-      return ''.join(typed_letters).lower()
+      return ''.join(typed_letters)
     elif key is not None:
       on_key_press(key, typed_letters, command_set)
 
@@ -61,7 +55,7 @@ def user_input(command_set):
 def on_key_press(key, typed_letters, command_num):
   # if the tab key is pressed (tab completion)
   if key == '\t':
-    typed_string, ending_string = tab_completion(''.join(typed_letters), command_num)
+    typed_string, ending_string = tab_completion(''.join(typed_letters).lower(), command_num)
     if ending_string:
       typed_letters.extend(ending_string)
     typed_string = ''.join(typed_letters)
@@ -125,6 +119,8 @@ def space_out():
     if key == ' ':
       break
 
+### ------------MAIN CLI Controller--------------- ###
+
 
 # starts the cli main menu
 def main_menu_handler():
@@ -170,14 +166,17 @@ def main_response(userInput):
 
 # when user wants to load a saved game
 def load_save_game():
-  global puzzle_stats
+  ## all load options
   print_load_options()
   file_name = user_input(0)
+
+  ## user confirmation 
   print_load_game()
   answer = user_input(0).lower()
   match answer:
     case "y":
-      start_game_with_key_from_load(puzzle_stats.LoadGame(file_name))
+      if (start_game_with_key_from_load(file_name) == 1):
+        print("Was unalbe to Load the File")
     case "n":
       cls()
       return
@@ -205,14 +204,11 @@ def keyStart():
 
 # function to save game
 def saveGamePrompt():
-    global puzzle_stats
-    global puzzle
-
     while(True):
       print("Enter title to save game as:")
       userInput = user_input(0).lower() #asks user for an input
       cls()
-      puzzle_stats.get_save_game(puzzle, userInput)
+      PuzzleStats().get_save_game(userInput)
       print(f"{userInput} has been saved.")
       return
 
@@ -225,17 +221,15 @@ def activeGameLoop():
 
 # when an active game is in play
 def activeGame():
-  global puzzle
-  global puzzle_stats
   command_set = 2
 
-  print_current_puzzle(puzzle_stats)
+  print_current_puzzle()
   print("Enter your guess.")
   userInput = user_input(command_set).lower() #asks user for input to match
   if (userInput == ""):
     return True
   elif (userInput[0] != "/"):
-    outcome = print_guess_outcome(puzzle_stats.get_check_guess(userInput, puzzle))
+    outcome = print_guess_outcome(PuzzleStats().get_check_guess(userInput))
     time.sleep(1)
     return outcome
   else:
@@ -252,7 +246,7 @@ def active_game_commands(userInput):
       return True
 
     case "/shuffle":
-      puzzle_stats.shuffled_puzzle = ShuffleKey(puzzle.pangram, puzzle.required_letter)
+      PuzzleStats().ShuffleKey()
       return True
 
     case "/savegame":
@@ -275,11 +269,12 @@ def active_game_commands(userInput):
         file_name = user_input(0).lower()
         cls()
         save_current_game(file_name)
+      PuzzleStats().clear()
       return False
 
     case "/share":
       cls()
-      print_shared_key_output(puzzle.encode_puzzle_key())
+      print_shared_key_output(PuzzleStats().encode_puzzle_key())
       space_out()
 
       return True
@@ -299,44 +294,37 @@ def active_game_commands(userInput):
 
 # starts a new game from randomly selected puzzle
 def start_new_game():
-  global puzzle
-  global puzzle_stats
-  puzzle, puzzle_stats = prep_new_game()
+  prep_new_game()
   activeGameLoop()
 
 # Start game from base
 def start_game_with_key(key):
-  global puzzle
-  global puzzle_stats
   prep_value = prep_game_with_key(key)
 
-  if type(prep_value) == int:
+  if type(prep_value) == 1:
     return 1
   
-  puzzle, puzzle_stats = prep_value
   activeGameLoop()
 
 # start game from a saved .json file
-def start_game_with_key_from_load(save_info):
-  global puzzle
-  global puzzle_stats
-  print(save_info)
+def start_game_with_key_from_load(file_name):
+  ## From Universal Controller
+  print(file_name)
+  input()
+  prep_value = prep_game_from_load(file_name)
 
-  if save_info != 1:
-    activeGameLoop()
+  ## Checks to see if a puzzle was loaded correctly 
+  if prep_value == 1:
+    return 1
+
+  activeGameLoop()
   
-  # prep_value = prep_game_from_load(save_info)
-  # if type(prep_value) == int:
-  #   return 1
-
-  # puzzle = prep_value
+  
     
 
 # creates a save file (saves current game)
 def save_current_game(filename):
-  global puzzle
-  global puzzle_stats
-  puzzle_stats.get_save_game(puzzle, filename)
+  PuzzleStats().get_save_game(filename)
 
 # closes the CLI
 def exit_game():
@@ -361,16 +349,13 @@ def cls():
 
 # Start a game from a shared key
 def start_shared_game():
-  global puzzle
-  global puzzle_stats
-
   cls()
   print_shared_key_input()
   shared_key = user_input(0).lower()
   
   prep_value = prep_game_from_share(shared_key)
   
-  if type(prep_value) == int:
+  if type(prep_value) == 1:
     cls()
     print("Invalid Code Input.")
     print("\nPress the space key to try again...")
@@ -383,7 +368,7 @@ def start_shared_game():
       elif key == 'n':
         return True
 
-  puzzle = prep_value
+  
   activeGameLoop()
 
   
