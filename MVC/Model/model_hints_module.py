@@ -4,10 +4,7 @@
         Words: List of words from puzzle
         Letters: Array of letters from the model
         Points: Total points in the puzzle
-    Returns
-         1d array of [letters, word_count, points, pangram_count], a list[list[str]] letter counts with 
-         letters and word lengths in the rows and columns, 
-         and dictionary Of First Two Letters with the letters as the key and count as the pair
+    Returns 0
 """
 
 m_letters = []
@@ -104,20 +101,25 @@ def generateHints(words, letters, points):
     m_letterMatrix = letterMatrix
     m_twoLetterDictionary = twoLetterDictionary
     
-    # returns array of letters word count points and pangram, then a list[list[str]] of the letters and count array, 
-    # then a dictionary of the two letters words start with
-    return 0 #[letters, word_count, points, pangram_count], letterMatrix, twoLetterDictionary#, twoLetters_counts
+   
+    return 0 
 
+# Returns string of letters
 def getLetters():
     return m_letters
+# Returns string of word count
 def getWordCount():
     return m_word_count
+# Returns string of points
 def getPoints():
     return m_points
+# Returns string of pangram counts
 def getPangramCount():
     return m_pangram_count
+# Returns  list[list[str]] of the letters and count array
 def getLetterMatrix():
     return m_letterMatrix
+# Returns Dictionary of countaining  starting two letters : count
 def geTwoLetterDictionary():
     return m_twoLetterDictionary
 
