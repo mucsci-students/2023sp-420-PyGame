@@ -46,22 +46,37 @@ def generateLetterMatrix(words, letters):
     # Initialize letterMatrix 
     # (maxLength - 1) for maxLength -3 for lengths + total + column label
     # 9 is for 7 letters + total + row label
+   
     letterMatrix = [[str(0)]*(maxLength - 1)]*9 
     letter_index = 1
     for i in letters:
-        letterMatrix[letter_index][0] = str(i)
+        print(i)
+        letterMatrix[letter_index][0] = i
+        print(letterMatrix)
         letter_index += 1
-    letterMatrix[8][0] = "tot"
-    
+    #letterMatrix[8][0] = "tot"
+    #Initialized word length on top column
+    print(letterMatrix)
+    print("\n")
     for i in range(1, maxLength - 2):
         letterMatrix[0][i] = str(i)
     letterMatrix[0][maxLength - 2] = "tot"
     for word in words:
-        current_word_length = len(word)
+        word_column = len(word) - 3
         first_letter = word[0]
-        letterMatrix[letters.index(first_letter) + 1][current_word_length - 3] = \
-            int(letterMatrix[letters.index(first_letter) + 1][current_word_length - 3]) + 1 
-#LETTER MATRIX
+        word_row = letters.index(first_letter.upper()) + 1
+        letterMatrix[word_row][word_column] = str(int(letterMatrix[word_row][word_column]) + 1 )
+
+
+    '''
+    for j in range(1,8):
+            row_total = 0
+            for i in range(1, maxLength - 1):#uninclusive end
+                row_total += int(letterMatrix[j][i])
+            letterMatrix [j][maxLength - 2] = str(row_total)
+
+    '''
+    
     # Totals Rows
     for letter in letters:
         row_total = 0
@@ -119,8 +134,10 @@ generateLetters()
 generatePoints()
 generatePangramCount(word_list, testletters)
 generateWordCount(word_list)
+
 var = generateLetterMatrix(word_list, testletters)
+print(var)
 generateTwoLetterDictionary(word_list)
-generateBingo(var)
+print(generateBingo(var))
 
 
