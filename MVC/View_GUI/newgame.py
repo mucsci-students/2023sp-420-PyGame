@@ -100,9 +100,11 @@ def start_new_game():
     
     # function is called when the "START FROM RANDOM" button is clicked on
     def random_screen():
-        puzzle, puzzle_stats = prep_new_game()
-        game = Game(puzzle, puzzle_stats)
+        prep_new_game()
+        
+        game = Game()
         game.run()
+
  
     # function is called when the "START FROM KEY" button is clicked on
     def key_screen():
@@ -269,20 +271,20 @@ def start_new_game():
     def start_from_key(key):    
         prep_value = prep_game_with_key(key)
 
-        if type(prep_value) == int:
+        if prep_value == 1:
             return 1
 
-        game = Game(prep_value[0], prep_value[1])
+        game = Game()
         game.run()
     
     #function start from share
     def start_from_share(shared_key):    
         prep_value = prep_game_from_share(shared_key)
 
-        if type(prep_value) == int:
+        if prep_value == 1:
             return 1
 
-        game = Game(prep_value[0], prep_value[1])
+        game = Game()
         game.run()
 
     load_game()
