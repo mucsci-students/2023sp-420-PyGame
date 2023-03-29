@@ -1,4 +1,4 @@
-from puzzle import *
+from model_puzzle import *
 
 '''    
 m_letters = puzzle.pangram
@@ -24,6 +24,7 @@ def generatePoints():
 def generatePangramCount(words, letters):
     #words = puzzle.current_word_list
     #letters = puzzle.pangram
+    pangram_count = 0
     for word in words:
         if(len(word) >= 7 ):
             if all(letter in word for letter in letters):
@@ -74,7 +75,7 @@ def generateLetterMatrix(words, letters):
             count += int(letterMatrix[i][j])
         letterMatrix [8][j] = str(count)
     return letterMatrix
-# Returns Dictionary of countaining  starting two letters : count
+# Returns Dictionary of countaining  starting two letters : count AS (str) : (int)
 def generateTwoLetterDictionary(words):
     #words = puzzle.current_word_list    
     twoLetterDictionary = {}
@@ -105,20 +106,21 @@ puzzle = Puzzle()
 
 #puzzle.generate_random_puzzle()
 #generateHints(puzzle.current_word_list, puzzle.pangram, puzzle.total_points)
-'''
+
 
 # Testing 
-letters = 'LZAETQU'
+testletters = 'LZAETQU'
+require_letter = "Q"
 word_list = ['quetzal', 'equate', 'quelea', 'quezal', 'aquae', 'equal', 'quale', 'quate', 'quell', 'queue', 'tuque', 'aqua']
 
 
 #individual function testing
 generateLetters()
 generatePoints()
-generatePangramCount(word_list, letters)
+generatePangramCount(word_list, testletters)
 generateWordCount(word_list)
-var = generateLetterMatrix(word_list, letters)
+var = generateLetterMatrix(word_list, testletters)
 generateTwoLetterDictionary(word_list)
 generateBingo(var)
 
-'''
+
