@@ -1,10 +1,6 @@
 import pygame, os, random
 from model_puzzle import *
 
-# from model_shuffleLetters import *
-# from model_puzzle import *
-# from model_PuzzleStats import *
-
 
 class Game:
     def __init__(self):
