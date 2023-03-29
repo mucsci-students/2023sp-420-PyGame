@@ -16,14 +16,10 @@ def generateLetters():
     return puzzle.pangram
 # Returns string of word count
 def generateWordCount(words):
-    words = puzzle.current_word_list
-    word_count = 0
-    for word in words:
-        word_count += 1
-    return str(word_count)
+    return str(len(words))
 # Returns str of points
 def generatePoints():
-    return str(puzzle.total_points())
+    return str(puzzle.total_points)
 # Returns string of pangram counts
 def generatePangramCount(words, letters):
     #words = puzzle.current_word_list
@@ -110,13 +106,19 @@ puzzle = Puzzle()
 #puzzle.generate_random_puzzle()
 #generateHints(puzzle.current_word_list, puzzle.pangram, puzzle.total_points)
 '''
-#individual functions
+
+# Testing 
+letters = 'LZAETQU'
+word_list = ['quetzal', 'equate', 'quelea', 'quezal', 'aquae', 'equal', 'quale', 'quate', 'quell', 'queue', 'tuque', 'aqua']
+
+
+#individual function testing
 generateLetters()
 generatePoints()
-generatePangramCount(puzzle.current_word_list, puzzle.pangram)
-generateWordCount(puzzle.current_word_list)
-var = generateLetterMatrix(puzzle.current_word_list, puzzle.pangram)
-generateTwoLetterDictionary(puzzle.current_word_list)
+generatePangramCount(word_list, letters)
+generateWordCount(word_list)
+var = generateLetterMatrix(word_list, letters)
+generateTwoLetterDictionary(word_list)
 generateBingo(var)
 
 '''
