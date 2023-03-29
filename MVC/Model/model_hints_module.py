@@ -1,14 +1,6 @@
-"""
-    generateHints: must be called first
-    Takes Three Parameters
-        Words: List of words from puzzle
-        Letters: Array of letters from the model
-        Points: Total points in the puzzle
-    Returns 0
-"""
 from puzzle import *
 
-    
+'''    
 m_letters = puzzle.pangram
 m_word_count = 0
 m_points = puzzle.total_points
@@ -16,15 +8,15 @@ m_pangram_count = 0
 m_letterMatrix = [[str()]]
 m_twoLetterDictionary = {}
 #puzzle = puzzle.stats
-m_words =  puzzle.current_word_list
+m_words =  puzzle.current_word_list'''
 
 
 # Returns string of letters for the current puzzle
 def generateLetters():
-    m_letters = puzzle.pangram
     return puzzle.pangram
 # Returns string of word count
 def generateWordCount(words):
+    words = puzzle.current_word_list
     word_count = 0
     for word in words:
         word_count += 1
@@ -34,6 +26,8 @@ def generatePoints():
     return str(puzzle.total_points())
 # Returns string of pangram counts
 def generatePangramCount(words, letters):
+    #words = puzzle.current_word_list
+    #letters = puzzle.pangram
     for word in words:
         if(len(word) >= 7 ):
             if all(letter in word for letter in letters):
@@ -43,7 +37,8 @@ def generatePangramCount(words, letters):
 # Parmeters: the words of the current_puzzle as list and the puzzle.pangram as list of letters
 # Returns  list[list[str]] of the letters and count array
 def generateLetterMatrix(words, letters):
-   
+   # words = puzzle.current_word_list
+    #letters = puzzle.pangram
     
     if(words == [] or len(letters) < 7):
         return 1
@@ -85,6 +80,7 @@ def generateLetterMatrix(words, letters):
     return letterMatrix
 # Returns Dictionary of countaining  starting two letters : count
 def generateTwoLetterDictionary(words):
+    #words = puzzle.current_word_list    
     twoLetterDictionary = {}
     for word in words:
         twoLetters = word[0:2]
@@ -110,9 +106,10 @@ def generateBingo(letterMatrix):
     
 
 puzzle = Puzzle()
-puzzle.generate_random_puzzle()
-#generateHints(puzzle.current_word_list, puzzle.pangram, puzzle.total_points)
 
+#puzzle.generate_random_puzzle()
+#generateHints(puzzle.current_word_list, puzzle.pangram, puzzle.total_points)
+'''
 #individual functions
 generateLetters()
 generatePoints()
@@ -122,3 +119,4 @@ var = generateLetterMatrix(puzzle.current_word_list, puzzle.pangram)
 generateTwoLetterDictionary(puzzle.current_word_list)
 generateBingo(var)
 
+'''
