@@ -44,10 +44,9 @@ def start_load():
     def load_menu():
         save_path = ''
         for path in sys.path:
-            if "/Saves" in path:
+            if "Saves" in path:
                 save_path = path
-                break 
-
+                break
         options = os.listdir(save_path)
         option_count = len(options)
         curr_count = 0
@@ -130,8 +129,9 @@ def start_load():
         print(f'loadgame.py - def load_game(file_name): Selected filename is: {file_name}')
         spacer = 0 
         prep_value = prep_game_from_load(file_name)
+        print(prep_value)
 
-        if type(prep_value) == int:
+        if prep_value == 1:
             return 1
         running = True
         while running:
@@ -163,7 +163,7 @@ def start_load():
                         running = False
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:
                     if yes.collidepoint((mx, my)):
-                        game = Game(prep_value[0], prep_value[1])
+                        game = Game()
                         game.run()
                         running = False
                     if no.collidepoint((mx, my)):

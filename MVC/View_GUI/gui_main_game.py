@@ -1,91 +1,82 @@
 import pygame, os, random
-import platform
-import win32api     # Needed for Windows
-# import AppKit       # Needed for macOS
-import subprocess   # Need for Linux
 from model_puzzle import *
 
+# from model_shuffleLetters import *
+# from model_puzzle import *
+# from model_PuzzleStats import *
+
+
 class Game:
-    def __init__(self, puzzle, puzzle_stats):
-            
-        self.puzzle = puzzle
-        self.puzzle_stats = puzzle_stats
-        print(f'gui_main_game.py - def__init__(): puzzle.pangram is: {puzzle.pangram}')
-        print(f'gui_main_game.py - def__init__(): puzzle.required_letter is: {puzzle.required_letter}')
-
+    def __init__(self):
         pygame.init()
+        self.puzzle_stats = None
 
-        self.setup_screen()
-        pygame.display.set_caption("Main Game")
-        self.image_file_path = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
-        self.background_image = pygame.image.load(os.path.join(self.image_file_path, "Background_Image.png")).convert()
-        self.scaled_background_image = self.background_image
-        
+        self.colors = Colors()
+        self.button_dict = {}
+        self.letter_dict = {}
+        self.all_possible_words = []
+        self.correctly_guessed_words = []
+
+        self.puzzle_letter_center_position = []
+        self.top_puzzle_section = (0, 0)
+        self.bottom_puzzle_section = (0, 0)
+
+        self.game_window_minimum_width = 800
+        self.game_window_minimum_height = 600
+
+        # Define an absolute minimum value for width and height.
+        self.game_window_width = self.game_window_minimum_width
+        self.game_window_height = self.game_window_minimum_height
         self.game_window = pygame.display.set_mode((self.game_window_width, self.game_window_height), pygame.RESIZABLE)
-        if pygame.display.get_init():
-            pygame.display.window_position = (0,0)
-        
-        # Define the radius and center position of the hexagon
+
+        # Find the x,y coordinate for the middle of the game window.
         self.center_x, self.center_y = self.game_window_width // 2, self.game_window_height // 2
+        self.radius = min(self.game_window_width, self.game_window_height) // 8
+
+        self.control_height = int(self.radius * .5)
+        self.control_width = self.radius * 5
+
+        # Set the name and icon for the window.
+        pygame.display.set_caption("Main Game")
+        image_file_path = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
+        pygame.display.window_position = (0, 0)
+
+        self.background_image = pygame.image.load(os.path.join(image_file_path, "Background_Image.png")).convert()
+
+        # Get and use a copy of the background image to avoid distortion when resizing.
+        self.scaled_background_image = self.background_image
 
         # Set up the colors
-        self.WHITE = (255, 255, 255)                # White
-        self.BLACK = (0, 0, 0)                      # Black
-        self.ORANGE = (255, 189, 49)                # Orange
-        self.NEON_ORANGE = (255, 85, 0)             # Obnoxious Orange
-        self.ARROW_COLOR = (155, 155, 155)          # Light Gray
-        self.INPUT_BACKGROUND = (224, 224, 224)     # Gray
-        self.VALID_COLOR = (68, 214, 44)            # Green
-        self.INVALID_COLOR = (255, 0, 0)            # Red
-        self.GAME_BACKGROUND = (255, 30, 231)       # Bright Pink
-        self.HOVER_COLOR = self.ORANGE              # Changes while running
-        self.SHOW_WORDS_HOVER = self.WHITE          # Changes while running
-        self.HEXAGON_HOVER = self.BLACK             # Changes while running
-        self.SHUFFLE_HOVER = self.ORANGE            # Changes while running
-        self.SUBMIT_HOVER = self.ORANGE             # Changes while running
-        self.SUBMIT_BUTTON = self.BLACK
-        self.BUTTON_BACKGROUND = (186,100,65)
-        self.SCORE = self.NEON_ORANGE
-        self.SAVE_BUTTON = self.BLACK
-        self.SAVE_HOVER = self.ORANGE
-        # Define the letters to display
-        self.puzzle_stats.shuffled_puzzle = self.puzzle_stats.shuffled_puzzle.upper()
-        
-        self.current_word_list = []
-        self.guessed_word_list = []
-        # self.guessed_word_list = self.puzzle_stats.guesses
+        self.HOVER_COLOR = self.colors.ORANGE
+        self.SUBMIT_BUTTON = self.colors.BLACK
+        self.SUBMIT_HOVER = self.colors.ORANGE
+        self.HEXAGON_HOVER = self.colors.BLACK
+        self.SHUFFLE_HOVER = self.colors.ORANGE
+        self.SHOW_WORDS_HOVER = self.colors.ORANGE
+        self.UP_ARROW_COLOR = self.colors.LIGHT_GRAY
+        self.DOWN_ARROW_COLOR = self.colors.LIGHT_GRAY
 
         self.input_box_max_length = 0
+        print(self.all_possible_words)
 
-        for word in self.puzzle.current_word_list:
-            self.current_word_list.append(word[0])
-            if len(word[0]) > self.input_box_max_length:
-                self.input_box_max_length = len(word[0])
-    
-    
-        print(self.current_word_list)
-
-        # Set up the scroll variables
+        # Set up variables to control the scroll wheel
         self.scroll_position = 0
         self.scroll_direction = 0
-
-        print(self.input_box_max_length)
+        self.max_input_length = 0
 
         # Set up puzzle letter font
         self.puzzle_letter_font_size = int(self.game_window_width * .15)
-        print(self.puzzle_letter_font_size)  
         self.puzzle_letter_font = pygame.font.SysFont(None, self.puzzle_letter_font_size)
-        
+
         # Set up show guessed words button font
         self.guessed_word_button_font_size = int(self.game_window_width * .07)
         self.guessed_word_button_font = pygame.font.SysFont(None, self.guessed_word_button_font_size)
-        
+
         # Set up input box and smaller button font
-        self.input_box_font_size = int(self.game_window_width * .01)        
+        self.input_box_font_size = int(self.game_window_width * .01)
         self.input_box_font = pygame.font.SysFont(None, self.input_box_font_size)
 
-
-        print(f'input font: {self.input_box_font_size}')  
+        print(f'input font: {self.input_box_font_size}')
         print(f'guessed word: {self.guessed_word_button_font_size}')
 
         # Set up the timer
@@ -94,119 +85,98 @@ class Game:
         self.timer_duration = 900  # in milliseconds
         self.timer_start_time = 0
 
+        self.show_words_rect = None
+        self.arrow_up_rect = None
+        self.arrow_down_rect = None
+        self.exit_button_rect = None
+        self.guessed_words_column_count = 1
+
         # self.character_width, self.character_height = self.input_box_font.size(self.puzzle_stats.shuffled_puzzle[0])
         self.character_width, self.character_height = self.guessed_word_button_font.size('i')
         print(f'char width: {self.character_width}')
         print(f'char height: {self.character_height}')
-        
+
         self.clock = pygame.time.Clock()
         self.input_box_text = ''
-        
+        self.show_words_text = "Show Guessed Words"
+
         self.running = True
         self.show_words_box_visible = False
-        
+        self.set_puzzle()
 
-    # Get the size of the primary monitor based on the operating system        
-    def setup_screen(self):
-        # Set up the main game game_window
-        self.game_window_minimum_width, self.game_window_minimum_height = 800, 600
+    def set_puzzle(self):
+        self.puzzle_stats = PuzzleStats()
 
-        # Get the size of the primary monitor on Windows
-        if platform.system() == "Windows":
-            self.game_window_width = win32api.GetSystemMetrics(0) // 2
-            self.game_window_height = win32api.GetSystemMetrics(1) // 2
-        
-        # Get the size of the primary monitor on macOS
-        elif platform.system() == "Darwin":
-            screen_size = AppKit.NSScreen.mainScreen().frame().size
-            self.game_window_width = win32api.GetSystemMetrics(0) // 2
-            self.game_window_height = win32api.GetSystemMetrics(1) // 2
-        
-        # Get the size of the primary monitor on Linux
-        elif platform.system() == "Linux":
-            output = subprocess.check_output(["xrandr"]).decode("utf-8")
-            primary_line = [line for line in output.splitlines() if " primary " in line][0]
-            screen_size = primary_line.split()[3]
-            self.game_window_width, self.game_window_height = map(int, screen_size.split("x")) // 2
-        
-        # Minimum size
-        else:
-            self.game_window_width = self.game_window_minimum_width
-            self.game_window_height = self.game_window_minimum_height
+        # Define the letters to display
+        self.puzzle_stats.shuffled_puzzle = self.puzzle_stats.shuffled_puzzle.upper()
 
-    
+        for word in self.puzzle_stats.current_word_list:
+            self.all_possible_words.append(word[0])
+            if len(word[0]) > self.input_box_max_length:
+                self.input_box_max_length = len(word[0])
+        self.input_box_max_length += 10
+        print(self.input_box_max_length)
+        print(self.all_possible_words)
+
+    def calculate_puzzle_position(self):
+        self.puzzle_letter_center_position = [
+            (self.center_x, self.center_y),                                     # Center
+            (self.center_x, self.center_y - 2 * self.radius),                   # Top Middle
+            (self.center_x + 2 * self.radius, self.center_y - self.radius),     # Top Right
+            (self.center_x + 2 * self.radius, self.center_y + self.radius),     # Bottom right
+            (self.center_x, self.center_y + 2 * self.radius),                   # Bottom Middle
+            (self.center_x - 2 * self.radius, self.center_y + self.radius),     # Bottom Left
+            (self.center_x - 2 * self.radius, self.center_y - self.radius)      # Top Left
+        ]
+
+        # Determine the (x,y) coordinates for the section above and below the main puzzle.
+        self.top_puzzle_section = (self.center_x, self.puzzle_letter_center_position[1][1] - (self.radius * 1.75))
+        self.bottom_puzzle_section = (self.center_x, self.puzzle_letter_center_position[4][1] + self.radius)
+
     # Calculate the scale and position of elements on screen based on game_window size.
     def calculate_scale(self):
         self.center_x, self.center_y = self.game_window_width // 2, self.game_window_height // 2
         self.radius = min(self.game_window_width, self.game_window_height) // 8
-        self.puzzle_letter_center_position = [
-            (self.center_x, self.center_y),                                             # Center
-            (self.center_x, self.center_y - 2 * self.radius),                           # Top Middle
-            (self.center_x + 2 * self.radius * 0.866, self.center_y - self.radius),     # Top Right
-            (self.center_x + 2 * self.radius * 0.866, self.center_y + self.radius),     # Bottom right
-            (self.center_x, self.center_y + 2 * self.radius),                           # Bottom Middle
-            (self.center_x - 2 * self.radius * 0.866, self.center_y + self.radius),     # Bottom Left
-            (self.center_x - 2 * self.radius * 0.866, self.center_y - self.radius)      # Top Left
-        ]
-
-        # Calculate position of the input box and dropdown menu.
-        self.input_box_pos = (self.puzzle_letter_center_position[5][0] - self.radius, self.puzzle_letter_center_position[4][1] + self.radius)
-        self.show_words_pos = (self.puzzle_letter_center_position[5][0] - (self.radius * 3), self.puzzle_letter_center_position[1][1] - (self.radius * 1.75))
-
-        # Calculate the size of the input box
-        self.input_box_width = (self.radius * 5) + (self.radius * .5)
-        self.input_box_height = int(self.radius * .5)
-
-        # Calculate the size of the "Show Words" button
-        self.guessed_words_button_width = self.input_box_width * 1.75
-        self.guessed_words_button_height = int(0.06 * self.game_window_height)
-        self.guessed_words_button_text = self.guessed_word_button_font.render("Show Guessed Words", True, self.SHOW_WORDS_HOVER)
-
-        # Calculate the size of the dropdown window
-        self.guessed_words_background_width = self.guessed_words_button_width
-        self.guessed_words_background_height = self.game_window_height * .90
-      
-        # Set up the arrow buttons
-        self.arrow_width = self.guessed_words_background_width * .05
-        self.arrow_height = self.guessed_words_background_height * .05
-        self.arrow_up_x = self.show_words_pos[0] + self.guessed_words_background_width - (self.arrow_height * 2)
-        self.arrow_up_y = self.show_words_pos[1] + (self.arrow_height * 3)
-        self.arrow_down_x = self.arrow_up_x
-        self.arrow_down_y =  self.show_words_pos[1] + self.guessed_words_background_height - self.arrow_height
-
-        # Define the arrow button rectangles
-        self.arrow_up_rectangle = pygame.Rect(self.arrow_up_x, self.arrow_up_y - self.arrow_height, self.arrow_width,  self.arrow_height)
-        self.arrow_down_rectangle = pygame.Rect(self.arrow_down_x, self.arrow_down_y, self.arrow_width, self.arrow_height)
-       
-        # Calculate the number of columns based on the width of the display area
-        self.word_width = self.input_box_font_size * max(len(word) for word in self.current_word_list)
-        self.col_width = self.word_width + 5
-
-        self.guessed_words_column_count = int(max(1, self.guessed_words_background_width // self.col_width))
-        self.guessed_words_list_rows = len(self.current_word_list) // self.guessed_words_column_count + (len(self.current_word_list) % self.guessed_words_column_count != 0)
-        
-        # Give calculated values to pygame.Rect to draw the input box.
-        self.input_box_rectangle = pygame.Rect(self.input_box_pos, (self.input_box_width, self.input_box_height))
-        self.guessed_words_button = pygame.Rect(self.show_words_pos, (self.guessed_words_button_width, self.guessed_words_button_height))
-
-        self.guessed_words_background_rectangle = pygame.Rect(self.show_words_pos[0], self.show_words_pos[1] + self.guessed_words_button_height, self.guessed_words_background_width, self.guessed_words_background_height)
-        
-        # Center the "Show Words" text
-        self.guessed_words_text_rectangle = self.guessed_words_button_text.get_rect()
-        self.guessed_words_text_rectangle.centerx = self.guessed_words_button.centerx
-        self.guessed_words_text_rectangle.centery = self.guessed_words_button.centery
-
-        self.draw_gradient(self.input_box_rectangle, self.input_box_pos)
-        self.draw_gradient(self.guessed_words_button, self.show_words_pos)
-        if self.show_words_box_visible:
-            self.draw_gradient(self.guessed_words_background_rectangle, self.show_words_pos)
-        
-        self.menu_y = self.show_words_pos[1] + 5
-        
+        self.control_width = self.radius * 5
+        self.control_height = self.radius * .5
         # Get the width and height of a character in the current puzzle
-        self.character_width, self.character_height = self.input_box_font.size(self.puzzle.pangram[0])
-        # Divide the width of the box and the width of a puzzle character to determine max possible characters.
+        self.character_width, self.character_height = self.input_box_font.size(self.puzzle_stats.pangram[0])
+        self.scale_font()
+        self.calculate_puzzle_position()
 
+    def draw_game(self):
+        show_words_box_x_offset = self.top_puzzle_section[0] - (self.radius * 4.5)
+        input_box_x_offset = self.bottom_puzzle_section[0] - (self.radius * 2.5)
+
+        show_words_pos = show_words_box_x_offset, self.top_puzzle_section[1]
+        exit_game_pos = show_words_pos[0], show_words_pos[1] + self.control_height
+        input_box_pos = input_box_x_offset, self.bottom_puzzle_section[1]
+
+        shuffle_position = input_box_pos[0] - self.radius, input_box_pos[1]
+        save_position = shuffle_position[0] - (self.radius * 1.25), input_box_pos[1]
+        submit_position = input_box_pos[0] + self.control_width + self.radius, input_box_pos[1]
+        hint_position = submit_position[0] + (self.radius * 1.25), submit_position[1]
+
+        self.draw_hex_button(shuffle_position, "Shuffle")
+        self.draw_hex_button(save_position, "Save")
+        self.draw_hex_button(submit_position, "Submit")
+        self.draw_hex_button(hint_position, "Hints")
+
+        input_box_rect = pygame.Rect(input_box_pos, (self.control_width, self.control_height))
+        self.show_words_rect = pygame.Rect(show_words_pos, (self.control_width * 1.75, self.control_height))
+        self.exit_button_rect = pygame.Rect(exit_game_pos, (self.control_width * .66, self.control_height))
+
+        self.draw_rectangle_button(input_box_pos, input_box_rect,
+                                   self.input_box_text, self.colors.WHITE)
+        self.draw_rectangle_button(show_words_pos, self.show_words_rect,
+                                   self.show_words_text, self.SHOW_WORDS_HOVER)
+
+        if self.show_words_box_visible:
+            self.draw_guessed_words()
+        elif not self.show_words_box_visible:
+            self.draw_rank((show_words_pos[0] + (self.control_width * 1.75), show_words_pos[1] + self.control_height))
+            self.draw_rectangle_button(exit_game_pos, self.exit_button_rect,
+                                       "Leave Game", self.colors.ORANGE)
 
     def draw_gradient(self, box, pos):
         box_surface = pygame.Surface(box.size, pygame.SRCALPHA)
@@ -218,10 +188,8 @@ class Game:
         gradient_surface.blit(box_surface, (0, 0), special_flags=pygame.BLEND_RGBA_MULT)
         self.game_window.blit(gradient_surface, pos)
 
-
     def draw_hexagon(self):
         self.calculate_scale()
-        # Draw the letters and hexagons
         for i, pos in enumerate(self.puzzle_letter_center_position):
             letter = self.puzzle_stats.shuffled_puzzle[i]
             hex_points = [
@@ -234,153 +202,157 @@ class Game:
             ]
 
             # Check if the mouse cursor is inside the hexagon
-            hex_pos = (pos[0] - self.radius, pos[1] - self.radius * 0.866)
-            hex_rect = pygame.Rect(hex_pos, (self.radius * 2, self.radius * 1.732))
-            
-            if hex_rect.collidepoint(pygame.mouse.get_pos()) and not self.show_words_box_visible:
+            if self.point_inside_polygon(pygame.mouse.get_pos(), hex_points) and not self.show_words_box_visible:
                 self.HEXAGON_HOVER = self.HOVER_COLOR
+                self.letter_dict[letter] = True
                 pygame.draw.polygon(self.game_window, self.HEXAGON_HOVER, hex_points)
+                pygame.draw.polygon(self.game_window, self.colors.BLACK, hex_points, 6)
             else:
-                self.HEXAGON_HOVER = self.BLACK
-                pygame.draw.polygon(self.game_window, self.HEXAGON_HOVER, hex_points, 6)
+                self.HEXAGON_HOVER = self.colors.NEON_ORANGE
+                self.letter_dict[letter] = False
+                pygame.draw.polygon(self.game_window, self.HEXAGON_HOVER, hex_points)
+                pygame.draw.polygon(self.game_window, self.colors.BLACK, hex_points, 6)
 
-            letter_text = self.puzzle_letter_font.render(letter, True, self.BLACK)
+            letter_text = self.puzzle_letter_font.render(letter, True, self.colors.BLACK)
             letter_text_rect = letter_text.get_rect(center=pos)
             self.game_window.blit(letter_text, letter_text_rect)
 
+    def draw_rectangle_button(self, position, button_rectangle, text, color):
+        rect = pygame.draw.rect(self.game_window, self.colors.BLACK, button_rectangle, 2)
+        if rect.collidepoint(pygame.mouse.get_pos()):
+            color = self.colors.WHITE
 
-    def draw_input_box(self):
-        # Draw the input box rectangle and a fancy border.
-        pygame.draw.rect(self.game_window, self.BLACK, self.input_box_rectangle, 2)
+        if self.bad_timer_active:
+            color = self.colors.INVALID_COLOR
+            # Randomly modify the position of the text within a certain range
+            button_rectangle.center = (button_rectangle.centerx + random.randint(-5, 5),
+                                       button_rectangle.centery + random.randint(-5, 5))
+        elif self.good_timer_active:
+            color = self.colors.VALID_COLOR
 
-        # Variable storing the rendered font
-        input_surface = self.input_box_font.render(self.input_box_text, True, self.INPUT_BACKGROUND)
-        
+        input_surface = self.input_box_font.render(text, True, color)
         # Center the input text within the input box rectangle
         input_rect = input_surface.get_rect()
-        if self.bad_timer_active:
-            # Randomly modify the position of the text within a certain range
-            self.input_box_rectangle.center = (self.input_box_rectangle.centerx + random.randint(-5, 5), self.input_box_rectangle.centery + random.randint(-5, 5))
-        
-        input_rect.center = self.input_box_rectangle.center
-
-        # Put the text on the rect
+        input_rect.center = button_rectangle.center
+        self.draw_gradient(button_rectangle, position)
         self.game_window.blit(input_surface, input_rect)
 
+    def draw_hex_button(self, position, text):
+        hex_pos = HexagonButton(position[0], position[1], self.radius).draw_hexagonal_button()
+        if self.good_timer_active:
+            self.SUBMIT_HOVER = self.colors.VALID_COLOR
+        elif self.bad_timer_active:
+            self.SUBMIT_HOVER = self.colors.INVALID_COLOR
 
-    def draw_shuffle_button(self):
-        # Set the (x,y) values of the shuffle letters button to be to the right of the input box.
-        self.shuffle_button_pos = (self.input_box_pos[0] - self.radius, self.input_box_pos[1])
-        self.save_button_pos = (self.input_box_pos[0] - (self.radius * 2), self.input_box_pos[1])
-        
-        shuffle_letter_hex_points = [
-            (self.shuffle_button_pos[0], self.shuffle_button_pos[1] - (self.input_box_height * .5)),                                 
-            (self.shuffle_button_pos[0] + (self.input_box_height), self.input_box_rectangle.y),     
-            (self.shuffle_button_pos[0] + (self.input_box_height), self.input_box_rectangle.y + (self.input_box_height)),
-            (self.shuffle_button_pos[0], self.shuffle_button_pos[1] + (self.input_box_height * 1.5)),
-            (self.shuffle_button_pos[0] - (self.input_box_height), self.input_box_rectangle.y + self.input_box_height),    
-            (self.shuffle_button_pos[0] - (self.input_box_height), self.input_box_rectangle.y),   
-        ]
-
-        save_letter_hex_points = []
-        for i in shuffle_letter_hex_points:
-            new_x = (i[0] - (self.radius * 2), i[1])
-            save_letter_hex_points.append(new_x)
-
-        self.shuffle_button = pygame.draw.polygon(self.game_window, self.SHUFFLE_HOVER, shuffle_letter_hex_points, 4)
-        self.save_button = pygame.draw.polygon(self.game_window, self.SAVE_HOVER, save_letter_hex_points, 4)
-        shuffle_text = self.input_box_font.render("Shuffle", True, self.SUBMIT_BUTTON)
-        shuffle_text_rect = shuffle_text.get_rect(center=self.shuffle_button.center)
-        save_text = self.input_box_font.render("  Save", True, self.SAVE_BUTTON)
-        save_text_rect = shuffle_text.get_rect(center=self.save_button.center)
-
-        self.game_window.blit(save_text, save_text_rect)
-        self.game_window.blit(shuffle_text, shuffle_text_rect)
-
-
-    def draw_submit_button(self):
-        # Set the (x,y) values of the shuffle letters button to be to the right of the input box.
-        self.submit_button_pos = (self.input_box_pos[0] + self.input_box_width + self.radius, self.input_box_pos[1])
-        
-        submit_guess_hex_points = [
-            (self.submit_button_pos[0], self.submit_button_pos[1] - (self.input_box_height * .5)),                                 
-            (self.submit_button_pos[0] + (self.input_box_height), self.input_box_rectangle.y),     
-            (self.submit_button_pos[0] + (self.input_box_height), self.input_box_rectangle.y + (self.input_box_height)),
-            (self.submit_button_pos[0], self.submit_button_pos[1] + (self.input_box_height * 1.5)),
-            (self.submit_button_pos[0] - (self.input_box_height), self.input_box_rectangle.y + self.input_box_height),    
-            (self.submit_button_pos[0] - (self.input_box_height), self.input_box_rectangle.y),   
-        ]
-
-        self.submit_button = pygame.draw.polygon(self.game_window, self.SUBMIT_HOVER, submit_guess_hex_points, 4)
-        submit_text = self.input_box_font.render("Submit", True, self.SUBMIT_BUTTON)
-        submit_text_rect = submit_text.get_rect(center=self.submit_button.center)
-        self.game_window.blit(submit_text, submit_text_rect)
-    
-
-    def draw_guessed_words_button(self):
-        pygame.draw.rect(self.game_window, self.BLACK, self.guessed_words_button, 2)
-        self.game_window.blit(self.guessed_words_button_text, (self.guessed_words_text_rectangle))
-        
-        if self.show_words_box_visible:
-            self.guessed_words_button_text = self.guessed_word_button_font.render("Hide guessed words", True, self.BLACK)     
+        if self.point_inside_polygon(pygame.mouse.get_pos(), hex_pos) and not self.show_words_box_visible:
+            self.SUBMIT_HOVER = self.colors.WHITE
+            self.button_dict[text] = True
         else:
-            self.guessed_words_button_text = self.guessed_word_button_font.render("Show guessed words", True, self.BLACK)
+            self.SUBMIT_HOVER = self.colors.BLACK
+            self.button_dict[text] = False
+        pygame.draw.polygon(self.game_window, self.colors.ORANGE, hex_pos)
+        button = pygame.draw.polygon(self.game_window, self.SUBMIT_HOVER, hex_pos, 4)
+        render_text = self.input_box_font.render(text, True, self.SUBMIT_BUTTON)
+        text_rect = render_text.get_rect(center=button.center)
+        self.game_window.blit(render_text, text_rect)
 
-    def draw_rank(self):
-        if not self.show_words_box_visible:
-            self.rank_width = self.guessed_words_button.right - (self.puzzle_letter_center_position[2][0] - self.radius)
-            self.rank_height = self.guessed_words_button_height
-            self.rank_pos = self.puzzle_letter_center_position[2][0] - self.radius + 1, self.guessed_words_button.centery + (self.guessed_words_button_height * .5) + 1
-            self.rank_rectangle = pygame.Rect(self.rank_pos, (self.rank_width, self.rank_height))
-            pygame.draw.rect(self.game_window, self.BLACK, self.rank_rectangle, 2)
+    @staticmethod
+    def point_inside_polygon(mouse_point, hex_points):
+        mouse_x, mouse_y = mouse_point
+        num_points = len(hex_points)
+        inside_hex = False
+        start_x_pos, start_y_pos = hex_points[0]
+        for i in range(num_points + 1):
+            end_x_pos, end_y_pos = hex_points[i % num_points]
+            if mouse_y > min(start_y_pos, end_y_pos):
+                if mouse_y <= max(start_y_pos, end_y_pos):
+                    if mouse_x <= max(start_x_pos, end_x_pos):
+                        if start_y_pos != end_y_pos:
+                            x_intercept = (mouse_y - start_y_pos) * (end_x_pos - start_x_pos) / (end_y_pos - start_y_pos) + start_x_pos
+                            if start_x_pos == end_x_pos or mouse_x <= x_intercept:
+                                inside_hex = not inside_hex
+            start_x_pos, start_y_pos = end_x_pos, end_y_pos
+        return inside_hex
 
-            self.rank_text = self.guessed_word_button_font.render(f'{self.puzzle_stats.get_rank()}: {self.puzzle_stats.score} / {self.puzzle_stats.maxScore}', True, self.SCORE)
-            
-            self.rank_text_x = (self.rank_width - self.rank_text.get_width()) // 2  
-            self.rank_text_y = (self.rank_height - self.rank_text.get_height()) // 2
-            self.rank_surface = pygame.Surface((self.rank_width, self.rank_height), pygame.SRCALPHA)
-            self.draw_gradient(self.rank_rectangle, self.rank_pos)
-            self.rank_surface.blit(self.rank_text, (self.rank_text_x, self.rank_text_y))
-            self.game_window.blit(self.rank_surface, (self.rank_pos))
-
-
+    def draw_rank(self, pos):
+        rank_width = self.control_width * .66
+        rank_pos = pos[0] - rank_width, pos[1]
+        rank_text = f'{self.puzzle_stats.get_rank()}: {self.puzzle_stats.score} / {self.puzzle_stats.total_points}'
+        rank_box_rect = pygame.Rect(rank_pos, (rank_width, self.control_height))
+        input_surface = self.input_box_font.render(rank_text, True, self.colors.NEON_ORANGE)
+        # Center the input text within the input box rectangle
+        input_rect = input_surface.get_rect()
+        input_rect.center = rank_box_rect.center
+        self.draw_gradient(rank_box_rect, rank_pos)
+        self.game_window.blit(input_surface, input_rect)
 
     def draw_guessed_words(self):
-        # Draw the dropdown box if it's visible
-        if self.show_words_box_visible:
-            # Draw the up and down arrows
-            if self.scroll_position == 0:
-                pygame.draw.polygon(self.game_window, self.ARROW_COLOR, [[self.arrow_up_x, self.arrow_up_y], [self.arrow_up_x + self.arrow_width, self.arrow_up_y], [self.arrow_up_x + self.arrow_width // 2, self.arrow_up_y - self.arrow_height]])
-            else:
-                pygame.draw.polygon(self.game_window, self.BLACK, [[self.arrow_up_x, self.arrow_up_y], [self.arrow_up_x + self.arrow_width, self.arrow_up_y], [self.arrow_up_x + self.arrow_width // 2, self.arrow_up_y - self.arrow_height]])
+        words_background_rect = pygame.Rect((self.top_puzzle_section[0] - (self.radius * 4.5),
+                                             self.top_puzzle_section[1] + self.control_height),
+                                            (self.control_width * 1.75, self.game_window_height * .9))
+        self.draw_rectangle_button(words_background_rect.topleft, words_background_rect, "", self.SHOW_WORDS_HOVER)
 
-            # Draw the words
-            for word_column in range(self.guessed_words_column_count):
-                word_column_x = self.show_words_pos[0] + word_column * self.col_width
-                for i in range(len(self.guessed_word_list)):
-                    if i % self.guessed_words_column_count == word_column:
-                        word_y = self.menu_y + ((i // self.guessed_words_column_count) * 30) - (self.scroll_position * 30)
-                        if word_y >= self.show_words_pos[1] and word_y + 30 <= self.show_words_pos[1] + self.guessed_words_background_height:
-                            word = self.input_box_font.render(self.guessed_word_list[i], True, self.NEON_ORANGE)
-                            print(self.guessed_word_list[i])
-                            self.game_window.blit(word, (word_column_x + 10, word_y + self.guessed_words_button_height))
-                            pygame.draw.polygon(self.game_window, self.ARROW_COLOR, [[self.arrow_down_x, self.arrow_down_y], [self.arrow_down_x + self.arrow_width, self.arrow_down_y], [self.arrow_down_x + self.arrow_width // 2, self.arrow_down_y + self.arrow_height]])
-                        else:
-                            pygame.draw.polygon(self.game_window, self.BLACK, [[self.arrow_down_x, self.arrow_down_y], [self.arrow_down_x + self.arrow_width, self.arrow_down_y], [self.arrow_down_x + self.arrow_width // 2, self.arrow_down_y + self.arrow_height]])
+        guessed_words_start_pos = words_background_rect.topleft
+        menu_y = guessed_words_start_pos[1]
+        arrow_dimensions = (self.control_width * 1.75) * .05
+        arrow_offset_x = words_background_rect.topright[0] - (arrow_dimensions * .5)
+        arrow_start_pos = arrow_offset_x, words_background_rect.topright[1]
 
-    
+        arrow_up_pos = (arrow_start_pos[0] + arrow_dimensions - (arrow_dimensions * 2),
+                        arrow_start_pos[1] + (arrow_dimensions * 3))
+
+        arrow_down_pos = arrow_up_pos[0], (arrow_start_pos[1] + (self.radius * 2) - arrow_dimensions)
+
+        # Define the arrow button rectangles
+        self.arrow_up_rect = pygame.Rect(arrow_up_pos[0], arrow_up_pos[1] - arrow_dimensions,
+                                         arrow_dimensions, arrow_dimensions)
+        self.arrow_down_rect = pygame.Rect(arrow_down_pos[0], arrow_down_pos[1], arrow_dimensions, arrow_dimensions)
+
+        # Calculate the number of columns based on the width of the display area
+        col_width = (self.input_box_font_size * max(len(word) for word in self.all_possible_words)) * .75
+        self.guessed_words_column_count = int(max(1, (words_background_rect.size[0]) // col_width))
+
+        if self.scroll_position == 0:
+            self.UP_ARROW_COLOR = self.colors.LIGHT_GRAY
+        else:
+            self.UP_ARROW_COLOR = self.colors.BLACK
+
+        # Draw up arrow
+        pygame.draw.polygon(self.game_window, self.UP_ARROW_COLOR, (
+            arrow_up_pos, (arrow_up_pos[0] + arrow_dimensions, arrow_up_pos[1]),
+            (arrow_up_pos[0] + arrow_dimensions // 2, arrow_up_pos[1] - arrow_dimensions)
+        ))
+
+        # Draw down arrow
+        pygame.draw.polygon(self.game_window, self.DOWN_ARROW_COLOR, (
+            arrow_down_pos,
+            (arrow_down_pos[0] + arrow_dimensions, arrow_down_pos[1]),
+            (arrow_down_pos[0] + arrow_dimensions // 2,
+             arrow_down_pos[1] + arrow_dimensions)
+        ))
+
+        # Draw the words
+        for word_column in range(self.guessed_words_column_count):
+            word_column_x = guessed_words_start_pos[0] + word_column * col_width
+            for i in range(len(self.correctly_guessed_words)):
+                if i % self.guessed_words_column_count == word_column:
+                    word_y = menu_y + ((i // self.guessed_words_column_count) * 30) - (
+                                self.scroll_position * 30)
+                    if word_y >= guessed_words_start_pos[1] and word_y + 30 <= guessed_words_start_pos[
+                        1] + (self.game_window_height * .90):
+                        word = self.input_box_font.render(self.correctly_guessed_words[i], True, self.colors.NEON_ORANGE)
+                        self.game_window.blit(word, (word_column_x + 10, word_y + 10))
+                        self.DOWN_ARROW_COLOR = self.colors.LIGHT_GRAY
+                    else:
+                        self.DOWN_ARROW_COLOR = self.colors.BLACK
+
     def handle_guess_visuals(self):
-        if (self.puzzle_stats.get_check_guess(self.input_box_text, self.puzzle)) == 0:
-            self.guessed_word_list = self.puzzle_stats.guesses
-            self.INPUT_BACKGROUND = self.WHITE
-            self.SUBMIT_BUTTON = self.VALID_COLOR
-            self.SUBMIT_HOVER = self.VALID_COLOR
-            self.SHUFFLE_HOVER = self.VALID_COLOR
-            self.SAVE_HOVER = self.VALID_COLOR
-            self.SAVE_BUTTON = self.VALID_COLOR
-            self.INPUT_BACKGROUND = self.VALID_COLOR
-            self.SCORE = self.VALID_COLOR
-            
+        if (self.puzzle_stats.get_check_guess(self.input_box_text)) == 0:
+            self.correctly_guessed_words = self.puzzle_stats.guesses
+            self.SUBMIT_BUTTON = self.colors.VALID_COLOR
+            self.SUBMIT_HOVER = self.colors.VALID_COLOR
+            self.SHUFFLE_HOVER = self.colors.VALID_COLOR
+
             self.good_timer_active = True
             self.timer_start_time = pygame.time.get_ticks()
             if len(self.input_box_text) == 4:
@@ -388,116 +360,102 @@ class Game:
             else:
                 self.input_box_text = f'+ {self.puzzle_stats.get_word_points(self.input_box_text)} points!'
         else:
-            self.INPUT_BACKGROUND = self.INVALID_COLOR
-            self.SUBMIT_BUTTON = self.INVALID_COLOR
-            self.SUBMIT_HOVER = self.INVALID_COLOR
-            self.SHUFFLE_HOVER = self.INVALID_COLOR
-            self.SAVE_HOVER = self.INVALID_COLOR
-            self.SAVE_BUTTON = self.INVALID_COLOR
+            self.SUBMIT_BUTTON = self.colors.INVALID_COLOR
+            self.SUBMIT_HOVER = self.colors.INVALID_COLOR
+            self.SHUFFLE_HOVER = self.colors.INVALID_COLOR
             self.bad_timer_active = True
             self.timer_start_time = pygame.time.get_ticks()
 
-
     def scale_font(self):
+        text_height = int(self.radius * .5)
         # Set new puzzle font size
-        self.puzzle_letter_font_size = int(self.radius * 1.5)        
+        self.puzzle_letter_font_size = int(self.radius * 1.5)
         self.puzzle_letter_font = pygame.font.SysFont(None, self.puzzle_letter_font_size)
-        
+
         if self.good_timer_active:
             # Set new input box font size
-            self.input_box_font_size = int(self.input_box_height * .80)        
+            self.input_box_font_size = int(text_height * .85)
             self.input_box_font = pygame.font.SysFont(None, self.input_box_font_size)
         else:
             # Set new input box font size
-            self.input_box_font_size = int(self.input_box_height * .75)        
+            self.input_box_font_size = int(text_height * .75)
             self.input_box_font = pygame.font.SysFont(None, self.input_box_font_size)
 
         # Set new show guessed words font size
-        self.guessed_word_button_font_size = int(self.guessed_words_button_width * .05)
-        self.guessed_word_button_font = pygame.font.SysFont(None, self.guessed_word_button_font_size)  
-
-
-    def leave_game(self):
-        button_text = self.guessed_word_button_font.render("Leave Game", True, (0, 0, 0))
-        self.exit_button_rect = button_text.get_rect()
-        self.exit_button_rect.topleft = (10, self.guessed_words_button.y)
-        pygame.draw.rect(self.game_window, self.ORANGE, self.exit_button_rect)
-        self.game_window.blit(button_text, self.exit_button_rect)
-
+        self.guessed_word_button_font_size = int((text_height * 1.75) * .05)
+        self.guessed_word_button_font = pygame.font.SysFont(None, self.guessed_word_button_font_size)
 
     def handle_save_visuals(self):
-        semi_transparent_color = (0, 0, 0, 160)
-        
-        message_box_width = self.input_box_width
-        message_box_height = self.input_box_height
-        message_box_x = (self.game_window_width - message_box_width) // 2
-        message_box_y = (self.game_window_height - message_box_height) // 2 - 100
-        message_box_rectangle = pygame.Rect(message_box_x, message_box_y, message_box_width, message_box_height)
+        pass
+        # semi_transparent_color = (0, 0, 0, 160)
+        #
+        # message_box_width = (self.radius * 5)
+        # message_box_height = self.input_box_height
+        # message_box_x = (self.game_window_width - message_box_width) // 2
+        # message_box_y = (self.game_window_height - message_box_height) // 2 - 100
+        # message_box_rectangle = pygame.Rect(message_box_x, message_box_y, message_box_width, message_box_height)
 
-        file_input_width = self.input_box_width
-        file_input_height = self.input_box_height * 1.1
-        file_input_x = (self.game_window_width - file_input_width) // 2
-        file_input_y = (self.game_window_height - file_input_height) // 2 + 100
-        file_input_rectangle = pygame.Rect(file_input_x, file_input_y, file_input_width, file_input_height)
-
-        message_text_surface = self.input_box_font.render(f'Enter filename: ', True, self.NEON_ORANGE)
-
-        hide_background_surface = pygame.Surface((self.game_window_width, self.game_window_height), pygame.SRCALPHA)
-        message_display = pygame.Surface((message_box_width, message_box_height), pygame.SRCALPHA)
-        message_display.fill(semi_transparent_color)
-        hide_background_surface.fill(semi_transparent_color)
-        
-        # Create a Font object
-        font = pygame.font.SysFont(None, 32)
-
-        message_text_rect = message_text_surface.get_rect(center=message_box_rectangle.center)
-        self.game_window.blit(hide_background_surface, (0, 0))
-        self.game_window.blit(message_display, (message_box_x, message_box_y))
-        self.game_window.blit(message_text_surface, (message_text_rect))
-
-        input_text = ''
-        while True:
-            event = pygame.event.wait()
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_RETURN:
-                    if input_text != '':
-                        print(f'gui_main_game.py - def handle_save_visuals(): Save has not implemented required letter.')
-                        # self.puzzle_stats.get_save_game(self.puzzle_stats, input_text)     
-                        break
-                elif event.key == pygame.K_BACKSPACE:
-                    input_text = input_text[:-1]
-                elif event.unicode.isalpha():
-                    input_text += event.unicode
-                elif event.key == pygame.K_ESCAPE:
-                    break
-            
-            pygame.draw.rect(self.game_window, self.WHITE, file_input_rectangle)
-            # Render the text as a Surface and blit it onto the text display
-            text_surface = font.render(input_text, True, (0, 0, 0))
-            self.game_window.blit(text_surface, (file_input_x, file_input_y))
-            pygame.display.update()
-        
+        # file_input_width = self.control_width
+        # file_input_height = self.input_box_height * 1.1
+        # file_input_x = (self.game_window_width - file_input_width) // 2
+        # file_input_y = (self.game_window_height - file_input_height) // 2 + 100
+        # file_input_rectangle = pygame.Rect(file_input_x, file_input_y, file_input_width, file_input_height)
+        #
+        # message_text_surface = self.input_box_font.render(f'Enter filename: ', True, self.colors.NEON_ORANGE)
+        #
+        # hide_background_surface = pygame.Surface((self.game_window_width, self.game_window_height), pygame.SRCALPHA)
+        # message_display = pygame.Surface((message_box_width, message_box_height), pygame.SRCALPHA)
+        # message_display.fill(semi_transparent_color)
+        # hide_background_surface.fill(semi_transparent_color)
+        #
+        # # Create a Font object
+        # font = pygame.font.SysFont(None, 32)
+        #
+        # message_text_rect = message_text_surface.get_rect(center=message_box_rectangle.center)
+        # self.game_window.blit(hide_background_surface, (0, 0))
+        # self.game_window.blit(message_display, (message_box_x, message_box_y))
+        # self.game_window.blit(message_text_surface, (message_text_rect))
+        #
+        # input_text = ''
+        # while True:
+        #     event = pygame.event.wait()
+        #     if event.type == pygame.KEYDOWN:
+        #         if event.key == pygame.K_RETURN:
+        #             if input_text != '':
+        #                 print(
+        #                     f'gui_main_game.py - def handle_save_visuals(): Save has not implemented required letter.')
+        #                 # self.puzzle_stats.get_save_game(self.puzzle_stats, input_text)
+        #                 break
+        #         elif event.key == pygame.K_BACKSPACE:
+        #             input_text = input_text[:-1]
+        #         elif event.unicode.isalpha():
+        #             input_text += event.unicode
+        #         elif event.key == pygame.K_ESCAPE:
+        #             break
+        #
+        #     pygame.draw.rect(self.game_window, self.colors.WHITE, file_input_rectangle)
+        #     # Render the text as a Surface and blit it onto the text display
+        #     text_surface = font.render(input_text, True, (0, 0, 0))
+        #     self.game_window.blit(text_surface, (file_input_x, file_input_y))
+        #     pygame.display.update()
 
     # Draw all screen elements
     def draw_screen(self):
         self.draw_hexagon()
-        self.draw_input_box()
-        self.draw_submit_button()
-        self.draw_shuffle_button()
-        self.draw_guessed_words_button()
-        self.draw_guessed_words()
-        self.draw_rank()
-        self.scale_font()
-        self.leave_game()
+        self.draw_game()
 
     def run(self):
-        pygame.time.wait(500)
+        loading = True
 
         while self.running:
-            # Limit framerate
+            if self.show_words_box_visible:
+                self.show_words_text = "Hide Guessed Words"
+            else:
+                self.show_words_text = "Show Guessed Words"
+            # Set frame rate to 60
             self.clock.tick(60)
             # Fill the background
-            self.game_window.blit(self.scaled_background_image, (0,0))
+            self.game_window.blit(self.scaled_background_image, (0, 0))
             self.draw_screen()
 
             if self.puzzle_stats.check_progress():
@@ -508,32 +466,26 @@ class Game:
                 if pygame.time.get_ticks() - self.timer_start_time >= self.timer_duration:
                     # Stop the timer after the specified duration has passed
                     self.bad_timer_active = False
-                    self.INPUT_BACKGROUND = self.WHITE
-                    self.SUBMIT_HOVER = self.BLACK
-                    self.SHUFFLE_HOVER = self.BLACK
-                    self.SUBMIT_BUTTON = self.BLACK
-                    self.SAVE_HOVER = self.BLACK
-                    self.SAVE_BUTTON = self.BLACK
-            
+                    self.SUBMIT_HOVER = self.colors.BLACK
+                    self.SHUFFLE_HOVER = self.colors.BLACK
+                    self.SUBMIT_BUTTON = self.colors.BLACK
+
             if self.good_timer_active:
-                 if pygame.time.get_ticks() - self.timer_start_time >= self.timer_duration:
+                if pygame.time.get_ticks() - self.timer_start_time >= self.timer_duration:
                     # Stop the timer after the specified duration has passed
                     self.good_timer_active = False
                     self.input_box_text = ''
-                    self.SCORE = self.NEON_ORANGE
-                    self.INPUT_BACKGROUND = self.WHITE
-                    self.SUBMIT_HOVER = self.BLACK
-                    self.SHUFFLE_HOVER = self.BLACK
-                    self.SUBMIT_BUTTON = self.BLACK
-                    self.SAVE_HOVER = self.BLACK
-                    self.SAVE_BUTTON = self.BLACK
+                    self.SUBMIT_HOVER = self.colors.BLACK
+                    self.SHUFFLE_HOVER = self.colors.BLACK
+                    self.SUBMIT_BUTTON = self.colors.BLACK
 
             # Handle events
             for event in pygame.event.get():
                 # Quit the game
                 if event.type == pygame.QUIT:
                     self.running = False
-                
+                    pygame.quit()
+                #
                 # If user resized game_window, set new dimensions
                 elif event.type == pygame.VIDEORESIZE:
                     # Set screen to minimum allowed width if resized too small
@@ -541,111 +493,129 @@ class Game:
                         self.game_window_width = self.game_window_minimum_width
                     else:
                         self.game_window_width = event.w
-                    
+
                     # Set screen to minimum allowed height if resized too small
                     if event.h < self.game_window_minimum_height:
-                       self.game_window_height = self.game_window_minimum_height
+                        self.game_window_height = self.game_window_minimum_height
                     else:
                         self.game_window_height = event.h
+                    self.calculate_scale()
+                #
+                    pygame.display.set_mode((self.game_window_width, self.game_window_height), pygame.RESIZABLE)
+                    self.scaled_background_image = pygame.transform.scale(
+                        self.background_image, (self.game_window_width, self.game_window_height)).convert()
+                #
 
-                    self.game_window = pygame.display.set_mode((self.game_window_width, self.game_window_height), pygame.RESIZABLE)
-                    self.scaled_background_image = pygame.transform.scale(self.background_image, (self.game_window_width, self.game_window_height)).convert()
-                
-                if event.type == pygame.MOUSEMOTION:
-                    # Change the button color when hovered
-                    if self.guessed_words_button.collidepoint(event.pos):
-                        self.SHOW_WORDS_HOVER = self.NEON_ORANGE
-                    else:
-                        self.SHOW_WORDS_HOVER = self.ORANGE
-                    
-                    if self.shuffle_button.collidepoint(event.pos) and not self.show_words_box_visible and not self.bad_timer_active:
-                        self.SHUFFLE_HOVER = self.ORANGE
-                    else:
-                        self.SHUFFLE_HOVER = self.BLACK
-
-                    if self.save_button.collidepoint(event.pos) and not self.show_words_box_visible and not self.bad_timer_active:
-                        self.SAVE_HOVER = self.ORANGE
-                    else:
-                        self.SAVE_HOVER = self.BLACK
-                    
-                    if self.submit_button.collidepoint(event.pos) and not self.show_words_box_visible and not self.bad_timer_active:
-                        self.SUBMIT_HOVER = self.ORANGE
-                    else:
-                        self.SUBMIT_HOVER = self.BLACK
-                    
                 # Check if the user has clicked the up or down arrow
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 1 and self.show_words_box_visible:
-                    if self.arrow_up_rectangle.collidepoint(event.pos):
+                    if self.arrow_up_rect.collidepoint(event.pos):
                         self.scroll_direction = -1
-                    elif self.arrow_down_rectangle.collidepoint(event.pos):
+                    elif self.arrow_down_rect.collidepoint(event.pos):
                         self.scroll_direction = 1
 
                 # Mouse scroll up with guessed words visible
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 4 and self.show_words_box_visible:
                     self.scroll_position = max(0, self.scroll_position - 1)
                     # Redraw words to account for new scroll position.
-                    self.draw_guessed_words()
 
                 # Mouse scroll down with guessed words visible
                 elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 5 and self.show_words_box_visible:
-                    self.scroll_position = min(len(self.guessed_word_list) - 1, self.scroll_position + 1)
-                    # Redraw words to account for new scroll position.
-                    self.draw_guessed_words()
+                    self.scroll_position = min(len(self.correctly_guessed_words) - 1, self.scroll_position + 1)
 
                 # If user released left click on mouse.
                 elif event.type == pygame.MOUSEBUTTONUP and event.button == 1:
-                    self.scroll_direction = 0
-                    # If user clicked on "Show Words".
-                    if self.guessed_words_button.collidepoint(event.pos):
-                        self.show_words_box_visible = not self.show_words_box_visible
-                    
-                    # If user clicked on "Shuffle".
-                    elif self.shuffle_button.collidepoint(event.pos) and not self.show_words_box_visible:
-                        # Calls shuffle_letters
-                        self.puzzle_stats.shuffled_puzzle = ShuffleKey(self.puzzle.pangram, self.puzzle.required_letter)
-                        self.puzzle_stats.shuffled_puzzle = self.puzzle_stats.shuffled_puzzle.upper()
+                    if loading:
+                        pygame.time.wait(800)
+                        loading = False
+                    else:
+                        self.scroll_direction = 0
+                        for text in self.button_dict:
+                            if text == "Shuffle":
+                                if self.button_dict[text]:
+                                    self.puzzle_stats.ShuffleKey()
+                                    self.puzzle_stats.shuffled_puzzle = self.puzzle_stats.shuffled_puzzle.upper()
+                            elif text == "Submit":
+                                if self.button_dict[text]:
+                                    self.handle_guess_visuals()
+                            elif text == "Save":
+                                if self.button_dict[text]:
+                                    self.handle_save_visuals()
+                            elif text == "Hints":
+                                if self.button_dict[text]:
+                                    pass
+                                    # self.handle_save_visuals()
 
-                    # If user clicked on "Submit".
-                    elif self.submit_button.collidepoint(event.pos) and not self.show_words_box_visible:
-                        self.handle_guess_visuals()
-                    
-                    # If user clicked on "Save".
-                    elif self.save_button.collidepoint(event.pos) and not self.show_words_box_visible:
-                        self.handle_save_visuals()
+                        # If user clicked on "Show Words".
+                        if self.show_words_rect.collidepoint(event.pos):
+                            self.show_words_box_visible = not self.show_words_box_visible
 
-                    elif self.exit_button_rect.collidepoint(event.pos):
-                        self.running = False
-                
+                        elif self.exit_button_rect.collidepoint(event.pos):
+                            self.running = False
 
-                    # Check if user clicked inside a hex related to a letter.
-                    for i, pos in enumerate(self.puzzle_letter_center_position):
-                        hex_pos = (pos[0] - self.radius, pos[1] - self.radius * 0.866)
-                        hex_rect = pygame.Rect(hex_pos, (self.radius * 2, self.radius * 1.732))
-                        
-                        # If user did click on a letter:
-                        if hex_rect.collidepoint(event.pos):
-                            # Update current string with clicked letter.
-                            self.input_box_text += self.puzzle_stats.shuffled_puzzle[i]
+                        for letter in self.letter_dict:
+                            if self.letter_dict[letter] and len(self.input_box_text) < self.input_box_max_length:
+                                self.input_box_text += letter
 
                 # Handle key events
                 elif event.type == pygame.KEYDOWN:
-                    key=pygame.key.name(event.key)
-                    print (key, "Key is pressed")
+                    key = pygame.key.name(event.key)
+                    print(key, "key was pressed")
                     # Check if the backspace key was pressed
                     if event.key == pygame.K_BACKSPACE:
                         self.input_box_text = self.input_box_text[:-1]
-                    
                     # Check if a letter key was pressed
-                    elif event.unicode.isalpha() and event.unicode in self.puzzle.pangram:
+                    elif event.unicode.isalpha() and event.unicode in self.puzzle_stats.pangram:
                         if len(self.input_box_text) < self.input_box_max_length:
                             self.input_box_text += event.unicode.upper()
-                
-                elif event.type == pygame.KEYUP: 
+
+                elif event.type == pygame.KEYUP:
                     if event.key == pygame.K_RETURN and not self.good_timer_active:
                         if self.input_box_text != '':
                             self.handle_guess_visuals()
 
-            self.scroll_position = max(0, min((len(self.guessed_word_list) // self.guessed_words_column_count) - 15, self.scroll_position + self.scroll_direction))
-            self.draw_guessed_words()
+            self.scroll_position = max(0, min((len(self.correctly_guessed_words) // self.guessed_words_column_count) - 15,
+                                              self.scroll_position + self.scroll_direction))
             pygame.display.update()
-        # pygame.quit()
+
+
+class Button:
+    def __init__(self, x_coordinate, y_coordinate, radius):
+        self.x_coordinate = x_coordinate
+        self.y_coordinate = y_coordinate
+        self.radius = radius
+        self.control_height = int(radius * .5)
+
+
+class HexagonButton(Button):
+    def __init__(self, x_coordinate, y_coordinate, radius):
+        super().__init__(x_coordinate, y_coordinate, radius)
+        self.hex_points = []
+
+    def draw_hexagonal_button(self):
+        hex_points = [
+            (self.x_coordinate, self.y_coordinate - (self.radius * .25)),
+            (self.x_coordinate + self.control_height, self.y_coordinate),
+            (
+             self.x_coordinate + self.control_height, self.y_coordinate + self.control_height),
+            (self.x_coordinate, self.y_coordinate + (self.radius * .75)),
+            (self.x_coordinate - self.control_height, self.y_coordinate + self.control_height),
+            (self.x_coordinate - self.control_height, self.y_coordinate),
+        ]
+        self.hex_points = hex_points
+
+        return self.hex_points
+
+
+class Colors:
+    def __init__(self):
+        # Set up the colors
+        self.WHITE = (255, 255, 255)  # White
+        self.BLACK = (0, 0, 0)  # Black
+        self.ORANGE = (255, 189, 49)  # Orange
+        self.NEON_ORANGE = (255, 85, 0)  # Obnoxious Orange
+        self.GRAY = (224, 224, 224)
+        self.LIGHT_GRAY = (155, 155, 155)  # Light Gray
+        self.VALID_COLOR = (68, 214, 44)  # Green
+        self.INVALID_COLOR = (255, 0, 0)  # Red
+        self.GAME_BACKGROUND = (255, 30, 231)  # Bright Pink
+        self.BUTTON_BACKGROUND = (186, 100, 65)
