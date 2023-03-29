@@ -1,5 +1,6 @@
 from model_puzzle import *
-
+from collections import OrderedDict
+#from array import *
 '''    
 m_letters = puzzle.pangram
 m_word_count = 0
@@ -46,20 +47,19 @@ def generateLetterMatrix(words, letters):
     # Initialize letterMatrix 
     # (maxLength - 1) for maxLength -3 for lengths + total + column label
     # 9 is for 7 letters + total + row label
-   
-    letterMatrix = [[str(0)]*(maxLength - 1)]*9 
+    letterMatrix = []
+    for i in range(0, 9):
+        letterMatrix.append([str(0)]*(maxLength - 1))
+    
     letter_index = 1
     for i in letters:
-        print(i)
         letterMatrix[letter_index][0] = i
-        print(letterMatrix)
         letter_index += 1
-    #letterMatrix[8][0] = "tot"
+    letterMatrix[8][0] = "tot"
     #Initialized word length on top column
-    print(letterMatrix)
-    print("\n")
+
     for i in range(1, maxLength - 2):
-        letterMatrix[0][i] = str(i)
+        letterMatrix[0][i] = str(i + 3)
     letterMatrix[0][maxLength - 2] = "tot"
     for word in words:
         word_column = len(word) - 3
@@ -99,9 +99,9 @@ def generateTwoLetterDictionary(words):
         if twoLetters not in twoLetterDictionary: 
             twoLetterDictionary[twoLetters] = 0
         twoLetterDictionary[twoLetters] += 1
-    twoLetterDictionary = sorted(twoLetterDictionary)
-
-    return twoLetterDictionary
+    #twoLetterDictionary = sorted(twoLetterDictionary)
+    dict1 = OrderedDict(sorted(twoLetterDictionary.items()))
+    return dict1
 # Prerequisite: Two letter Matrix generated 
 # Param: the letter matrix generated 
 #Looks at the totals for each letter in rows of the letter matrix, 
@@ -114,16 +114,11 @@ def generateBingo(letterMatrix):
     if(min(index) < 1):
         return 0
     return 1
-    
-    
-
 puzzle = Puzzle()
-
-#puzzle.generate_random_puzzle()
-#generateHints(puzzle.current_word_list, puzzle.pangram, puzzle.total_points)
-
-
-# Testing 
+'''
+# Testing
+#Working
+ 
 testletters = 'LZAETQU'
 require_letter = "Q"
 word_list = ['quetzal', 'equate', 'quelea', 'quezal', 'aquae', 'equal', 'quale', 'quate', 'quell', 'queue', 'tuque', 'aqua']
@@ -136,8 +131,11 @@ generatePangramCount(word_list, testletters)
 generateWordCount(word_list)
 
 var = generateLetterMatrix(word_list, testletters)
-print(var)
-generateTwoLetterDictionary(word_list)
-print(generateBingo(var))
+#print(var)
+dicton = generateTwoLetterDictionary(word_list)
+print(dicton.keys())
+for x, y in dicton.items():
+  print(x, y)
+#print(generateBingo(var))
 
-
+'''
