@@ -54,7 +54,7 @@ class Game:
         self.DOWN_ARROW_COLOR = self.colors.LIGHT_GRAY
 
         self.input_box_max_length = 0
-        print(self.all_possible_words)
+        # print(self.all_possible_words)
 
         # Set up variables to control the scroll wheel
         self.scroll_position = 0
@@ -73,8 +73,8 @@ class Game:
         self.input_box_font_size = int(self.game_window_width * .01)
         self.input_box_font = pygame.font.SysFont(None, self.input_box_font_size)
 
-        print(f'input font: {self.input_box_font_size}')
-        print(f'guessed word: {self.guessed_word_button_font_size}')
+        # print(f'input font: {self.input_box_font_size}')
+        # print(f'guessed word: {self.guessed_word_button_font_size}')
 
         # Set up the timer
         self.bad_timer_active = False
@@ -90,8 +90,8 @@ class Game:
 
         # self.character_width, self.character_height = self.input_box_font.size(self.puzzle_stats.shuffled_puzzle[0])
         self.character_width, self.character_height = self.guessed_word_button_font.size('i')
-        print(f'char width: {self.character_width}')
-        print(f'char height: {self.character_height}')
+        # print(f'char width: {self.character_width}')
+        # print(f'char height: {self.character_height}')
 
         self.clock = pygame.time.Clock()
         self.input_box_text = ''
@@ -114,9 +114,9 @@ class Game:
         self.input_box_max_length += 10
         # self.puzzle_stats.current_word_list = self.all_possible_words
 
-        print(len(self.puzzle_stats.current_word_list))
-        print(self.input_box_max_length)
-        print(self.all_possible_words)
+        # print(len(self.puzzle_stats.current_word_list))
+        # print(self.input_box_max_length)
+        # print(self.all_possible_words)
 
     def calculate_puzzle_position(self):
         self.puzzle_letter_center_position = [
