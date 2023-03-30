@@ -72,7 +72,7 @@ def print_current_puzzle():
           /help      /shuffle 
           /back      /showall 
           /share     /savegame 
-          /exit      /refresh
+          /exit      /hints
         
         """
     print(currentProgress)
@@ -287,3 +287,52 @@ def print_shared_key_input():
 def print_shared_key_output(key):
     print("\n\tYour Share Key is: " + str(key))
     print("\n\tPress the space key to continue...")
+
+def print_hint():
+    print("\n\t\t--------- HINTS ---------\n\n")
+    print_hint_pangram()
+    print_hint_matrix()
+    Print_hint_two_Let_Dict()
+    print("\n\t  ... Press the space key to continue ...")
+
+def print_hint_pangram():
+    puzzle = PuzzleStats()
+    print("\tPangram Over-view: \n")
+    print(f"\t -> Center letter is {puzzle.shuffled_puzzle[0].upper()}; Remaining letters are: {puzzle.shuffled_puzzle[1:6].upper()}")
+    print(f"\t -> Words {len(puzzle.current_word_list)}; Points: {puzzle.total_points}")
+    rem_words = len(puzzle.current_word_list) - len(puzzle.guesses)
+    rem_points = puzzle.total_points - puzzle.score
+    print(f"\t -> Remaining Words: {rem_words}; Remaining Points: {rem_points}")
+
+
+def print_hint_matrix():
+    print("\n\n\tHint Matrix: \n")
+    print("\t\t", end = "")
+
+    ## prints the first row, then puts a space after
+    print('\n\t\t'.join([''.join(['{:5}'.format(item) for item in row]) 
+      for row in PuzzleStats().hints.two_d_array[0:1]]))
+   
+    print("\n\t\t", end = "")
+
+    ## prints the remaining matrix (by row)
+    print('\n\t\t'.join([''.join(['{:5}'.format(item) for item in row]) 
+      for row in PuzzleStats().hints.two_d_array[1:]]))
+    
+
+def Print_hint_two_Let_Dict():
+    print("\n\n\tTwo Letter List: \n")
+
+    two_letter_dict = PuzzleStats().hints.two_letter_dict
+    two_letter_str = ""
+    count = 0
+    for key in two_letter_dict:
+        two_letter_str = two_letter_str + (f"\t\t{key.upper()} - {two_letter_dict[key]}")
+        if count == 1:
+            two_letter_str = two_letter_str + "\n"
+            count = 0   
+        else:
+            two_letter_str = two_letter_str + "\t"
+            count += 1
+
+    print (two_letter_str)
