@@ -112,7 +112,8 @@ class Game:
             if len(word[0]) > self.input_box_max_length:
                 self.input_box_max_length = len(word[0])
         self.input_box_max_length += 10
-        self.puzzle_stats.current_word_list = self.all_possible_words
+        # self.puzzle_stats.current_word_list = self.all_possible_words
+
         print(len(self.puzzle_stats.current_word_list))
         print(self.input_box_max_length)
         print(self.all_possible_words)
