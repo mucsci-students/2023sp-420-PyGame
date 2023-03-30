@@ -121,6 +121,8 @@ class PuzzleStats(Puzzle):
         self.guesses = []
         self.wordList = []
         self.shuffled_puzzle = ""
+        if hasattr(self, 'hints'):
+            del self.hints 
         
 
 
