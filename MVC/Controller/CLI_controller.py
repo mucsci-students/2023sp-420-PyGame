@@ -22,7 +22,7 @@ def tab_completion(typed_string, command_set):
   if command_set == 1:
     commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/help', '/exit']
   elif command_set == 2:
-    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/refresh']
+    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints']
 
   # finds commands that match what the user started to type
   matches = [c for c in commands if c.startswith(typed_string)]
@@ -286,7 +286,11 @@ def active_game_commands(userInput):
       print_exit()
       return exit_game()
     
-    case "/refresh":
+    case "/hints":
+      cls()
+      PuzzleStats().generate_hints()
+      print_hint()
+      space_out()
       return True
 
     case _:
@@ -318,8 +322,6 @@ def start_game_with_key_from_load(file_name):
     return 1
 
   activeGameLoop()
-  
-  
     
 
 # creates a save file (saves current game)
