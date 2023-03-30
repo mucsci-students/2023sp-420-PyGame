@@ -69,12 +69,19 @@ def generateLetterMatrix(words, letters):
 
 
     '''
-    for j in range(1,8):
-            row_total = 0
-            for i in range(1, maxLength - 1):#uninclusive end
-                row_total += int(letterMatrix[j][i])
-            letterMatrix [j][maxLength - 2] = str(row_total)
-
+    
+    column_totals = []
+    for i in range(0, maxLength - 1):
+        column_totals.append(0)
+    for j in range(1,7):
+        row_total = 0
+        for i in range(1, maxLength - 1):#uninclusive end
+            val = int(letterMatrix[j][i])
+            row_total += val
+            column_totals[i] += val
+        letterMatrix [j][maxLength - 2] = str(row_total)
+    for j in range(1, maxLength - 1)
+        letterMatrix [j][maxLength - 2] = str(column_totals[j])
     '''
     
     # Totals Rows
