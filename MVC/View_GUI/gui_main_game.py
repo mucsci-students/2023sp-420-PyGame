@@ -588,6 +588,8 @@ class Game:
                             elif text == "Hints":
                                 if self.button_dict[text]:
                                     hint_screen()
+                                    pygame.display.set_mode((self.game_window_width, self.game_window_height),
+                                                            pygame.RESIZABLE)
 
                         # If user clicked on "Show Words".
                         if self.show_words_rect.collidepoint(event.pos):
