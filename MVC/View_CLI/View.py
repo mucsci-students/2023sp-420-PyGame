@@ -54,11 +54,11 @@ def print_current_puzzle():
                /     \\
           ,---<   {fir}   >---.
          /     \     /     \\
-         "  {sec}  "     "  {thi}  "
+         "  {sec}  ">---<"  {thi}  "
          \     /     \     /
           >---<   {req}   >---<
          /     \     /     \\
-         "  {fou}  "     "  {fif}  "
+         "  {fou}  ">---<"  {fif}  "
          \     /     \     /
           `---<   {six}   >---'
                \     /
@@ -181,22 +181,22 @@ Instructions
 ~ Each puzzle includes at least one “pangram” which uses every letter, which are worth double points.
 
 Main Menu Commands:
-/NewGame          Loads a new game
-/LoadGame         Loads a saved game
-/StartFromKey     Enter a 7 letter key to start a new puzzle
-/StartSharedGame  Copies the key to your clipboard
-/Help             Get instructions and commands 
-/Exit             Exits the program
+/newgame          Loads a new game
+/loadgame         Loads a saved game
+/startfromkey     Enter a 7 letter key to start a new puzzle
+/startsharedgame  Copies the key to your clipboard
+/help             Get instructions and commands 
+/exit             Exits the program
 
 In-Game Commands:
-/Help             Get instructions and commands
-/Back             Go back to the main menu screen
-/Share            Shows a sharable key (usable for CLI and GUI)
-/Exit             Exits the program
-/Shuffle          Shuffles the outer letters of the hive
-/ShowAll          Prints a list of correct guessed words
-/SaveGame         Saves the current state of the game
-/Refresh          Refreshes the window
+/help             Get instructions and commands
+/back             Go back to the main menu screen
+/share            Shows a sharable key (usable for CLI and GUI)
+/exit             Exits the program
+/shuffle          Shuffles the outer letters of the hive
+/showall          Prints a list of correct guessed words
+/savegame         Saves the current state of the game
+/hints            Shows the hint matrix and a two-letter list
 
 Press the space key to continue...
 """ 
@@ -295,7 +295,7 @@ def print_hint():
 def print_hint_pangram():
     puzzle = PuzzleStats()
     print("\tPangram Over-view: \n")
-    print(f"\t -> Center letter is {puzzle.shuffled_puzzle[0].upper()}; Remaining letters are: {puzzle.shuffled_puzzle[1:6].upper()}")
+    print(f"\t -> Center letter is {puzzle.shuffled_puzzle[0].upper()}; Remaining letters are: {puzzle.shuffled_puzzle[1:7].upper()}")
     print(f"\t -> Words {len(puzzle.current_word_list)}; Points: {puzzle.total_points}")
     rem_words = len(puzzle.current_word_list) - len(puzzle.guesses)
     rem_points = puzzle.total_points - puzzle.score
