@@ -60,9 +60,6 @@ def hint_screen():
     # prints reference matrix to terminal
     matrix_list = ["Hint Matrix: ", ""]
     [matrix_list.append(''.join(['{:4}'.format(item) for item in row])) for row in PuzzleStats().hints.two_d_array]
-    print("--------")
-    print(matrix_list)
-    print("--------")
 
     two_letter_dict = PuzzleStats().hints.two_letter_dict
     two_letter_str = ["Two Letter List: ", ""]

@@ -432,6 +432,5 @@ class PuzzleStats(Puzzle):
     def generate_hints(self):
         if not hasattr(self, 'hints'):
             self.hints = Hints(self.current_word_list, self.pangram)
-    
-    
+
             

@@ -32,9 +32,6 @@ Parameters: 2
 """
 def print_current_puzzle():
     puzzle = PuzzleStats()
-    print(puzzle.shuffled_puzzle)
-    print(puzzle.pangram)
-    print(puzzle.required_letter)
     
     prettyGuesses = get_pretty_guesses(puzzle.guesses)
     # variables to store each letter 
