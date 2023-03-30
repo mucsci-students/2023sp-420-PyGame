@@ -121,6 +121,8 @@ class PuzzleStats(Puzzle):
         self.guesses = []
         self.wordList = []
         self.shuffled_puzzle = ""
+        if hasattr(self, 'hints'):
+            del self.hints 
         
 
 
@@ -430,6 +432,5 @@ class PuzzleStats(Puzzle):
     def generate_hints(self):
         if not hasattr(self, 'hints'):
             self.hints = Hints(self.current_word_list, self.pangram)
-    
-    
+
             
