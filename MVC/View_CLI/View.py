@@ -244,11 +244,10 @@ def print_all_guesses(stats):
 def get_load_options():
     save_path = ''
     for path in sys.path:
-        if "\Saves" in path:
+        if "Saves" in path:
             save_path = path
             break
     options = os.listdir(save_path)
-    print(options)
     return options
 
 ## prints a detatiled "Invalid Guess" given a passed value from print_guess_outcome()
