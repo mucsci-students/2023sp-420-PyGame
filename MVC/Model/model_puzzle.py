@@ -6,7 +6,7 @@
 import os, json, random
 
 from Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
-
+from model_hints import * 
 
 ## Super Class
 class Puzzle():
@@ -97,7 +97,6 @@ class Puzzle():
             decoded_string += decoded_char
         return decoded_string
 
-
 ## Sub Class
 class PuzzleStats(Puzzle):
     _instance = None
@@ -122,6 +121,7 @@ class PuzzleStats(Puzzle):
         self.guesses = []
         self.wordList = []
         self.shuffled_puzzle = ""
+        
 
 
     ## ----------- Function Block for Checking Guess Req's ----------- ##
@@ -316,7 +316,12 @@ class PuzzleStats(Puzzle):
     """
     def get_save_game(self, fileName):
         ## Creates the local file path, plus includes the file extension  
-        saveFileName = "MVC/Model/Saves/" + fileName + ".json"
+        saveFileName = "Saves/" + fileName + ".json"
+
+        ## Converting out List-List to List
+        WordList = []
+        for word in self.current_word_list:
+            WordList.append(word[0])
 
         ## Create json object
         saveStat = {
@@ -325,7 +330,7 @@ class PuzzleStats(Puzzle):
             "CurrentPoints": self.score,
             "MaxPoints" : self.total_points,
             "GuessedWords": self.guesses,
-            "WordList" : self.current_word_list
+            "WordList" : WordList
         }
         
         json_object = json.dumps(saveStat, indent=4)
@@ -347,7 +352,7 @@ class PuzzleStats(Puzzle):
     def get_check_file(self, fileName):
         # print(f'filename is: {fileName}')
         check = bool
-        saveGames = os.listdir("MVC/Model/Saves/")
+        saveGames = os.listdir("Saves/")
         check = (fileName + ".json") in saveGames
         return check
 
@@ -369,7 +374,7 @@ class PuzzleStats(Puzzle):
         ## Loads the local file path for the saved game
         # saveFile = "Saves/" + fileName + ".json"
 
-        saveFile = "MVC/Model/Saves/" + fileName + ".json"
+        saveFile = "Saves/" + fileName + ".json"
         
         ## reads the json file as a Dict
         with open(saveFile, "r") as openfile:
@@ -421,3 +426,6 @@ class PuzzleStats(Puzzle):
         self.shuffled_puzzle = result
 
         return result
+    
+    def generate_hints(self):
+        self.hints = Hints(self.current_word_list, self.pangram)

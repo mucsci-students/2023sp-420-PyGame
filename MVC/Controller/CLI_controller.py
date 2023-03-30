@@ -206,7 +206,9 @@ def keyStart():
 def saveGamePrompt():
     while(True):
       print("Enter title to save game as:")
-      userInput = user_input(0).lower() #asks user for an input
+      userInput = user_input(0)  #asks user for an input
+      print(userInput)
+      input()
       cls()
       PuzzleStats().get_save_game(userInput)
       print(f"{userInput} has been saved.")
@@ -251,7 +253,7 @@ def active_game_commands(userInput):
 
     case "/savegame":
       print(f"Enter filename: ")
-      file_name = user_input(0).lower()
+      file_name = user_input(0)
       cls()
       save_current_game(file_name)
       return True
@@ -266,7 +268,7 @@ def active_game_commands(userInput):
       print_game_save()
       if(user_input(0).lower() == "y"):
         print(f"Enter filename: ")
-        file_name = user_input(0).lower()
+        file_name = user_input(0)
         cls()
         save_current_game(file_name)
       PuzzleStats().clear()
@@ -300,8 +302,8 @@ def start_new_game():
 # Start game from base
 def start_game_with_key(key):
   prep_value = prep_game_with_key(key)
-
-  if type(prep_value) == 1:
+ 
+  if prep_value == 1:
     return 1
   
   activeGameLoop()
@@ -353,7 +355,7 @@ def start_shared_game():
   
   prep_value = prep_game_from_share(shared_key)
   
-  if type(prep_value) == 1:
+  if prep_value == 1:
     cls()
     print("Invalid Code Input.")
     print("\nPress the space key to try again...")

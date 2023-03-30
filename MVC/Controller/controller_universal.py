@@ -23,11 +23,25 @@ generate the Puzzle and Puzzle_Stats objects from a key
 """
 def prep_game_with_key(key):
     puzzle = PuzzleStats()
+    if check_key(key) == 1:
+        return 1
+    
     if(puzzle.generate_puzzle_from_base(key) == 1):
+        input("2")
         return 1
 
     puzzle.ShuffleKey()
     return 0 
+
+
+"""  
+
+"""
+def check_key(key):
+    if len(set(key)) != 7:
+        return 1
+
+
 
 """
 generate the Puzzle and Puzzle_Stats objects from load 

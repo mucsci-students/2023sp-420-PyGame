@@ -14,6 +14,7 @@ import os
 ## nt = windows
 if os.name!="nt": 
     sys.path.append(os.getcwd()+"/MVC")
+    sys.path.append(os.getcwd()+"/Saves")
     sys.path.append(os.getcwd()+"/MVC/Controller")
     sys.path.append(os.getcwd()+"/MVC/Model")
     sys.path.append(os.getcwd()+"/MVC/Model/Saves")
@@ -22,6 +23,7 @@ if os.name!="nt":
     sys.path.append(os.getcwd()+"/MVC/View_GUI")  
 else:
     sys.path.append(os.getcwd()+"\\MVC")
+    sys.path.append(os.getcwd()+"\\Saves")
     sys.path.append(os.getcwd()+"\\MVC\\Controller")
     sys.path.append(os.getcwd()+"\\MVC\\Model")
     sys.path.append(os.getcwd()+"\\MVC\\Model\\Saves")
