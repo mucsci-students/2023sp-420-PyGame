@@ -3,13 +3,13 @@
 
 ## Table of Contents
 - [Summary](#summary)
-    - [Features](##Features)
+    - [Features](#features)
 - [Setup](#setup)
 - [How to Run](#how-to-run)
 - [How to Play](#how-to-play)
     - [Point System](###Rewarded-points)
     - [Rank System](###Ranks)
-- [Team](#Team-Members)
+- [Team](#team-members)
 ---
 
 ## Summary:
@@ -68,18 +68,20 @@ Create words using letters from the hive and try to get the maximum score. Words
 <details>
 <summary style="font-weight:bold;font-size:11.5pt;">Ranks:</summary>
 
-Every puzzle has eight ranks that will progress and change based on the percentage that the puzzle is completed
+Every puzzle has 10 ranks that will progress and change based on the percentage that the puzzle is completed:
 
- -  |   Rank   | Completed % |
-    |----------|-------------|
-    | Beginner |      3%     |
-    | Novice   |      7%     |
-    | Okay     |     12%     |
-    | Good     |     23%     |
-    | Solid    |     35%     |
-    | Nice     |     56%     |
-    | Great    |     72%     |
-    | Amazing  |     92%     |
+|   Rank     | Completed % |
+|------------|-------------|
+| Beginner   |     <2%     |
+| Good Start |      2%     |
+| Moving Up  |      5%     |
+| Good       |      8%     |
+| Solid      |     15%     |
+| Nice       |     25%     |
+| Great      |     40%     |
+| Amazing    |     50%     |
+| Genius     |     70%     |
+| Queen Bee  |    100%     |
 <br>
 </details>
 
@@ -89,6 +91,6 @@ Every puzzle has eight ranks that will progress and change based on the percenta
 
 ## Team Members:
 
-| [![Kiah bucher](https://avatars.githubusercontent.com/u/70379821?v=4)](https://github.com/WhitePolaris) | [![Robert Corle](https://avatars.githubusercontent.com/u/93812563?v=4)](https://github.com/RjCor) | [![Brendan LeFevre](https://avatars.githubusercontent.com/u/26367420?v=4)](https://github.com/BrendanLeFevre) | [![Ben Nase](https://avatars.githubusercontent.com/u/121914115?v=4)](https://github.com/bennase) | [![Priscilla Tran](https://avatars.githubusercontent.com/u/81700428?v=4)](https://github.com/priscillatran) | [![Ethan Wright](https://avatars.githubusercontent.com/u/122811350?v=4)](https://github.com/EthanWright24) |
-|---------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
-| [Kiah Bucher](https://github.com/WhitePolaris)                                                          | [Robert Corle](https://https://github.com/RjCor)                                                  | [Brendan LeFevre](https://github.com/BrendanLeFevre)                                                          | [Ben Nase](https://github.com/bennase)                                                           | [Priscilla Tran](https://github.com/priscillatran)                                                          | [Ethan Wright](https://github.com/EthanWright24)                                                           |
+| [![Kiah bucher](https://avatars.githubusercontent.com/u/70379821?v=4)](https://github.com/WhitePolaris) | [![Robert Corle](https://avatars.githubusercontent.com/u/93812563?v=4)](https://github.com/RjCor) | [![Ben Nase](https://avatars.githubusercontent.com/u/121914115?v=4)](https://github.com/bennase) | [![Priscilla Tran](https://avatars.githubusercontent.com/u/81700428?v=4)](https://github.com/priscillatran) | [![Ethan Wright](https://avatars.githubusercontent.com/u/122811350?v=4)](https://github.com/EthanWright24) |
+|---------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------|
+| [Kiah Bucher](https://github.com/WhitePolaris)                                                          | [Robert Corle](https://https://github.com/RjCor)                                                  | [Ben Nase](https://github.com/bennase)                                                           | [Priscilla Tran](https://github.com/priscillatran)                                                          | [Ethan Wright](https://github.com/EthanWright24)                                                           |
