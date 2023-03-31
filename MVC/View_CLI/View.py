@@ -296,7 +296,7 @@ def print_hint_pangram():
     puzzle = PuzzleStats()
     print("\tPangram Over-view: \n")
     print(f"\t -> Center letter is {puzzle.shuffled_puzzle[0].upper()}; Remaining letters are: {puzzle.shuffled_puzzle[1:7].upper()}")
-    print(f"\t -> Words {len(puzzle.current_word_list)}; Points: {puzzle.total_points}")
+    print(f"\t -> Words: {len(puzzle.current_word_list)}; Points: {puzzle.total_points}")
     rem_words = len(puzzle.current_word_list) - len(puzzle.guesses)
     rem_points = puzzle.total_points - puzzle.score
     print(f"\t -> Remaining Words: {rem_words}; Remaining Points: {rem_points}")
