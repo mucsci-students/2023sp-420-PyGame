@@ -141,6 +141,7 @@ def main_response(userInput):
       start_new_game()
 
     case "/loadgame":
+      cls()
       load_save_game()
           
     case "/startfromkey":
@@ -252,6 +253,7 @@ def active_game_commands(userInput):
       return True
 
     case "/savegame":
+      cls()
       print(f"Enter filename: ")
       file_name = user_input(0)
       cls()
@@ -259,7 +261,7 @@ def active_game_commands(userInput):
       return True
     
     case "/showall":
-      print_all_guesses(puzzle_stats)
+      print_all_guesses(PuzzleStats())
       space_out()
       
       return True

@@ -149,6 +149,7 @@ class PuzzleStats(Puzzle):
         if wordReq != 0:
             return int(wordReq)
         
+        ## return true or false
         wordGuessed = self.InGuesses(guess) # Bool
         if wordGuessed:
             return wordGuessed 
@@ -286,8 +287,8 @@ class PuzzleStats(Puzzle):
         if length == 4:
             points = 1
         # If word is a pangram, worth length * 2
-        elif length == 7 and len(set(word)) == 7:
-            points = 7
+        elif len(set(word)) == 7:
+            points = length + 7
         # Else word is worth its length
         else:
             points = length
@@ -318,7 +319,7 @@ class PuzzleStats(Puzzle):
     """
     def get_save_game(self, fileName):
         ## Creates the local file path, plus includes the file extension  
-        saveFileName = "Saves/" + fileName + ".json"
+        saveFileName = "PyGame_Project/Saves/" + fileName + ".json"
 
         ## Converting out List-List to List
         WordList = []
@@ -354,7 +355,7 @@ class PuzzleStats(Puzzle):
     def get_check_file(self, fileName):
         # print(f'filename is: {fileName}')
         check = bool
-        saveGames = os.listdir("Saves/")
+        saveGames = os.listdir("PyGame_Project/Saves/")
         check = (fileName + ".json") in saveGames
         return check
 
@@ -374,9 +375,9 @@ class PuzzleStats(Puzzle):
             return 1
             
         ## Loads the local file path for the saved game
-        # saveFile = "Saves/" + fileName + ".json"
+        # saveFile = "PyGame_Project/Saves/" + fileName + ".json"
 
-        saveFile = "Saves/" + fileName + ".json"
+        saveFile = "PyGame_Project/Saves/" + fileName + ".json"
         
         ## reads the json file as a Dict
         with open(saveFile, "r") as openfile:
