@@ -7,18 +7,19 @@ def start_help():
     pygame.init()
 
     # create window dimensions, and minimum window dimensions (when window is resized)
-    winX, winY = 600, 400
-    minX, minY = 450, 400
+    winX, winY = 750, 400
+    minX, minY = 700, 400
     window = pygame.display.set_mode((winX, winY), pygame.RESIZABLE)
 
     # set window name and icon
     pygame.display.set_caption("Help")
-    image_dir = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
+    image_dir = os.path.join(os.getcwd(), "PyGame_Project/MVC/View_GUI/helpicons")
     icon = pygame.image.load(os.path.join(image_dir, 'clubpenguin4.jpg'))
     pygame.display.set_icon(icon)
 
     # set visual text and font
-    font = pygame.font.Font(None, 21)
+    hex_font = pygame.font.SysFont(None, 21)
+    font = pygame.font.SysFont("couriernew", 16)
 
     # create hexagon points (NOT the lines between the points)
     hex_radius = 50 # change this for bigger hexagons, considered midpoint
@@ -56,7 +57,7 @@ def start_help():
     ~ 4-letter words are worth 1 point each. ***
     ~ If the entered word is longer than 4 letters then you get a point for the word's character length ***
     ~ Each puzzle includes at least one “pangram” which uses every letter at least once. ***
-    ~ Words guesses that use all seven given letters will earn double amount of points
+    ~ Words guesses that use all seven given letters will earn an extra 7 points, plus the word's character length
     """
 
     # text shown in window when "Rank System" Button is clicked
@@ -65,15 +66,15 @@ def start_help():
     *** ***
     Every puzzle has 10 ranks that will progress and change based on the percentage that the puzzle is completed.
     *** ***
-    0% - Beginner    ***
-    2% - Good Start  ***
-    5% - Moving Up   ***
-    8% - Good        ***
-    15% - Solid      ***
-    25% - Nice       ***
-    40% - Great      ***
-    50% - Amazing    ***
-    70% - Genius     ***
+     0% - Beginner    ***
+     2% - Good Start  ***
+     5% - Moving Up   ***
+     8% - Good        ***
+     15% - Solid      ***
+     25% - Nice       ***
+     40% - Great      ***
+     50% - Amazing    ***
+     70% - Genius     ***
     100% - Queen Bee  
     """
 
@@ -101,9 +102,9 @@ def start_help():
         pygame.draw.polygon(window, ("white"), arrow_rect_vertices, 1)
 
         # write the text on top of the hexagons
-        window.blit(font.render("How to Play", 1, ("black")), (32, 63))
-        window.blit(font.render("Points", 1, ("black")), (50, 188))
-        window.blit(font.render("Ranks", 1, ("black")), (50, 313))
+        window.blit(hex_font.render("How to Play", 1, ("black")), (32, 63))
+        window.blit(hex_font.render("Points", 1, ("black")), (50, 188))
+        window.blit(hex_font.render("Ranks", 1, ("black")), (50, 313))
 
     # when resizing window, text should be wrapped so that all text is visible to the user (not going outside the window)
     def wrap_text(info_text):
@@ -174,6 +175,6 @@ def start_help():
         pygame.display.update()
 
     # when running is False, reset the window size to the gui_main_menu window size
-    window = pygame.display.set_mode((600, 600), pygame.RESIZABLE)
+    window = pygame.display.set_mode((600, 600))
     return
     pygame.quit()

@@ -495,6 +495,8 @@ class Game:
         loading = True
 
         while self.running:
+            pygame.display.set_caption('Main Game')
+
             if self.show_words_box_visible:
                 self.show_words_text = "Hide Guessed Words"
             else:
@@ -622,6 +624,7 @@ class Game:
             self.scroll_position = max(0, min((len(self.correctly_guessed_words) // self.guessed_words_column_count) - 15,
                                               self.scroll_position + self.scroll_direction))
             pygame.display.update()
+        self.game_window = pygame.display.set_mode((600, 600))
 
 
 class Button:

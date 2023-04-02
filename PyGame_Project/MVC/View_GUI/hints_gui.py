@@ -14,7 +14,7 @@ def hint_screen():
     window = pygame.display.set_mode((winX, winY), pygame.RESIZABLE)
 
     # set window name and icon
-    pygame.display.set_caption("Hint Screen")
+    pygame.display.set_caption("Hints")
    
     # set visual text and font
     font = pygame.font.SysFont(None, 21)

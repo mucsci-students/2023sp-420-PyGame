@@ -1,5 +1,4 @@
 import pygame
-import subprocess
 from newgame import *
 from loadgame import *
 from helpgui import *
@@ -11,7 +10,7 @@ def start_gui():
     WINDOW_WIDTH = 600
     WINDOW_HEIGHT = 600
     DISPLAY_SURFACE = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-    pygame.display.set_caption('Main Menu PYGAME')
+    pygame.display.set_caption('Main Menu')
 
     # Define some colors
     WHITE = (255, 255, 255)
@@ -33,7 +32,7 @@ def start_gui():
     HEADER_TEXT = 'SPELLING BEE BY PYGAME'
     NEW_GAME_TEXT = 'New Game'
     LOAD_GAME_TEXT = 'Load Game'
-    HELP_TEXT = 'Help / How to Play'
+    HELP_TEXT = 'Help'
     EXIT_TEXT = 'Exit'
 
     # Define the font for the text
@@ -97,21 +96,20 @@ def start_gui():
 
         while running:
             # Handle events
+            pygame.display.set_caption('Main Menu')
+
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     running = False
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     mouse_pos = pygame.mouse.get_pos()
                     if new_game_box.collidepoint(mouse_pos):
-                        # subprocess.run(["python", "./MVC/view_GUI/newgame.py"])
                         start_new_game()
                         
                     elif load_game_box.collidepoint(mouse_pos):
-                        # subprocess.run(["python", "./MVC/view_GUI/loadgame.py"])
                         start_load()
                         
                     elif help_box.collidepoint(mouse_pos):
-                        # subprocess.run(["python", "./MVC/view_GUI/helpgui.py"])
                         start_help()
                         
                     elif exit_box.collidepoint(mouse_pos):
