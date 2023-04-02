@@ -35,7 +35,7 @@ class Game:
 
         # Set the name and icon for the window.
         pygame.display.set_caption("Main Game")
-        image_file_path = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
+        image_file_path = os.path.join(os.getcwd(), "PyGame_Project/mvc/view_gui/helpicons")
         pygame.display.window_position = (0, 0)
 
         self.background_image = pygame.image.load(os.path.join(image_file_path, "Background_Image.png")).convert()

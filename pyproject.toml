@@ -1,0 +1,10 @@
+[build-system]
+requires = ["setuptools", "setuptools-scm"]
+build-backend= "setuptools.build_meta"
+
+[project]
+name = "PyGame_Project"
+version = "1.0"
+
+[project.scripts]
+PyGame = "PyGame_Project.__main__:main"

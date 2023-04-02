@@ -65,7 +65,7 @@ class Hints:
         for letter in self.pangram:
             columns = []
             counter = 0
-            columns.append(letter)
+            columns.append(letter.upper())
             for size in range(4, self.max_length + 1):
                 if (letter, size) in counts:
                     if size in column_sum:
