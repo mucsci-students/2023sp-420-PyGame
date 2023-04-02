@@ -6,6 +6,7 @@
     - [Features](#features)
 - [Setup](#setup)
 - [How to Run](#how-to-run)
+- [How to Run Test](#how-to-run)
 - [How to Play](#how-to-play)
     - [Point System](###Rewarded-points)
     - [Rank System](###Ranks)
@@ -33,7 +34,18 @@ A simple game where a player is to create English words using a number of given 
 2. Clone the main branch of [PyGame's repository](https://github.com/mucsci-students/2023sp-420-PyGame) from Github to your local machine.
 3. Navigate to the cloned repository and set up virtual environment with the following command
     - ``` python -m venv venv ```
+4. Activate the virtual environment with ``` .\venv\Scripts\activate ```
 
+5. Install project dependencies go to the directory for the project by running the following commands:
+    - Mac:
+    ``` pip3 install -r requirements.txt ```
+    - Windows:
+    ``` pip install -r requirements.txt ```
+6. Install our PyGame directory to your venv with the following commands:
+    - Mac:
+    ``` python3 -m pip3 install -e . ```
+    - Windows:
+    ``` python -m pip install -e . ```
 ---
 
 ## How to Run:
@@ -42,24 +54,21 @@ A simple game where a player is to create English words using a number of given 
 
 2. Activate the virtual environment with ``` .\venv\Scripts\activate ```
 
-3. Install project dependencies go to the directory for the project by running the following commands:
-    - Mac:
-    ``` pip3 install -r requirements.txt ```
-    - Windows:
-    ``` pip install -r requirements.txt ```
-
-4. Install our PyGame directory to your venv with the following commands:
-    - Mac:
-    ``` python3 -m pip3 install -e . ```
-    - Windows:
-    ``` python -m pip install -e . ```
-
 5. Once you are in the venv, type ```PyGame``` to launch our game, it will default to run the game with a GUI active. 
     - if you want to run our project in CLI run the following argument after PyGame ``` -- cli ``
 
 6. If you are lost and need any help once the game is launched, type `/help` for more details
 
+---
 
+## How to Run Test:
+
+1. Open your terminal or command interface and navigate to your `2023sp-420-PyGame` directory.
+
+2. Activate the virtual environment with ``` .\venv\Scripts\activate ```
+
+3. Once you are in the venv, type ```pytest``` to run our project test 
+    - to see code coverage run ``` pytest --cov ```
 ---
 
 ## How to Play:

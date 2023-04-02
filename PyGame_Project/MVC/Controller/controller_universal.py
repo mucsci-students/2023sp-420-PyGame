@@ -2,7 +2,6 @@ import sys
 import os
 
 from model_puzzle import *
-from View import *
 
 
 """
