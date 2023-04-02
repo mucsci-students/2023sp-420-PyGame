@@ -33,7 +33,7 @@ def start_gui():
     HEADER_TEXT = 'SPELLING BEE BY PYGAME'
     NEW_GAME_TEXT = 'New Game'
     LOAD_GAME_TEXT = 'Load Game'
-    HELP_TEXT = 'Help / How to Play'
+    HELP_TEXT = 'Help'
     EXIT_TEXT = 'Exit'
 
     # Define the font for the text
