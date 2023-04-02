@@ -33,17 +33,20 @@ A simple game where a player is to create English words using a number of given 
 1. Download and install [Python 3.11.1](https://www.python.org/downloads/). 
 2. Clone the main branch of [PyGame's repository](https://github.com/mucsci-students/2023sp-420-PyGame) from Github to your local machine.
 3. Navigate to the cloned repository and set up virtual environment with the following command
-    - ``` python -m venv venv ```
-4. Activate the virtual environment with ``` .\venv\Scripts\activate ```
-
+    - ``` python3 -m venv venv ``` 
+4. Activate the virtual environment with 
+    - Windows:
+    ``` .\venv\Scripts\activate ```
+    - Mac:
+    ``` source venv/bin/activate ```
 5. Install project dependencies go to the directory for the project by running the following commands:
     - Mac:
-    ``` pip3 install -r requirements.txt ```
+    ``` pip install -r requirements.txt ```
     - Windows:
     ``` pip install -r requirements.txt ```
 6. Install our PyGame directory to your venv with the following commands:
     - Mac:
-    ``` python3 -m pip3 install -e . ```
+    ``` python3 -m pip install -e . ```
     - Windows:
     ``` python -m pip install -e . ```
 ---
