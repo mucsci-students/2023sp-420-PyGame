@@ -36,8 +36,7 @@ def main():
         sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC\\View_CLI")
         sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC\\View_GUI")
 
-    print(sys.path)
-
+    
     from CLI_controller import main_menu_handler
     from gui_main_menu import start_gui
 
