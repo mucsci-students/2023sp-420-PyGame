@@ -149,6 +149,7 @@ class PuzzleStats(Puzzle):
         if wordReq != 0:
             return int(wordReq)
         
+        ## return true or false
         wordGuessed = self.InGuesses(guess) # Bool
         if wordGuessed:
             return wordGuessed 
@@ -286,8 +287,8 @@ class PuzzleStats(Puzzle):
         if length == 4:
             points = 1
         # If word is a pangram, worth length * 2
-        elif length == 7 and len(set(word)) == 7:
-            points = 7
+        elif len(set(word)) == 7:
+            points = length + 7
         # Else word is worth its length
         else:
             points = length
