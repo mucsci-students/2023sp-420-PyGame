@@ -8,8 +8,8 @@
 - [How to Run](#how-to-run)
 - [How to Run Test](#how-to-run)
 - [How to Play](#how-to-play)
-    - [Point System](###Rewarded-points)
-    - [Rank System](###Ranks)
+    - [Point System](#rewarded-points)
+    - [Rank System](#ranks)
 - [Team](#team-members)
 ---
 
@@ -17,7 +17,7 @@
 
 A simple game where a player is to create English words using a number of given characters, but the word has to use the required character.
 
-### Features
+### Features:
 - Large selection of randomly generated puzzles.
 - Ability to create your own puzzle by inputting a word with seven unique characters.
 - Word puzzles can be stored and accessed at a later time.
@@ -35,10 +35,10 @@ A simple game where a player is to create English words using a number of given 
 3. Navigate to the cloned repository and set up virtual environment with the following command
     - ``` python3 -m venv venv ``` 
 4. Activate the virtual environment with 
-    - Windows:
-    ``` .\venv\Scripts\activate ```
     - Mac:
     ``` source venv/bin/activate ```
+    - Windows:
+    ``` .\venv\Scripts\activate ```
 5. Install project dependencies go to the directory for the project by running the following commands:
     - Mac:
     ``` pip install -r requirements.txt ```
@@ -78,21 +78,14 @@ A simple game where a player is to create English words using a number of given 
 
 Create words using letters from the hive and try to get the maximum score. Words must have at least four letters and include the required letter (The letter in the center of the hive). The required letter is surrounded by six letters that you use additionally (not required). Use the six additional letters along with the required letter to create words. Using letters that are not given will result in either a wrong answer or may not be entered to begin with. Every letter can be used more than one time in a single guess. Word guesses can not contain hyphens, proper nouns, vulgarities, or obscure words. Each puzzle includes at least one “pangram” which uses all seven given letters at least once.
 
-<br>
-
-<details>
-<summary style="font-weight:bold;font-size:11.5pt;">Rewarded Points:</summary>
+### Rewarded Points:
 
 - 4-letter words are worth 1 point each.
 - If the entered word is longer than 4 letters then you get a point for the word's character length
 - Each puzzle includes at least one “pangram” which uses every letter at least once.
 - Words guesses that use all seven given letters will earn double amount of points
-</details>
 
-<br>
-
-<details>
-<summary style="font-weight:bold;font-size:11.5pt;">Ranks:</summary>
+### Ranks:
 
 Every puzzle has 10 ranks that will progress and change based on the percentage that the puzzle is completed:
 
@@ -108,11 +101,16 @@ Every puzzle has 10 ranks that will progress and change based on the percentage 
 | Amazing    |     50%     |
 | Genius     |     70%     |
 | Queen Bee  |    100%     |
-<br>
-</details>
 
 <br>
 
+---
+
+## Design Patterns Used:
+
+- MVC
+- Singleton
+- Iterator
 ---
 
 ## Team Members:
