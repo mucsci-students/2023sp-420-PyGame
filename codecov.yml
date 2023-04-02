@@ -2,7 +2,7 @@ codecov:
  token: b86d51b5-9e2f-4502-b289-9534575c34d3
 
 ignore:
- - "PyGame_Project/Saves"
+ - "PyGame_Project/MVC/ViewGUI"
 
 coverage:
   round: down
