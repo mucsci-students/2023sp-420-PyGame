@@ -3,3 +3,10 @@ codecov:
 
 ignore:
  - "PyGame_Project/Saves"
+
+coverage:
+  round: down
+  status:
+    project:
+      default:
+        target: 85%
