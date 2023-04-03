@@ -40,6 +40,6 @@ jobs:
     - name: Upload coverage reports to Codecov
       uses: codecov/codecov-action@v3
       with: 
-        token: ${{ secrets.GITHUB_TOKEN }}
+        token: b86d51b5-9e2f-4502-b289-9534575c34d3
         fail_ci_if_error: true
         verbose: true
