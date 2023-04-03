@@ -1,2 +1,0 @@
-pygame --pre
-pypiwin32
