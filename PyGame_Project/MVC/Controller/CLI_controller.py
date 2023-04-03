@@ -66,8 +66,8 @@ def on_key_press(key, typed_letters, command_num):
     print("\033[K", end="")
     typed_string = ''.join(typed_letters)
   
-  # if a single alpha character or '/' is pressed (like: /, a, b; not like: shift, backspace)
-  elif key.isalpha() or key == '/':
+  # if a single alpha/numeric character or '/' is pressed (like: /, a, 1; not like: shift, backspace)
+  elif key.isalpha() or key.isnumeric() or key == '/':
     typed_letters.append(key)
     typed_string = ''.join(typed_letters)
 
@@ -114,10 +114,11 @@ def get_os_name():
 # Checks to see if the space key was pressed
 # "Press the space key to continue.."
 def space_out():
-  key = get_os_name()
   while True:
+    key = get_os_name()
     if key == ' ':
       break
+    
 
 ### ------------MAIN CLI Controller--------------- ###
 
