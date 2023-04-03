@@ -2,9 +2,6 @@ codecov:
  token: b86d51b5-9e2f-4502-b289-9534575c34d3
  require_ci_to_pass: yes
 
-ignore:
- - "PyGame_Project/Test/"
-
 coverage:
   round: down
   status:
