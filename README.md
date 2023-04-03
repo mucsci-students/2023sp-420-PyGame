@@ -6,7 +6,7 @@
     - [Features](#features)
 - [Setup](#setup)
 - [How to Run](#how-to-run)
-- [How to Run Test](#how-to-run)
+- [How to Run Test](#how-to-run-test)
 - [How to Play](#how-to-play)
     - [Point System](#rewarded-points)
     - [Rank System](#ranks)
