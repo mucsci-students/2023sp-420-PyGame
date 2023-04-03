@@ -34,7 +34,7 @@ A simple game where a player is to create English words using a number of given 
 2. Clone the main branch of [PyGame's repository](https://github.com/mucsci-students/2023sp-420-PyGame) from Github to your local machine.
 3. Navigate to the cloned repository and set up virtual environment with the following command
     - ``` python3 -m venv venv ``` 
-4. Activate the virtual environment with 
+4. Activate the virtual environment with:
     - Mac:
     ``` source venv/bin/activate ```
     - Windows:
@@ -55,12 +55,14 @@ A simple game where a player is to create English words using a number of given 
 
 1. Open your terminal or command interface and navigate to your `2023sp-420-PyGame` directory.
 
-2. Activate the virtual environment with ``` .\venv\Scripts\activate ```
+2. Activate the virtual environment with:
+    - Mac:
+    ``` source venv/bin/activate ```
+    - Windows:
+    ``` .\venv\Scripts\activate ```
 
 5. Once you are in the venv, type ```PyGame``` to launch our game, it will default to run the game with a GUI active. 
-    - if you want to run our project in CLI run the following argument after PyGame ``` -- cli ``
-
-6. If you are lost and need any help once the game is launched, type `/help` for more details
+    - if you want to run our project in CLI run the following command, ``` PyGame -- cli ```
 
 ---
 
@@ -68,10 +70,14 @@ A simple game where a player is to create English words using a number of given 
 
 1. Open your terminal or command interface and navigate to your `2023sp-420-PyGame` directory.
 
-2. Activate the virtual environment with ``` .\venv\Scripts\activate ```
+2. Activate the virtual environment with:
+    - Mac:
+    ``` source venv/bin/activate ```
+    - Windows:
+    ``` .\venv\Scripts\activate ```
 
 3. Once you are in the venv, type ```pytest``` to run our project test 
-    - to see code coverage run ``` pytest --cov ```
+    - to see code coverage run ``` pytest --cov=PyGame_Project/MVC/Model ```
 ---
 
 ## How to Play:
@@ -108,9 +114,14 @@ Every puzzle has 10 ranks that will progress and change based on the percentage 
 
 ## Design Patterns Used:
 
-- MVC
-- Singleton
-- Iterator
+- MVC: 
+    - Our over all structure for the python project follows the MVC pattern, which involves splitting up the files into three categories: Model, Controller, and View. Splitting these files allows us to keep a high level of organization within the directories.
+
+- Singleton:
+     - We set out a puzzle and puzzle stats class to match the Singleton Pattern. Our main reason for this choice was the realization that we can only have one puzzle active at a time. One of the largest benefits that we found is that it is easier to access the class object no matter where we are in the project. The Singleton Pattern allows us to bypass the mess of constantly passing parameters, or declaring global variables. This allows us to call the same object by declaring the PuzzleStats "constructor / new command" 
+
+- Iterator: 
+    - When we display the load options in our GUI, we do not allow for a user input. Instead, we display an available file name. Then, you would have the option to hit either a “Next” or “Prev” button. To achieve this, we used an iterator pattern to allow for an iterator to loop back and stop from going out of range.
 ---
 
 ## Team Members:
