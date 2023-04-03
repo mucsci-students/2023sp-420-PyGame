@@ -42,4 +42,4 @@ jobs:
       with: 
         fail_ci_if_error: true
         verbose: true
-        token: b86d51b5-9e2f-4502-b289-9534575c34d3
+        token: ${{ secrets.CODECOV_TOKEN }}
