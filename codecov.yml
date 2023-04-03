@@ -3,7 +3,7 @@ codecov:
  require_ci_to_pass: yes
 
 ignore:
- - "Pygame_Project/Test/"
+ - "PyGame_Project/Test/"
 
 coverage:
   round: down
