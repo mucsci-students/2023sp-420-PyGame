@@ -66,6 +66,7 @@ def on_key_press(key, typed_letters, command_num):
     print("\033[K", end="")
     typed_string = ''.join(typed_letters)
   
+    """ 
   # if a single alpha/numeric character or '/' is pressed (like: /, a, 1; not like: shift, backspace)
   elif key.isalpha() or key.isnumeric() or key == '/':
     typed_letters.append(key)
@@ -74,13 +75,13 @@ def on_key_press(key, typed_letters, command_num):
   # if the key pressed is not tab, backspace, single alpha char, or '/'
   else:
     return
+    """
   
-  """
-  # allows all keys to be pressed (delete last elif and else statement)
+  # allows all keys to be pressed (as opposed to commented out elif and else statement)
   else:
     typed_letters.append(key)
     typed_string = ''.join(typed_letters)
-  """
+  
 
   # outputs the final string after the last key is pressed to the console
   print(typed_string, end='\r')
