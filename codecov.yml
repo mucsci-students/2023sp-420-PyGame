@@ -7,4 +7,10 @@ coverage:
   status:
     project:
       default:
-        target: 85%
+        target: auto
+        threshold: 0%
+        
+comment:
+  layout: "reach, diff, flags, files"
+  behavior: default
+  require_changes: no
