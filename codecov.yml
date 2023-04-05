@@ -14,4 +14,4 @@ coverage:
 comment:
   layout: "diff, flags, files"
   behavior: default
-  require_changes: no
+  require_changes: false
