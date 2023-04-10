@@ -29,14 +29,12 @@ def generate_tables():
 
 
 def get_scores_for_puzzle(required_letter, all_letters):
-    # Generate the unique identifier for the given puzzle
+    
     identifier = generate_puzzle_identifier(required_letter, all_letters)
-
-    # Connect to the SQLite database
     conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
     cursor = conn.cursor()
 
-    # SQL query to fetch scores for the puzzle with the given unique_identifier
+    # Fetch scores for the puzzle with the given unique_identifier
     query = """
     SELECT hs.player_name, hs.score
     FROM highscores AS hs
@@ -45,7 +43,7 @@ def get_scores_for_puzzle(required_letter, all_letters):
     ORDER BY hs.score DESC;
     """
 
-    # Execute the query and fetch the results
+    # Execute and fetch the results
     cursor.execute(query, (identifier,))
     scores = cursor.fetchall()
 
@@ -55,10 +53,8 @@ def get_scores_for_puzzle(required_letter, all_letters):
     return scores
 
 def insert_or_update_score(player_name, required_letter, all_letters, score):
-    # Generate the unique identifier for the given puzzle
+    
     identifier = generate_puzzle_identifier(required_letter, all_letters)
-
-    # Connect to the SQLite database
     conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
     cursor = conn.cursor()
 
@@ -108,11 +104,9 @@ def get_player_rank(player_name, required_letter, all_letters):
     WHERE rs.player_name = ?;
     """
 
-    # Execute the query and fetch the result
+    # Execute and fetch the results
     cursor.execute(query, (identifier, identifier, player_name))
     result = cursor.fetchone()
-
-    # Close the connection
     conn.close()
 
     return result
@@ -121,7 +115,7 @@ def generate_puzzle_identifier(required_letter, all_letters):
     # Combine the required letter and other letters into a single string
     combined_letters = required_letter + ''.join(sorted(all_letters))
     
-    # Generate a hash (e.g., SHA-256) based on the combined letters
+    # Generate a hash based on required letter + letters
     hash_object = hashlib.sha256(combined_letters.encode())
     identifier = hash_object.hexdigest()
     
