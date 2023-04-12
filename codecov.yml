@@ -7,9 +7,14 @@ coverage:
   status:
     project:
       default:
-        target: 85%
         target: auto
         threshold: 0%
+        base: auto
+        flags:
+          - unittests
+        if_ci_failed: error
+        if_not_found: error
+        if_no_data: error
 
 comment:
   layout: "diff, flags, files"
