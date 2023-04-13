@@ -272,7 +272,6 @@ def active_game_commands(userInput):
     case "/showall":
       print_all_guesses(PuzzleStats())
       space_out()
-      
       return True
     
     case "/back":
@@ -303,6 +302,11 @@ def active_game_commands(userInput):
       print_hint()
       space_out()
       return True
+    
+    case "/giveup":
+      cls()
+      print_giveup_confirmation()
+      return give_up()
 
     case _:
       print("Command Not Recognized")
@@ -384,4 +388,16 @@ def start_shared_game():
   
   activeGameLoop()
 
-  
+
+# gives up!
+def give_up():
+  answer = user_input(0).lower()
+
+  match answer:
+    case "y":
+      # you gave up!
+      return
+    
+    case _:
+      return True
+

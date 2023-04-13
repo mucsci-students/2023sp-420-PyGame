@@ -69,7 +69,8 @@ def print_current_puzzle():
           /help      /shuffle 
           /back      /showall 
           /share     /savegame 
-          /exit      /hints
+          /hints     /giveup
+                /exit
         
         """
     print(currentProgress)
@@ -105,12 +106,13 @@ Main Menu
     /loadgame
     /startfromkey
     /startsharedgame
+    /highscores
     /help
     /exit
 """
     print(mainMenu)
 
-## Promtps user if he wants to exit the game or not
+## Prompts user if he wants to exit the game or not
 def print_exit():
     exit = f"""
 Confirm exit?
@@ -119,7 +121,7 @@ N
 """
     print(exit)
 
-## Promtps user if he wants to save the game or not
+## Prompts user if he wants to save the game or not
 def print_game_save():
     gameSave = f"""
 
@@ -129,7 +131,7 @@ N
 """
     print(gameSave)
 
-## Promtps user if he wants to load the game or not
+## Prompts user if he wants to load the game or not
 def print_load_game():
     load = f"""
     
@@ -174,7 +176,7 @@ Instructions
 ~ Create words using letters from the hive and try to get the maximum score. 
 ~ Words must have at least four unique letters and include the center letter in brackets.
 ~ All optional letters will be surrounding the required center letter.   
-~ Letters can be used more than once. 
+~ Letters can be used more than once.
 ~ Words with hyphens, proper nouns, vulgarities, and especially obscure words are not in the word list. 
 ~ Score points to increase your rating.
 ~ 4-letter words are worth 1 point each.
@@ -186,7 +188,8 @@ Main Menu Commands:
 /loadgame         Loads a saved game
 /startfromkey     Enter a 7 letter key to start a new puzzle
 /startsharedgame  Copies the key to your clipboard
-/help             Get instructions and commands 
+/highscores       Searches for the top 10 high scores from a pangram and required letter
+/help             Get instructions and commands
 /exit             Exits the program
 
 In-Game Commands:
@@ -198,6 +201,7 @@ In-Game Commands:
 /showall          Prints a list of correct guessed words
 /savegame         Saves the current state of the game
 /hints            Shows the hint matrix and a two-letter list
+/giveup           Finishes the game and lets you enter a name for the current puzzle's high score
 
 Press the space key to continue...
 """ 
@@ -334,3 +338,17 @@ def Print_hint_two_Let_Dict():
             count += 1
 
     print (two_letter_str)
+
+
+def print_giveup_confirmation():
+    giveup = f"""
+
+Are you sure you want to give up? (This is irreversible!)
+Y
+N
+"""
+    print(giveup)
+
+
+def print_high_scores():
+    return
