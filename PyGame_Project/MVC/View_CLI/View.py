@@ -196,12 +196,12 @@ In-Game Commands:
 /help             Get instructions and commands
 /back             Go back to the main menu screen
 /share            Shows a sharable key (usable for CLI and GUI)
-/exit             Exits the program
 /shuffle          Shuffles the outer letters of the hive
 /showall          Prints a list of correct guessed words
 /savegame         Saves the current state of the game
 /hints            Shows the hint matrix and a two-letter list
 /giveup           Finishes the game and lets you enter a name for the current puzzle's high score
+/exit             Exits the program
 
 Press the space key to continue...
 """ 
@@ -343,12 +343,15 @@ def Print_hint_two_Let_Dict():
 def print_giveup_confirmation():
     giveup = f"""
 
-Are you sure you want to give up? (This is irreversible!)
+Are you sure you want to give up? (** This is irreversible! **)
 Y
 N
 """
     print(giveup)
 
+def print_enter_name():
+    print("Enter a 3-digit name for your high score: ")
 
 def print_high_scores():
+    print("\n\n\tTop 10 High Scores:")
     return

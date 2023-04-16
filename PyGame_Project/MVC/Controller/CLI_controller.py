@@ -20,9 +20,9 @@ def tab_completion(typed_string, command_set):
   
   # gets the correct command set, depending on if the user is on the Main Menu or the Active Game screen
   if command_set == 1:
-    commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/help', '/exit']
+    commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/highscores', '/help', '/exit']
   elif command_set == 2:
-    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints']
+    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints', '/giveup']
 
   # finds commands that match what the user started to type
   matches = [c for c in commands if c.startswith(typed_string)]
@@ -53,19 +53,27 @@ def user_input(command_set):
 
 # Figures out information about the key pressed
 def on_key_press(key, typed_letters, command_num):
-  # if the tab key is pressed (tab completion)
-  if key == '\t':
-    typed_string, ending_string = tab_completion(''.join(typed_letters).lower(), command_num)
-    if ending_string:
-      typed_letters.extend(ending_string)
-    typed_string = ''.join(typed_letters)
+  # when a user types (most cases)
+  if command_num != 3:
 
-  # if the backspace key is pressed (unix = \xf7; win = \x08)
-  elif key == '\x7f' or key == '\x08':
-    typed_letters and typed_letters.pop()
-    print("\033[K", end="")
-    typed_string = ''.join(typed_letters)
-  
+    # if the tab key is pressed (tab completion)
+    if key == '\t':
+      typed_string, ending_string = tab_completion(''.join(typed_letters).lower(), command_num)
+      if ending_string:
+        typed_letters.extend(ending_string)
+      typed_string = ''.join(typed_letters)
+
+    # if the backspace key is pressed (unix = \xf7; win = \x08)
+    elif key == '\x7f' or key == '\x08':
+      typed_letters and typed_letters.pop()
+      print("\033[K", end="")
+      typed_string = ''.join(typed_letters)
+
+    # allows all keys to be pressed (as opposed to commented out elif and else statement)
+    else:
+      typed_letters.append(key)
+      typed_string = ''.join(typed_letters)
+    
     """ 
   # if a single alpha/numeric character or '/' is pressed (like: /, a, 1; not like: shift, backspace)
   elif key.isalpha() or key.isnumeric() or key == '/':
@@ -77,12 +85,14 @@ def on_key_press(key, typed_letters, command_num):
     return
     """
   
-  # allows all keys to be pressed (as opposed to commented out elif and else statement)
+  # if the user is entering a high score (limit of 3 letters)
   else:
-    typed_letters.append(key)
-    typed_string = ''.join(typed_letters)
+    if len(typed_letters) == 3:
+      return
+    else:
+      typed_letters.append(key)
+      typed_string = ''.join(typed_letters)
   
-
   # outputs the final string after the last key is pressed to the console
   print(typed_string, end='\r')
 
@@ -159,6 +169,15 @@ def main_response(userInput):
     case "/startsharedgame":
       start_shared_game()
 
+    case "/highscores":
+      cls()
+      print("Enter the pangram (including the required letter):")
+      pangram = user_input(0).lower()
+      req_letter = user_input(0).lower()
+
+      # print pangram, then required letter
+      # then print top 10
+
     case "/help":
       cls()
       print_help()
@@ -186,7 +205,7 @@ def load_save_game():
   match answer:
     case "y":
       if (start_game_with_key_from_load(file_name) == 1):
-        print("Was unalbe to Load the File")
+        print("Was unable to load the file")
     case "n":
       cls()
       return
@@ -306,7 +325,14 @@ def active_game_commands(userInput):
     case "/giveup":
       cls()
       print_giveup_confirmation()
-      return give_up()
+      if give_up() == 2:
+        return True
+      cls()
+      print_enter_name()
+      userInput = user_input(3)
+      # take the userInput and put it in high score database
+      cls()
+      return False
 
     case _:
       print("Command Not Recognized")
@@ -338,7 +364,6 @@ def start_game_with_key_from_load(file_name):
 
   activeGameLoop()
     
-
 # creates a save file (saves current game)
 def save_current_game(filename):
   PuzzleStats().get_save_game(filename)
@@ -388,16 +413,16 @@ def start_shared_game():
   
   activeGameLoop()
 
-
 # gives up!
+# (1 = give up; 2 = don't give up)
 def give_up():
   answer = user_input(0).lower()
 
   match answer:
     case "y":
       # you gave up!
-      return
+      return 1
     
     case _:
-      return True
+      return 2
 
