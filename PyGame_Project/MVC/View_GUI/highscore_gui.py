@@ -1,6 +1,8 @@
 # imports
 import pygame, sys,math
 from pygame.locals import *
+from gui_main_game import Game
+from controller_universal import *
 
 # starting highscore screen
 def highscore():
