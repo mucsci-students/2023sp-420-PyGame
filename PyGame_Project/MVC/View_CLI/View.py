@@ -295,7 +295,7 @@ def print_hint():
     print_hint_pangram()
     print_hint_matrix()
     Print_hint_two_Let_Dict()
-    print("\n\t  ... Press the space key to continue ...")
+    print("\n\tPress the space key to continue ...")
 
 def print_hint_pangram():
     puzzle = PuzzleStats()
@@ -352,6 +352,9 @@ N
 def print_enter_name():
     print("Enter a 3-digit name for your high score: ")
 
-def print_high_scores():
+def print_high_scores(pangram, req_letter):
     print("\n\n\tTop 10 High Scores:")
+
+
+    print("\n\tPress the space key to continue...")
     return

@@ -169,14 +169,15 @@ def main_response(userInput):
     case "/startsharedgame":
       start_shared_game()
 
+    # change user_inputs
     case "/highscores":
       cls()
       print("Enter the pangram (including the required letter):")
       pangram = user_input(0).lower()
+      print("Enter the required letter:")
       req_letter = user_input(0).lower()
-
-      # print pangram, then required letter
-      # then print top 10
+      print_high_scores(pangram, req_letter)
+      space_out()
 
     case "/help":
       cls()
