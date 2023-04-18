@@ -8,10 +8,3 @@ coverage:
     project:
       default:
         target: 85%
-        target: auto
-        threshold: 0%
-
-comment:
-  layout: "diff, flags, files"
-  behavior: update
-  require_changes: false
