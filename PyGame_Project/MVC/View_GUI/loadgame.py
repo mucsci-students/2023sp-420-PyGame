@@ -1,7 +1,7 @@
 # imports
 import pygame, sys, os, math
 from pygame.locals import *
-from game_screen.components.main_screen import build_main_screen
+from gui_main_game import Game
 from controller_universal import *
 
 # load start screen
@@ -163,7 +163,8 @@ def start_load():
                         running = False
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:
                     if yes.collidepoint((mx, my)):
-                        build_main_screen()
+                        game = Game()
+                        game.run()
                         running = False
                     if no.collidepoint((mx, my)):
                         return

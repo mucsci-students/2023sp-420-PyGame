@@ -1,5 +1,7 @@
 """ 
+    Author: Robert 2/7/23 (model_puzzle.py)
     Author: Ethan (model_PuzzleStats)
+
 """
 import os, json, random
 
@@ -21,6 +23,7 @@ class Puzzle():
         return cls._instance
 
     """ 
+        Author: Robert 2/7/23
         Definition: Generates a random puzzle and sets the following values:
             panagram, required_letter, total_points, and current_word_list
     """
@@ -43,6 +46,7 @@ class Puzzle():
             self.current_word_list = word[3]
 
     """ 
+        Author: Robert 2/7/23
         Definition: Generates a random puzzle from a given string.
         Returns: None if key is invalid. 
             Sets the following values if a valid key is provided:
