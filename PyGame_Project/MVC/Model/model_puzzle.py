@@ -3,8 +3,10 @@
     Author: Ethan (model_PuzzleStats)
 
 """
-import os, json, random
-
+import os, json, random, hashlib
+from base64 import b64encode, b64decode
+from Cryptodome.Cipher import AES
+from Cryptodome.Random import get_random_bytes
 from Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
 from model_hints import * 
 
@@ -21,7 +23,7 @@ class Puzzle():
             cls.current_word_list = []
 
         return cls._instance
-
+            
     """ 
         Author: Robert 2/7/23
         Definition: Generates a random puzzle and sets the following values:
@@ -96,7 +98,7 @@ class Puzzle():
             decoded_char = chr((ord(char) - 5 - 97) % 26 + 97)
             decoded_string += decoded_char
         return decoded_string
-
+    
 ## Sub Class
 class PuzzleStats(Puzzle):
     _instance = None
@@ -125,6 +127,46 @@ class PuzzleStats(Puzzle):
             del self.hints 
         
 
+## -------- encrypt / decrypt ----------- ##
+    def encrypt(plain_text, password):
+        # generate a random salt
+        salt = get_random_bytes(AES.block_size)
+
+        # use the Scrypt KDF to get a private key from the password
+        private_key = hashlib.scrypt(
+            password.encode(), salt=salt, n=2**14, r=8, p=1, dklen=32)
+
+        # create cipher config
+        cipher_config = AES.new(private_key, AES.MODE_GCM)
+
+        # return a dictionary with the encrypted text
+        cipher_text, tag = cipher_config.encrypt_and_digest(bytes(plain_text, 'utf-8'))
+        return {
+            'cipher_text': b64encode(cipher_text).decode('utf-8'),
+            'salt': b64encode(salt).decode('utf-8'),
+            'nonce': b64encode(cipher_config.nonce).decode('utf-8'),
+            'tag': b64encode(tag).decode('utf-8')
+        }
+
+    def decrypt(enc_dict, password):
+        # decode the dictionary entries from base64
+        salt = b64decode(enc_dict['salt'])
+        cipher_text = b64decode(enc_dict['cipher_text'])
+        nonce = b64decode(enc_dict['nonce'])
+        tag = b64decode(enc_dict['tag'])
+        
+
+        # generate the private key from the password and salt
+        private_key = hashlib.scrypt(
+            password.encode(), salt=salt, n=2**14, r=8, p=1, dklen=32)
+
+        # create the cipher config
+        cipher = AES.new(private_key, AES.MODE_GCM, nonce=nonce)
+
+        # decrypt the cipher text
+        decrypted = cipher.decrypt_and_verify(cipher_text, tag)
+
+        return decrypted
 
     ## ----------- Function Block for Checking Guess Req's ----------- ##
 
@@ -317,7 +359,7 @@ class PuzzleStats(Puzzle):
         "PuzzleLetters": puzzleId 
     }
     """
-    def get_save_game(self, fileName):
+    def get_save_game(self, fileName, encodeWords = True):
         ## Creates the local file path, plus includes the file extension  
         saveFileName = "PyGame_Project/Saves/" + fileName + ".json"
 
@@ -326,23 +368,38 @@ class PuzzleStats(Puzzle):
         for word in self.current_word_list:
             WordList.append(word[0])
 
+        key = "key"
         ## Create json object
-        saveStat = {
+        if(encodeWords):
+            saveStat = saveStat = {
             "RequiredLetter": self.required_letter,
             "PuzzleLetters": self.pangram,
             "CurrentPoints": self.score,
             "MaxPoints" : self.total_points,
             "GuessedWords": self.guesses,
-            "WordList" : WordList
+            "secretwordlist" : encrypt(WordList, key)
         }
-        
+        else:
+        #if not encrypted
+            saveStat = {
+                "RequiredLetter": self.required_letter,
+                "PuzzleLetters": self.pangram,
+                "CurrentPoints": self.score,
+                "MaxPoints" : self.total_points,
+                "GuessedWords": self.guesses,
+                "WordList" : WordList
+            }
         json_object = json.dumps(saveStat, indent=4)
-
         # Writing to sample.json
+
         with open(saveFileName, "w") as outfile:
             outfile.write(json_object)
+        # Encrypt
+
 
         outfile.close()
+
+
 
     """
     CheckFileName Takes One Parameter
@@ -378,19 +435,24 @@ class PuzzleStats(Puzzle):
         # saveFile = "PyGame_Project/Saves/" + fileName + ".json"
 
         saveFile = "PyGame_Project/Saves/" + fileName + ".json"
-        
+        ##decrpyt 
         ## reads the json file as a Dict
-        with open(saveFile, "r") as openfile:
+        #check for secret word list   
+     
+        with file as openfile:
             saveInfo = json.load(openfile)
-
-
         self.score = saveInfo["CurrentPoints"]
         self.guesses = saveInfo["GuessedWords"]
         self.total_points = saveInfo["MaxPoints"]
-        self.wordList = saveInfo["WordList"]
+        try:
+            self.wordList = decrypt(saveInfo["secretwordlist"], "key")
+        except:
+            self.wordList = saveInfo["WordList"]
 
         self.generate_puzzle_from_load(saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"])
         self.RankIndex()
+
+        #encrpyt ?
 
         openfile.close()
         return 0 
