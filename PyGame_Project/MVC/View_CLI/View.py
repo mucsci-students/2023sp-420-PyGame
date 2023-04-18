@@ -2,6 +2,7 @@ import os
 import sys
 
 from model_puzzle import *
+from Database.model_highscores import get_scores_for_puzzle
 
 ## prints the start up "Loading" screen
 def print_start_screen():
@@ -34,8 +35,8 @@ def print_current_puzzle():
     puzzle = PuzzleStats()
     
     prettyGuesses = get_pretty_guesses(puzzle.guesses)
+    
     # variables to store each letter 
-
     req = puzzle.shuffled_puzzle[0]
     fir = puzzle.shuffled_puzzle[3]
     sec = puzzle.shuffled_puzzle[1]
@@ -299,7 +300,7 @@ def print_hint():
 
 def print_hint_pangram():
     puzzle = PuzzleStats()
-    print("\tPangram Over-view: \n")
+    print("\tPangram Overview: \n")
     print(f"\t -> Center letter is {puzzle.shuffled_puzzle[0].upper()}; Remaining letters are: {puzzle.shuffled_puzzle[1:7].upper()}")
     print(f"\t -> Words: {len(puzzle.current_word_list)}; Points: {puzzle.total_points}")
     rem_words = len(puzzle.current_word_list) - len(puzzle.guesses)
@@ -349,12 +350,22 @@ N
 """
     print(giveup)
 
+
 def print_enter_name():
     print("Enter a 3-digit name for your high score: ")
 
-def print_high_scores(pangram, req_letter):
-    print("\n\n\tTop 10 High Scores:")
 
+def print_high_scores(all_letters, req_letter):
+    all_scores = get_scores_for_puzzle(req_letter, all_letters)
+    
+    print("\n\n\tTop 10 High Scores:\n")
+
+    rank_num = 1
+    for score in all_scores:
+        print(f"\t{rank_num}\t{score}\n")
+        rank_num += 1
+        if rank_num > 10:
+            return
 
     print("\n\tPress the space key to continue...")
     return

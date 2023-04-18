@@ -5,6 +5,7 @@ import os
 import time
 
 from model_puzzle import *
+from model_highscores import insert_or_update_score
 from controller_universal import *
 from View import *
 
@@ -173,10 +174,10 @@ def main_response(userInput):
     case "/highscores":
       cls()
       print("Enter the pangram (including the required letter):")
-      pangram = user_input(0).lower()
+      all_letters = user_input(0).lower()
       print("Enter the required letter:")
       req_letter = user_input(0).lower()
-      print_high_scores(pangram, req_letter)
+      print_high_scores(req_letter, all_letters)
       space_out()
 
     case "/help":
@@ -422,6 +423,15 @@ def give_up():
   match answer:
     case "y":
       # you gave up!
+      print_enter_name()
+      player_name = user_input(0)
+      
+      all_letters = PuzzleStats().getPangram()
+      req_letter = PuzzleStats().getReqLetter()
+      player_points = PuzzleStats().getPlayerTotalPoints()
+      
+      insert_or_update_score(player_name, req_letter, all_letters, player_points)
+
       return 1
     
     case _:
