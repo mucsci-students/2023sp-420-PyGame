@@ -4,7 +4,7 @@
 import os, json, random
 
 from PyGame_Project.MVC.Model.Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
-from PyGame_Project.MVC.Model.model_hints import * 
+from PyGame_Project.MVC.Model.model_hints import *
 
 ## Super Class
 class Puzzle():
@@ -120,6 +120,16 @@ class PuzzleStats(Puzzle):
         if hasattr(self, 'hints'):
             del self.hints 
         
+    ## ----------- Function Block for Getting Puzzle Information ----------- ##
+
+    def getPangram(self):
+        return self.pangram
+
+    def getReqLetter(self):
+        return self.required_letter
+    
+    def getPlayerTotalPoints(self):
+        return self.score
 
 
     ## ----------- Function Block for Checking Guess Req's ----------- ##
@@ -392,7 +402,7 @@ class PuzzleStats(Puzzle):
         return 0 
         
 
-    ## ----------- Function Block for Suffle ----------- ##
+    ## ----------- Function Block for Shuffle ----------- ##
 
     """
     ShuffleKey function
