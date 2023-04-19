@@ -120,17 +120,6 @@ class PuzzleStats(Puzzle):
         if hasattr(self, 'hints'):
             del self.hints 
         
-    ## ----------- Function Block for Getting Puzzle Information ----------- ##
-
-    def getPangram(self):
-        return self.pangram
-
-    def getReqLetter(self):
-        return self.required_letter
-    
-    def getPlayerTotalPoints(self):
-        return self.score
-
 
     ## ----------- Function Block for Checking Guess Req's ----------- ##
 
