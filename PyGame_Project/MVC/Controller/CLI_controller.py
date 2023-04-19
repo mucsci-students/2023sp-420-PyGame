@@ -254,6 +254,10 @@ def activeGameLoop():
 def activeGame():
   command_set = 2
 
+  if PuzzleStats().check_progress() == True:
+    game_complete()
+    return False
+
   print_current_puzzle()
   print("Enter your guess.")
   userInput = user_input(command_set).lower() #asks user for input to match
@@ -430,13 +434,7 @@ def give_up():
   match answer:
     # you gave up!
     case "y":
-      print_enter_name()
-      player_name = user_input(3)
-      all_letters = PuzzleStats().pangram
-      req_letter = PuzzleStats().required_letter
-      player_score = PuzzleStats().score
-      insert_or_update_score(player_name, req_letter, all_letters, player_score)
-
+      enter_high_score_name()
       cls()
       print_pangram_stats(req_letter, all_letters)
       high_score_current_puzzle()
@@ -485,3 +483,24 @@ def high_score_current_puzzle():
   req_letter = PuzzleStats().required_letter
   print_high_scores(req_letter, all_letters)
   space_out()
+
+
+def enter_high_score_name():
+  print_enter_name()
+  player_name = user_input(3)
+  all_letters = PuzzleStats().pangram
+  req_letter = PuzzleStats().required_letter
+  player_score = PuzzleStats().score
+  insert_or_update_score(player_name, req_letter, all_letters, player_score)
+
+
+def game_complete():
+  print_game_over()
+  space_out()
+  enter_high_score_name()
+  cls()
+  all_letters = PuzzleStats().pangram
+  req_letter = PuzzleStats().required_letter
+  print_pangram_stats(req_letter, all_letters)
+  high_score_current_puzzle()
+  return False
