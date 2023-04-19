@@ -315,7 +315,7 @@ class PuzzleStats(Puzzle):
     """
     def get_save_game(self, fileName):
         ## Creates the local file path, plus includes the file extension  
-        saveFileName = "PyGame_Project/Saves/" + fileName + ".json"
+        saveFileName = os.path.join(os.getcwd(), fileName + ".json")
 
         ## Converting out List-List to List
         WordList = []
@@ -351,7 +351,7 @@ class PuzzleStats(Puzzle):
     def get_check_file(self, fileName):
         # print(f'filename is: {fileName}')
         check = bool
-        saveGames = os.listdir("PyGame_Project/Saves/")
+        saveGames = os.listdir(os.getcwd())
         check = (fileName + ".json") in saveGames
         return check
 
@@ -373,24 +373,7 @@ class PuzzleStats(Puzzle):
         ## Loads the local file path for the saved game
         # saveFile = "PyGame_Project/Saves/" + fileName + ".json"
 
-        saveFile = "PyGame_Project/Saves/" + fileName + ".json"
-        
-        ## reads the json file as a Dict
-        with open(saveFile, "r") as openfile:
-            saveInfo = json.load(openfile)
-
-
-        self.score = saveInfo["CurrentPoints"]
-        self.guesses = saveInfo["GuessedWords"]
-        self.total_points = saveInfo["MaxPoints"]
-        self.wordList = saveInfo["WordList"]
-
-        self.generate_puzzle_from_load(saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"])
-        self.RankIndex()
-
-        openfile.close()
-        return 0 
-        
+            
 
     ## ----------- Function Block for Suffle ----------- ##
 
