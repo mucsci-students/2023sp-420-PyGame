@@ -1,6 +1,6 @@
 from ..components.center.game import update_hexagon_positions
-from model_puzzle import *
-from hints_gui import *
+from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.View_GUI.hints_gui import *
 import pygame
 
 min_width = 800

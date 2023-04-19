@@ -1,7 +1,7 @@
 import pygame
-from newgame import *
-from loadgame import *
-from helpgui import *
+from PyGame_Project.MVC.View_GUI.newgame import *
+from PyGame_Project.MVC.View_GUI.loadgame import *
+from PyGame_Project.MVC.View_GUI.helpgui import *
 
 def start_gui():
     pygame.init()

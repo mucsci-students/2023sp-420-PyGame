@@ -4,9 +4,9 @@ import sys
 import os
 import time
 
-from model_puzzle import *
-from controller_universal import *
-from View import *
+from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.Controller.controller_universal import *
+from PyGame_Project.MVC.View_CLI.View import *
 
 
 
