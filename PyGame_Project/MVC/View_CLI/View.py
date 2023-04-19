@@ -70,8 +70,9 @@ def print_current_puzzle():
           /help      /shuffle 
           /back      /showall 
           /share     /savegame 
-          /hints     /giveup
-          /exit      /highscores
+          /hints     /highscores
+          /giveup    /createimage
+                 /exit
         
         """
     print(currentProgress)
@@ -203,6 +204,7 @@ In-Game Commands:
 /hints            Shows the hint matrix and a two-letter list
 /giveup           Finishes the game and lets you enter a name for the current puzzle's high score
 /highscores       Searches for the top 10 high scores from a pangram and required letter for the current puzzle
+/createimage      Creates a Puzzle Card image with statistics of the current puzzle
 /exit             Exits the program
 
 Press the space key to continue...

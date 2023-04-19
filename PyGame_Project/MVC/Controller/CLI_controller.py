@@ -8,6 +8,7 @@ from PyGame_Project.MVC.Model.model_puzzle import *
 from PyGame_Project.MVC.Controller.controller_universal import *
 from PyGame_Project.MVC.View_CLI.View import *
 from PyGame_Project.MVC.Model.Database.model_highscores import *
+from PyGame_Project.MVC.Model.imageGen import *
 
 
 ### ------------MAIN CLI Controller--------------- ###
@@ -22,7 +23,7 @@ def tab_completion(typed_string, command_set):
   if command_set == 1:
     commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/highscores', '/help', '/exit']
   elif command_set == 2:
-    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints', '/giveup', '/highscores']
+    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints', '/giveup', '/highscores', '/createimage']
 
   # finds commands that match what the user started to type
   matches = [c for c in commands if c.startswith(typed_string)]
@@ -333,6 +334,15 @@ def active_game_commands(userInput):
     case "/highscores":
       cls()
       high_score_current_puzzle()
+      return True
+    
+    case "/createimage":
+      cls()
+      print("Please enter a filename for your puzzle image: ")
+      filename = user_input(0)
+      generateImage(filename)
+      print("\nImage Saved!")
+      time.sleep(1)
       return True
 
     case _:
