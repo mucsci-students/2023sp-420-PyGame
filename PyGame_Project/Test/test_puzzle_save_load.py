@@ -37,7 +37,6 @@ Tests to see if loading a saving a game with encryption
 """
 def test_save_load_with_encrypt():
     someWordList = PuzzleStats().wordlist
-    #defaults to unencrypted, param here for clarity
     Puzzle().get_save_game("Johnson", True)
     Puzzle().LoadGame("Johnson")
     assert someWordList == PuzzleStats().wordlist
