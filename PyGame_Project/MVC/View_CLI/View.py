@@ -1,7 +1,7 @@
 import os
 import sys
 
-from model_puzzle import *
+from PyGame_Project.MVC.Model.model_puzzle import *
 
 ## prints the start up "Loading" screen
 def print_start_screen():

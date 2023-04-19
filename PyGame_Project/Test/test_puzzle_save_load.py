@@ -1,20 +1,8 @@
-import os, sys
 
-if os.name!="nt": 
-    sys.path.append(os.getcwd()+"/PyGame_Project/MVC")
-    sys.path.append(os.getcwd()+"/PyGame_Project/MVC/Controller")
-    sys.path.append(os.getcwd()+"/PyGame_Project/MVC/Model")
-    sys.path.append(os.getcwd()+"/PyGame_Project/MVC/Model/Database")
-else:
-    sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC")
-    sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC\\Controller")
-    sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC\\Model")
-    sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC\\Model\\Database")
+from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.Controller.controller_universal import *
 
 
-
-from model_puzzle import *
-from controller_universal import *
 
 """ def test_save_file():
 
