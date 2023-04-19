@@ -21,14 +21,14 @@ def create_show_words(state):
 
         guessed_words_start_pos = buffer, buffer_height
         menu_y = guessed_words_start_pos[1]
-        arrow_dimensions = (width * 1.75) * .05
+        arrow_dimensions = width * .05
         arrow_offset_x = buffer + width - (arrow_dimensions * .5)
         arrow_start_pos = arrow_offset_x, buffer_height + 5
 
         arrow_up_pos = (arrow_start_pos[0] + arrow_dimensions - (arrow_dimensions * 2),
                         arrow_start_pos[1] + (arrow_dimensions * 3))
 
-        arrow_down_pos = arrow_up_pos[0], (arrow_start_pos[1] + (width) - arrow_dimensions)
+        arrow_down_pos = arrow_up_pos[0], buffer_height + height - (arrow_dimensions * 5)
 
         # Define the arrow button rectangles
         arrow_up_rect = pygame.Rect(arrow_up_pos[0], arrow_up_pos[1] - arrow_dimensions,
@@ -37,7 +37,8 @@ def create_show_words(state):
 
         input_box_font_size = state.display.get_width() * .05
         # Calculate the number of columns based on the width of the display area
-        col_width = (input_box_font_size * max(len(word) for word in state.puzzle_stats.wordList)) * 1.75
+        # col_width = width // (input_box_font_size * max(len(word) for word in state.puzzle_stats.wordList))
+        col_width = width // max(len(word) for word in state.puzzle_stats.wordList)
         guessed_words_column_count = int(max(1, (shape.shape.size[0]) // col_width))
         arrow_color = None
 
