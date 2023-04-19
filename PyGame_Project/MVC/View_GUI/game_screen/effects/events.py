@@ -19,23 +19,7 @@ def wire_events(state):
 
         if state.active_popup is None or not state.active_popup.active:
             if event.type == pygame.MOUSEBUTTONUP:
-                for key in state.buttons:
-                    if key.strip() == "Shuffle" and state.buttons[key]:
-                        clicked_shuffle(state)
-                    elif key.strip() == "Submit" and state.buttons[key]:
-                        clicked_submit(state)
-                    elif key.strip() == "Clear" and state.buttons[key]:
-                        clicked_clear(state)
-                    elif key.strip() == "Give Up" and state.buttons[key]:
-                        clicked_give_up(state)
-                    elif key.strip() == "Save" and state.buttons[key]:
-                        clicked_save(state)
-                    elif key.strip() == "Hints" and state.buttons[key]:
-                        clicked_hints()
-                    elif key.strip() == "Leave Game" and state.buttons[key]:
-                        clicked_leave(state)
-                    elif key.strip() in state.puzzle_stats.pangram.upper() and state.buttons[key] and state.can_guess:
-                        state.current_guess += key.upper()
+                handle_button_press(state)
 
             elif event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_BACKSPACE:
@@ -71,6 +55,9 @@ def wire_events(state):
         elif state.active_popup.active:
             state.active_popup.handle_event(event, state)
 
+        for key in state.buttons:
+            if state.buttons[key]:
+                print(key)
 
 def clicked_shuffle(state):
     if not state.is_animating:
@@ -112,3 +99,32 @@ def clicked_submit(state):
 
 def clicked_clear(state):
     state.current_guess = ''
+
+def clicked_show_words(state):
+    state.show_guessed = not state.show_guessed
+    print(f'state.show_guessed = {state.show_guessed}')
+
+def handle_button_press(state):
+    for key in state.buttons:
+        if not state.show_active:
+            if key.strip() == "Shuffle" and state.buttons[key]:
+                clicked_shuffle(state)
+            elif key.strip() == "Submit" and state.buttons[key]:
+                clicked_submit(state)
+            elif key.strip() == "Clear" and state.buttons[key]:
+                clicked_clear(state)
+            elif key.strip() == "Give Up" and state.buttons[key]:
+                clicked_give_up(state)
+            elif key.strip() == "Save" and state.buttons[key]:
+                clicked_save(state)
+            elif key.strip() == "Hints" and state.buttons[key]:
+                clicked_hints()
+            elif key.strip() == "Leave Game" and state.buttons[key]:
+                clicked_leave(state)
+            elif key.strip() == "Show Guessed Words" and state.buttons[key]:
+                clicked_show_words(state)
+            elif key.strip() in state.puzzle_stats.pangram.upper() and state.buttons[key] and state.can_guess:
+                state.current_guess += key.upper()
+        else:
+            if key.strip == "Hide Guessed Words" and state.buttons[key]:
+                clicked_show_words(state)

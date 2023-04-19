@@ -3,11 +3,11 @@ from Model.model_puzzle import PuzzleStats
 from .components.pop_ups import LeavePopup, SavePopup, GiveUpPopup
 
 import pygame
-pygame.init()
 
 
 @dataclass
 class State:
+    pygame.init()
     display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     start_animation_time = pygame.time.get_ticks()
     puzzle_stats = PuzzleStats()
@@ -22,13 +22,12 @@ class State:
     buttons = {}
 
     is_animating: bool = False
+    show_guessed: bool = False
     first_run: bool = True
     can_guess: bool = True
     running: bool = True
 
     required_letter = ''
     current_puzzle = ''
-    # current_puzzle = str(puzzle_stats.pangram).join('')
-    print(f'current puzzle is: {current_puzzle}')
     current_guess = ''
 

@@ -18,6 +18,7 @@ class Rectangle(Shape):
         self.font_surface = self.font.render(text, True, font_color)
         self.font_rect = self.font_surface.get_rect()
         self.grad_surface = pygame.Surface((w, h), pygame.SRCALPHA)
+        self.text = text
 
     def draw(self, display, color):
         pygame.draw.rect(display, color, self.shape, 2)
