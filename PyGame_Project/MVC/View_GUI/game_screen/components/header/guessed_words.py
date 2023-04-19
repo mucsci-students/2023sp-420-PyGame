@@ -58,9 +58,11 @@ def create_show_words(state):
     button_text = ''
     buffer_height = 0.0625 * state.display.get_height() + 10
 
+    font_color = COLOR_ORANGE
+
     shape = Rectangle(
         x=buffer, y=buffer_height, w=width, h=height,
-        font_color=COLOR_ORANGE,
+        font_color=font_color,
         text=button_text
     )
     

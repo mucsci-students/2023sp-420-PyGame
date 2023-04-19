@@ -3,7 +3,7 @@ import pygame, os
 from model_puzzle import *
 from hints_gui import *
 
-from ..effects.events import wire_events
+from ..effects.events import wire_events, GuessState
 from ..state import State
 from .header import create_header
 from .center import create_center
@@ -13,6 +13,7 @@ from .footer import create_footer
 def build_main_screen():
     pygame.init()
     state = State()
+    state.guess_state = GuessState
     pygame.display.set_caption('New Game')
     state.puzzle_stats = PuzzleStats()
     state.required_letter = state.puzzle_stats.required_letter.upper()

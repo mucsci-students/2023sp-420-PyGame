@@ -13,12 +13,14 @@ class State:
     leave_popup = LeavePopup(display)
     save_popup = SavePopup(display)
     puzzle_stats = PuzzleStats()
+    current_guess_state = None
     active_popup = None
     guess_state = None
 
     elapsed_animation_time = 0
     max_scroll_position = 0
     animation_progress = 0
+    animation_duration = 900
     scroll_position = 0
 
     displayable_columns = 0
@@ -29,6 +31,8 @@ class State:
     surrounding_hexagons = []
     buttons = {}
 
+    incorrect_guess_timer: bool = False
+    correct_guess_timer: bool = False
     show_guessed_words: bool = False
     is_animating: bool = False
     first_run: bool = True

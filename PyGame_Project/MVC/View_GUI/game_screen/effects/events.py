@@ -9,11 +9,18 @@ class GuessState(Enum):
     INCORRECT = 2
     NEUTRAL = 3
 
+
 min_width = 800
 min_height = 600
 
 
 def wire_events(state):
+
+    if state.correct_guess_timer or state.incorrect_guess_timer:
+        if pygame.time.get_ticks() - state.start_animation_time >= state.animation_duration:
+            print('We actually got in here')
+            reset_timer(state)
+
     if state.active_popup is not None:
         if state.active_popup.active:
             state.active_popup.draw()
@@ -68,6 +75,7 @@ def wire_events(state):
         elif state.active_popup.active:
             state.active_popup.handle_event(event, state)
 
+
 def clicked_shuffle(state):
     if not state.is_animating:
         pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
@@ -95,15 +103,29 @@ def clicked_hints():
     hint_screen()
 
 
+def reset_timer(state):
+    state.current_guess_state = GuessState.NEUTRAL
+    if state.correct_guess_timer:
+        state.current_guess = ''
+    state.incorrect_guess_timer = False
+    state.correct_guess_timer = False
+
+
 def clicked_submit(state):
     if state.puzzle_stats.get_check_guess(state.current_guess) == 0:
-        print("Good")
+        state.current_guess_state = GuessState.CORRECT
+        state.correct_guess_timer = True
         if len(state.current_guess) == 4:
                 state.current_guess = f'+ {state.puzzle_stats.get_word_points(state.current_guess)} point!'
         else:
                 state.current_guess= f'+ {state.puzzle_stats.get_word_points(state.current_guess)} points!'
     else:
-        print("Bad")
+        state.current_guess_state = GuessState.INCORRECT
+        state.incorrect_guess_timer = True
+    
+    state.start_animation_time = pygame.time.get_ticks()
+    print(state.start_animation_time)
+
 
 def clicked_clear(state):
     state.current_guess = ''
