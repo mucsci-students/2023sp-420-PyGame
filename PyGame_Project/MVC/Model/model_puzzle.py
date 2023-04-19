@@ -394,12 +394,7 @@ class PuzzleStats(Puzzle):
 
         with open(saveFileName, "w") as outfile:
             outfile.write(json_object)
-        # Encrypt
-
-
         outfile.close()
-
-
 
     """
     CheckFileName Takes One Parameter
@@ -440,20 +435,18 @@ class PuzzleStats(Puzzle):
         ## reads the json file as a Dict
         #check for secret word list   
      
-        with file as openfile:
+        with open(saveFile, "w") as openfile:
             saveInfo = json.load(openfile)
-        self.score = saveInfo["CurrentPoints"]
-        self.guesses = saveInfo["GuessedWords"]
-        self.total_points = saveInfo["MaxPoints"]
-        try:
-            self.wordList = decrypt(saveInfo["SecretWordList"], "key")
-        except:
-            self.wordList = saveInfo["WordList"]
+            self.score = saveInfo["CurrentPoints"]
+            self.guesses = saveInfo["GuessedWords"]
+            self.total_points = saveInfo["MaxPoints"]
+            try:
+                self.wordList = decrypt(saveInfo["SecretWordList"], "key")
+            except:
+                self.wordList = saveInfo["WordList"]
 
         self.generate_puzzle_from_load(saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"])
         self.RankIndex()
-
-        #encrpyt ?
 
         openfile.close()
         return 0 

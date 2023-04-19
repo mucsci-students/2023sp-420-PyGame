@@ -338,12 +338,11 @@ def start_game_with_key_from_load(file_name):
 
 #Prompts the user with the option to make their file sharable, if not, then it will be encrypted soon alhamdulillah
 def encryption_prompt():
-  while(true):
-    print("Make Puzzle Sharable? y/n:")
+  while(True):
+    print("Allow Puzzle Sharing? Y/N")
     userInput = user_input(0).lower()  #asks user for an input
     print(userInput)
-    input()
-    cls()      
+    cls()  
     match userInput:
       case "y":
         return False
@@ -351,6 +350,7 @@ def encryption_prompt():
         return True
       case _: # if any other command not in the list is entered, then this output will be returned
         print("Command Not Recognized")
+
 # creates a save file (saves current game)
 def save_current_game(filename):
   encrypt_bool = encryption_prompt()
