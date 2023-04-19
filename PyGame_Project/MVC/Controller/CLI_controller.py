@@ -432,9 +432,9 @@ def give_up():
     case "y":
       print_enter_name()
       player_name = user_input(3)
-      all_letters = PuzzleStats().getPangram()
-      req_letter = PuzzleStats().getReqLetter()
-      player_score = PuzzleStats().getPlayerTotalPoints()
+      all_letters = PuzzleStats().pangram
+      req_letter = PuzzleStats().required_letter
+      player_score = PuzzleStats().score
       insert_or_update_score(player_name, req_letter, all_letters, player_score)
 
       cls()
@@ -481,7 +481,7 @@ def high_score_lookup():
 # for when the user wants to see the high scores for the current puzzle they're playing
 # accessed through an ACTIVE PUZZLE
 def high_score_current_puzzle():
-  all_letters = PuzzleStats().getPangram()
-  req_letter = PuzzleStats().getReqLetter()
+  all_letters = PuzzleStats().pangram
+  req_letter = PuzzleStats().required_letter
   print_high_scores(req_letter, all_letters)
   space_out()
