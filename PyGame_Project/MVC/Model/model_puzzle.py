@@ -127,7 +127,7 @@ class PuzzleStats(Puzzle):
             del self.hints 
         
 
-## -------- encrypt / decrypt ----------- ##
+    ## -------- encrypt / decrypt ----------- ##
     def encrypt(plain_text, password):
         # generate a random salt
         salt = get_random_bytes(AES.block_size)
@@ -359,7 +359,7 @@ class PuzzleStats(Puzzle):
         "PuzzleLetters": puzzleId 
     }
     """
-    def get_save_game(self, fileName, encodeWords = True):
+    def get_save_game(self, fileName, encodeWords = False):
         ## Creates the local file path, plus includes the file extension  
         saveFileName = "PyGame_Project/Saves/" + fileName + ".json"
 
@@ -371,14 +371,14 @@ class PuzzleStats(Puzzle):
         key = "key"
         ## Create json object
         if(encodeWords):
-            saveStat = saveStat = {
-            "RequiredLetter": self.required_letter,
-            "PuzzleLetters": self.pangram,
-            "CurrentPoints": self.score,
-            "MaxPoints" : self.total_points,
-            "GuessedWords": self.guesses,
-            "secretwordlist" : encrypt(WordList, key)
-        }
+            saveStat = {
+                "RequiredLetter": self.required_letter,
+                "PuzzleLetters": self.pangram,
+                "CurrentPoints": self.score,
+                "MaxPoints" : self.total_points,
+                "GuessedWords": self.guesses,
+                "SecretWordList" : encrypt(WordList, key)
+            }
         else:
         #if not encrypted
             saveStat = {
@@ -424,6 +424,7 @@ class PuzzleStats(Puzzle):
         Case 1: File Name is not valid; returns an error message
         Case 2: File Name is valid; populates Global Var with the players stats and load the puzzle
 
+    Reads file for secret word list, if this fails, it must be unencrypted, and continues loading.    
     Returns a "1" if the file name couldn"t be found
     """
     def LoadGame(self, fileName):
@@ -445,7 +446,7 @@ class PuzzleStats(Puzzle):
         self.guesses = saveInfo["GuessedWords"]
         self.total_points = saveInfo["MaxPoints"]
         try:
-            self.wordList = decrypt(saveInfo["secretwordlist"], "key")
+            self.wordList = decrypt(saveInfo["SecretWordList"], "key")
         except:
             self.wordList = saveInfo["WordList"]
 

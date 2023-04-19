@@ -1,4 +1,4 @@
-import os, sys
+import os, sys, pytest
 
 if os.name!="nt": 
     sys.path.append(os.getcwd()+"/PyGame_Project/MVC")
@@ -15,6 +15,32 @@ else:
 
 from model_puzzle import *
 from controller_universal import *
+pytest.fixture
+
+def puzzleGen():
+    PuzzleStats().clear()
+    shareable_key = "ygyxjrfq"
+    prep_game_from_share(shareable_key)
+    
+"""
+Tests to see if loading a saving a game without encryption
+"""
+def test_save_load():
+    someWordList = PuzzleStats().wordlist
+    #defaults to unencrypted, param here for clarity
+    Puzzle().get_save_game("Johnson", False)
+    Puzzle().LoadGame("Johnson")
+    
+    assert someWordList == PuzzleStats().wordlist
+"""
+Tests to see if loading a saving a game with encryption 
+"""
+def test_save_load_with_encrypt():
+    someWordList = PuzzleStats().wordlist
+    #defaults to unencrypted, param here for clarity
+    Puzzle().get_save_game("Johnson", True)
+    Puzzle().LoadGame("Johnson")
+    assert someWordList == PuzzleStats().wordlist
 
 """ def test_save_file():
 
