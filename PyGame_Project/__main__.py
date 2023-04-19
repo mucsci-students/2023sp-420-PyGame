@@ -25,7 +25,7 @@ def main():
         sys.path.append(os.getcwd()+"/PyGame_Project/MVC/Model/Saves")
         sys.path.append(os.getcwd()+"/PyGame_Project/MVC/Model/Database")
         sys.path.append(os.getcwd()+"/PyGame_Project/MVC/View_CLI")
-        sys.path.append(os.getcwd()+"/PyGame_Project/MVC/View_GUI")  
+        sys.path.append(os.getcwd()+"/PyGame_Project/MVC/View_GUI")
     else:
         sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC")
         sys.path.append(os.getcwd()+"\\PyGame_Project\\Saves")

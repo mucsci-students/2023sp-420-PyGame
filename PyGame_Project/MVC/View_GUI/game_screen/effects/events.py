@@ -18,6 +18,16 @@ def wire_events(state):
             clicked_leave(state)
 
         if state.active_popup is None or not state.active_popup.active:
+
+            if state.show_guessed_words:
+                 # Mouse scroll up with guessed words visible
+                if event.type == pygame.MOUSEBUTTONDOWN and event.button == 4:
+                    state.scroll_position = max(0, state.scroll_position - 1)
+
+                # Mouse scroll down with guessed words visible
+                elif event.type == pygame.MOUSEBUTTONDOWN and event.button == 5:
+                    state.scroll_position = min(len(state.puzzle_stats.guesses) - 15, state.scroll_position + 1)
+                
             if event.type == pygame.MOUSEBUTTONUP:
                 handle_button_press(state)
 
@@ -101,12 +111,11 @@ def clicked_clear(state):
     state.current_guess = ''
 
 def clicked_show_words(state):
-    state.show_guessed = not state.show_guessed
-    print(f'state.show_guessed = {state.show_guessed}')
+    state.show_guessed_words = not state.show_guessed_words
 
 def handle_button_press(state):
     for key in state.buttons:
-        if not state.show_active:
+        if not state.show_guessed_words:
             if key.strip() == "Shuffle" and state.buttons[key]:
                 clicked_shuffle(state)
             elif key.strip() == "Submit" and state.buttons[key]:
@@ -121,10 +130,7 @@ def handle_button_press(state):
                 clicked_hints()
             elif key.strip() == "Leave Game" and state.buttons[key]:
                 clicked_leave(state)
-            elif key.strip() == "Show Guessed Words" and state.buttons[key]:
-                clicked_show_words(state)
             elif key.strip() in state.puzzle_stats.pangram.upper() and state.buttons[key] and state.can_guess:
                 state.current_guess += key.upper()
-        else:
-            if key.strip == "Hide Guessed Words" and state.buttons[key]:
-                clicked_show_words(state)
+        if key.strip() == "Toggle Guessed Words" and state.buttons[key]:
+            clicked_show_words(state)

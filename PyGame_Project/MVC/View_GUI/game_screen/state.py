@@ -17,12 +17,13 @@ class State:
     active_popup = None
     elapsed_animation_time = 0
     animation_progress = 0
+    scroll_position = 0
 
     surrounding_hexagons = []
     buttons = {}
 
+    show_guessed_words: bool = False
     is_animating: bool = False
-    show_guessed: bool = False
     first_run: bool = True
     can_guess: bool = True
     running: bool = True

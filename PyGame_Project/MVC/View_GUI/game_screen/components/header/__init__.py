@@ -1,4 +1,5 @@
-from .top import create_top, create_show_words
+from .top import create_top
+from .guessed_words import create_show_words
 from .leave_button import create_leave_button
 from .score import create_score
 

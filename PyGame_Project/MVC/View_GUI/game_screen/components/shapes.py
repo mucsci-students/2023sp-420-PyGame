@@ -33,11 +33,7 @@ class Rectangle(Shape):
 
     def is_hover(self):
         return self.shape.collidepoint(pygame.mouse.get_pos())
-
-    # @property
-    # def position(self):
-    #     return self.x, self.y
-
+    
 
 @dataclass
 class Hexagon(Shape):
@@ -62,6 +58,7 @@ class Hexagon(Shape):
         text_surface = font.render(self.text, True, font_color)
         text_rect = text_surface.get_rect(center=self.center)
         display.blit(text_surface, text_rect)
+
 
     def is_hover(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()

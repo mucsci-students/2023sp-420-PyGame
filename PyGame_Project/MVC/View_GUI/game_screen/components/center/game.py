@@ -22,9 +22,11 @@ def create_game(state):
         for hexagon in state.surrounding_hexagons:
             hexagon.draw(state.display, COLOR_NEON_ORANGE, COLOR_BLACK, COLOR_ORANGE)
             hexagon.draw(state.display, COLOR_BLACK, COLOR_BLACK, COLOR_BLACK, 6)
+            state.buttons[hexagon.text] = hexagon.is_hover()
 
         center_hexagon.draw(state.display, COLOR_NEON_ORANGE, COLOR_BLACK, COLOR_ORANGE)
         center_hexagon.draw(state.display, COLOR_BLACK, COLOR_BLACK, COLOR_BLACK, 6)
+        state.buttons[center_hexagon.text] = center_hexagon.is_hover()
     else:
         start_animation(state)
 
