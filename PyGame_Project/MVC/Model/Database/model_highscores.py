@@ -122,6 +122,8 @@ def generate_puzzle_identifier(required_letter, all_letters):
     return identifier
 
 
+# tests
+"""
 # generate_tables()
 insert_or_update_score('Robert', 's', 'efdoras', 421)
 insert_or_update_score('Benjy', 's', 'efdoras', 69)
@@ -133,3 +135,4 @@ player_rank = get_player_rank('robert', 'f', 'efdoras')
 all_scores = get_scores_for_puzzle('s', 'efdoras')
 print(f'Player rank is: {player_rank}')
 print(f'All scores for puzzle are: {all_scores}')
+"""
