@@ -44,6 +44,7 @@ def start_hs(player_name, req_letter, pangram, player_score):
     
     # main function
     def hs_menu(player_name, req_letter, pangram, player_score):
+        # from shapes import Rectangle, Hexagon
         
         while True:
             # creates screen and titles
@@ -72,7 +73,6 @@ def start_hs(player_name, req_letter, pangram, player_score):
 
             # creating buttons
             share = pygame.draw.polygon(screen, ('black'), [(hex_x + 225, hex_y + 450) for hex_x, hex_y in hex_points], 3)
-        
 
             # defining statements when clicked on
             if share.collidepoint((mx, my)):
@@ -97,13 +97,10 @@ def start_hs(player_name, req_letter, pangram, player_score):
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        click = True
-                    if pygame.draw.polygon(screen, ("white"), arrow_rect_vertices).collidepoint(event.pos):
-                        start_gui()
-                    elif share.collidepoint(event.pos):
-                        generateImage(player_name)
+                if event.type == MOUSEBUTTONUP:
+                    generateImage(player_name)
+                    if share.collidepoint(event.pos):
+                        print("here")
 
             pygame.display.update()
             clock.tick(60)
