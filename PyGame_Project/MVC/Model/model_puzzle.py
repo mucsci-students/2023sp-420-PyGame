@@ -382,7 +382,7 @@ class PuzzleStats(Puzzle):
             return 1
             
         ## Loads the local file path for the saved game
-            saveFile = os.path.join(os.getcwd(), fileName + ".json")
+        saveFile = os.path.join(os.getcwd(), fileName + ".json")
         
         ## reads the json file as a Dict
         with open(saveFile, "r") as openfile:
