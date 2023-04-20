@@ -5,8 +5,7 @@ done - RankIndex
  """
 
 
-import os, sys, pytest
-
+import os, sys, pytest, pycryptodome
 if os.name!="nt": 
     sys.path.append(os.getcwd()+"/PyGame_Project/MVC")
     sys.path.append(os.getcwd()+"/PyGame_Project/MVC/Controller")
@@ -22,6 +21,9 @@ else:
 
 from model_puzzle import *
 from controller_universal import *
+from Crypto.Cipher import AES
+from Crypto.Random import get_random_bytes
+
 ## default puzzle generation for testing 
 pytest.fixture
 def generateString():
