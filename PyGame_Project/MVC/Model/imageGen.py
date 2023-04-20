@@ -1,5 +1,8 @@
 import os 
 from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.Model.Database.model_highscores import *
+
+
 from PIL import Image, ImageFont, ImageDraw 
 
 
@@ -59,9 +62,11 @@ def generateImage(saveName):
 
     aaaaa_text = "\t Words Correct: " + str(len(puzzle.guesses)) + "/" + str(len(puzzle.current_word_list))
     image_editable.text((40,680), aaaaa_text, (64, 45, 24), font=cardFontS)
+    
+    ##def get_player_rank(player_name, required_letter, all_letters):
+    playerRank = get_player_rank(saveName, puzzle.required_letter, puzzle.pangram)
 
-
-    aaaaa_text = "\t High Score Rank: ######" 
+    aaaaa_text = "\t High Score Rank: " + str(playerRank[2]) + "/" + str(playerRank[3])  
     image_editable.text((40,720), aaaaa_text, (64, 45, 24), font=cardFontS)
 
     """ 

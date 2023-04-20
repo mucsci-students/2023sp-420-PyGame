@@ -382,9 +382,7 @@ class PuzzleStats(Puzzle):
             return 1
             
         ## Loads the local file path for the saved game
-        # saveFile = "PyGame_Project/Saves/" + fileName + ".json"
-
-        saveFile = "PyGame_Project/Saves/" + fileName + ".json"
+            saveFile = os.path.join(os.getcwd(), fileName + ".json")
         
         ## reads the json file as a Dict
         with open(saveFile, "r") as openfile:
@@ -403,10 +401,9 @@ class PuzzleStats(Puzzle):
         self.RankIndex()
 
         openfile.close()
-        return 0 
-        
+        return 0        
 
-    ## ----------- Function Block for Suffle ----------- ##
+    ## ----------- Function Block for Shuffle ----------- ##
 
     """
     ShuffleKey function
