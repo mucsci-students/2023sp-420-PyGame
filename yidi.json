@@ -1,9 +1,0 @@
-{
-    "RequiredLetter": "x",
-    "PuzzleLetters": "nlfcuxo",
-    "CurrentPoints": 0,
-    "MaxPoints": 8,
-    "GuessedWords": [],
-    "SecretWordList": "{\"cipher_text\": \"FtsCvJlTHpApOGxK9Q==\", \"salt\": \"VWtYcDJzNXY4eS9CP0QoRytLYlBlU2hWbVlxM3Q2dzk=\", \"nonce\": \"+KBbmzKkrRG4RiaApUGd1Q==\", \"tag\": \"I6MbfvCLiJw2yJ2id94g3A==\"}",
-    "WordList": []
-}
