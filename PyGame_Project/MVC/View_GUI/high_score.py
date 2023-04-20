@@ -102,6 +102,8 @@ def start_hs(player_name, req_letter, pangram, player_score):
                         click = True
                     if pygame.draw.polygon(screen, ("white"), arrow_rect_vertices).collidepoint(event.pos):
                         start_gui()
+                    elif share.collidepoint(event.pos):
+                        generateImage(player_name)
 
             pygame.display.update()
             clock.tick(60)

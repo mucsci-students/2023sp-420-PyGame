@@ -2,7 +2,7 @@ import pygame, os
 
 from PyGame_Project.MVC.Model.model_puzzle import *
 from PyGame_Project.MVC.View_GUI.hints_gui import *
-
+from .pop_ups import LeavePopup, SavePopup, GiveUpPopup, BackPopup
 from ..effects.events import wire_events, GuessState
 from ..state import State
 from .header import create_header
@@ -24,6 +24,19 @@ def build_main_screen():
     bg_img = pygame.image.load(os.path.join(image_file_path, "Background_Image.png")).convert()
     fps = pygame.time.Clock()
     pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
+
+        
+    state.display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
+    state.start_animation_time = pygame.time.get_ticks()
+    state.give_up_popup = GiveUpPopup(state.display, state.puzzle_stats)
+    state.save_popup = SavePopup(state.display, state.puzzle_stats)
+    state.leave_popup = LeavePopup(state.display)
+    state.back_popup = BackPopup(state.display)
+
+    word_list = []
+    for word in state.puzzle_stats.current_word_list:
+        word_list.append(word[0])
+    state.word_list = word_list
 
 
     while state.running:

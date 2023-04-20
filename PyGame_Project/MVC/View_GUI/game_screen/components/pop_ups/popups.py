@@ -1,5 +1,6 @@
 import pygame, sys, re
 from pygame import *
+from PyGame_Project.MVC.View_GUI.high_score import start_hs
 
 
 min_width = 800
@@ -286,7 +287,7 @@ class GiveUpPopup(Popup):
 
         elif self.confirmation_bool:
             print("Popups.py Line 225 - This would call the highscore screen.")
-            # hey_ho_highscores(self.text_input, self.puzzle_stats.required_letter, self.puzzle_stats.pangram)
+            start_hs(self.text_input, self.puzzle_stats.required_letter, self.puzzle_stats.pangram, self.puzzle_stats.score)
 
     def on_no(self):
         self.__init__(self.screen, self.puzzle_stats)
