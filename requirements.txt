@@ -2,4 +2,4 @@ pygame --pre
 pytest
 pytest-cov
 Pillow
-pip3 install pycryptodomex
+pip3 
