@@ -4,7 +4,7 @@
 import os, json, random
 from PyGame_Project.MVC.Model.Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
 from PyGame_Project.MVC.Model.model_hints import *
-from encryption import *
+from PyGame_Project.MVC.Model.encryption import *
 
 ## Super Class
 class Puzzle():
