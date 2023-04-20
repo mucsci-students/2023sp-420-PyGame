@@ -1,10 +1,6 @@
-'''
-  Author: Robert Corle
-  Date: 2/12/23
-'''
 import sqlite3
 import random
-import os
+
 '''
   generate_table()
     Creates our table using the .txt files in Database/Individual_letters where

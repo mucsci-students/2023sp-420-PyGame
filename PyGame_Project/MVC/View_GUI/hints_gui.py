@@ -1,5 +1,5 @@
 import pygame, os, math
-from model_puzzle import *
+from PyGame_Project.MVC.Model.model_puzzle import *
 
 def hint_screen():
 

@@ -1,8 +1,8 @@
 # imports
 import pygame, sys,math
 from pygame.locals import *
-from gui_main_game import Game
-from controller_universal import *
+from PyGame_Project.MVC.View_GUI.gui_main_game import Game
+from PyGame_Project.MVC.Controller.controller_universal import *
 from pygame.locals import *
 
 # starting new game screen

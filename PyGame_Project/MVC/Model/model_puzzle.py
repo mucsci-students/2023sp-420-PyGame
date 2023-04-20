@@ -1,11 +1,9 @@
 """ 
-    Author: Robert 2/7/23 (model_puzzle.py)
     Author: Ethan (model_PuzzleStats)
-
 """
 import os, json, random
-from Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
-from model_hints import * 
+from PyGame_Project.MVC.Model.Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
+from PyGame_Project.MVC.Model.model_hints import *
 from encryption import *
 
 ## Super Class
@@ -23,7 +21,6 @@ class Puzzle():
         return cls._instance
             
     """ 
-        Author: Robert 2/7/23
         Definition: Generates a random puzzle and sets the following values:
             panagram, required_letter, total_points, and current_word_list
     """
@@ -46,7 +43,6 @@ class Puzzle():
             self.current_word_list = word[3]
 
     """ 
-        Author: Robert 2/7/23
         Definition: Generates a random puzzle from a given string.
         Returns: None if key is invalid. 
             Sets the following values if a valid key is provided:
@@ -319,7 +315,7 @@ class PuzzleStats(Puzzle):
 
     def get_save_game(self, fileName, encodeWords = False):
         ## Creates the local file path, plus includes the file extension  
-        saveFileName = "PyGame_Project/Saves/" + fileName + ".json"
+        saveFileName = os.path.join(os.getcwd(), fileName + ".json")
 
         ## Converting out List-List to List
         WordList = []
@@ -365,7 +361,7 @@ class PuzzleStats(Puzzle):
     def get_check_file(self, fileName):
         # print(f'filename is: {fileName}')
         check = bool
-        saveGames = os.listdir("PyGame_Project/Saves/")
+        saveGames = os.listdir(os.getcwd())
         check = (fileName + ".json") in saveGames
         return check
 
@@ -386,14 +382,18 @@ class PuzzleStats(Puzzle):
             return 1
             
         ## Loads the local file path for the saved game
+        # saveFile = "PyGame_Project/Saves/" + fileName + ".json"
+
         saveFile = "PyGame_Project/Saves/" + fileName + ".json"
         
         ## reads the json file as a Dict
         with open(saveFile, "r") as openfile:
             saveInfo = json.load(openfile)
+
+
         self.score = saveInfo["CurrentPoints"]
         self.guesses = saveInfo["GuessedWords"]
-        self.total_points = saveInfo["MaxPoints"]
+        self.total_points = saveInfo["MaxPoints"]        
         try:
             self.wordList = str(decrypt(saveInfo["SecretWordList"], "key")).split(". ")
         except:
@@ -403,7 +403,6 @@ class PuzzleStats(Puzzle):
         self.RankIndex()
 
         openfile.close()
-        
         return 0 
         
 
