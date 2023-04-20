@@ -77,7 +77,7 @@ def test_save_load_with_encrypt():
     check_1 = saveInfo["CurrentPoints"] == 2
     check_2 = len(saveInfo["GuessedWords"]) == 2
     check_3 = saveInfo["MaxPoints"] > 0
-    check_4 = saveInfo["wordList"] > 0
+    check_4 = saveInfo["WordList"] > 0
     check_5 = saveInfo["RequiredLetter"] == center_letter
     check_6 = len(set(saveInfo["PuzzleLetters"]).intersection(share_set)) == 7
 
