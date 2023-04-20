@@ -8,12 +8,12 @@ from PyGame_Project.MVC.Controller.controller_universal import *
 from model_puzzle import *
 from controller_universal import *
 pytest.fixture
-
+"""
 def puzzleGen():
     PuzzleStats().clear()
-    shareable_key = "ygyxjrfq"
+    shareable_key = "csqkhzct"
     prep_game_from_share(shareable_key)
-    
+""" 
     
 """
 Tests to load a saved game without encryption
