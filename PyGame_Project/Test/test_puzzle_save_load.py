@@ -22,24 +22,30 @@ def puzzleGen():
     shareable_key = "ygyxjrfq"
     prep_game_from_share(shareable_key)
     
-"""
-Tests to see if loading a saving a game without encryption
-"""
-def test_save_load():
-    someWordList = PuzzleStats().wordlist
-    #defaults to unencrypted, param here for clarity
-    Puzzle().get_save_game("Johnson", False)
-    Puzzle().LoadGame("Johnson")
     
-    assert someWordList == PuzzleStats().wordlist
+    
 """
-Tests to see if loading a saving a game with encryption 
+Tests to load a saved game without encryption
+""""""
+def test_save():
+    PuzzleStats().clear()
+    puzzleGen()
+    somewordList = Puzzle().current_word_list 
+    PuzzleStats().get_save_game("didi", False)
+    assert somewordList == PuzzleStats().wordList
+def test_load():
+    PuzzleStats().clear()
+    puzzleGen()"""
 """
+Tests to load a saved game with encryption
+""""""
 def test_save_load_with_encrypt():
-    someWordList = PuzzleStats().wordlist
-    Puzzle().get_save_game("Johnson", True)
-    Puzzle().LoadGame("Johnson")
-    assert someWordList == PuzzleStats().wordlist
+    PuzzleStats().clear()
+    puzzleGen()
+    somewordList = Puzzle().current_word_list   
+    PuzzleStats().get_save_game("yidi", True)
+    PuzzleStats().LoadGame("yidi")
+    assert somewordList == PuzzleStats().wordList"""
 
 """ def test_save_file():
 
@@ -71,7 +77,7 @@ def test_save_load_with_encrypt():
     check_1 = saveInfo["CurrentPoints"] == 2
     check_2 = len(saveInfo["GuessedWords"]) == 2
     check_3 = saveInfo["MaxPoints"] > 0
-    check_4 = saveInfo["WordList"] > 0
+    check_4 = saveInfo["wordList"] > 0
     check_5 = saveInfo["RequiredLetter"] == center_letter
     check_6 = len(set(saveInfo["PuzzleLetters"]).intersection(share_set)) == 7
 

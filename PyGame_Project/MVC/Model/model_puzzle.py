@@ -3,12 +3,10 @@
     Author: Ethan (model_PuzzleStats)
 
 """
-import os, json, random, hashlib
-from base64 import b64encode, b64decode
-from Cryptodome.Cipher import AES
-from Cryptodome.Random import get_random_bytes
+import os, json, random
 from Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
 from model_hints import * 
+from encryption import *
 
 ## Super Class
 class Puzzle():
@@ -126,47 +124,6 @@ class PuzzleStats(Puzzle):
         if hasattr(self, 'hints'):
             del self.hints 
         
-
-    ## -------- encrypt / decrypt ----------- ##
-    def encrypt(plain_text, password):
-        # generate a random salt
-        salt = get_random_bytes(AES.block_size)
-
-        # use the Scrypt KDF to get a private key from the password
-        private_key = hashlib.scrypt(
-            password.encode(), salt=salt, n=2**14, r=8, p=1, dklen=32)
-
-        # create cipher config
-        cipher_config = AES.new(private_key, AES.MODE_GCM)
-
-        # return a dictionary with the encrypted text
-        cipher_text, tag = cipher_config.encrypt_and_digest(bytes(plain_text, 'utf-8'))
-        return {
-            'cipher_text': b64encode(cipher_text).decode('utf-8'),
-            'salt': b64encode(salt).decode('utf-8'),
-            'nonce': b64encode(cipher_config.nonce).decode('utf-8'),
-            'tag': b64encode(tag).decode('utf-8')
-        }
-
-    def decrypt(enc_dict, password):
-        # decode the dictionary entries from base64
-        salt = b64decode(enc_dict['salt'])
-        cipher_text = b64decode(enc_dict['cipher_text'])
-        nonce = b64decode(enc_dict['nonce'])
-        tag = b64decode(enc_dict['tag'])
-        
-
-        # generate the private key from the password and salt
-        private_key = hashlib.scrypt(
-            password.encode(), salt=salt, n=2**14, r=8, p=1, dklen=32)
-
-        # create the cipher config
-        cipher = AES.new(private_key, AES.MODE_GCM, nonce=nonce)
-
-        # decrypt the cipher text
-        decrypted = cipher.decrypt_and_verify(cipher_text, tag)
-
-        return decrypted
 
     ## ----------- Function Block for Checking Guess Req's ----------- ##
 
@@ -359,6 +316,7 @@ class PuzzleStats(Puzzle):
         "PuzzleLetters": puzzleId 
     }
     """
+
     def get_save_game(self, fileName, encodeWords = False):
         ## Creates the local file path, plus includes the file extension  
         saveFileName = "PyGame_Project/Saves/" + fileName + ".json"
@@ -377,7 +335,7 @@ class PuzzleStats(Puzzle):
                 "CurrentPoints": self.score,
                 "MaxPoints" : self.total_points,
                 "GuessedWords": self.guesses,
-                "SecretWordList" : encrypt(WordList, key)
+                "SecretWordList" : encrypt('. '.join(WordList), key)
             }
         else:
         #if not encrypted
@@ -428,27 +386,24 @@ class PuzzleStats(Puzzle):
             return 1
             
         ## Loads the local file path for the saved game
-        # saveFile = "PyGame_Project/Saves/" + fileName + ".json"
-
         saveFile = "PyGame_Project/Saves/" + fileName + ".json"
-        ##decrpyt 
+        
         ## reads the json file as a Dict
-        #check for secret word list   
-     
-        with open(saveFile, "w") as openfile:
+        with open(saveFile, "r") as openfile:
             saveInfo = json.load(openfile)
-            self.score = saveInfo["CurrentPoints"]
-            self.guesses = saveInfo["GuessedWords"]
-            self.total_points = saveInfo["MaxPoints"]
-            try:
-                self.wordList = decrypt(saveInfo["SecretWordList"], "key")
-            except:
-                self.wordList = saveInfo["WordList"]
+        self.score = saveInfo["CurrentPoints"]
+        self.guesses = saveInfo["GuessedWords"]
+        self.total_points = saveInfo["MaxPoints"]
+        try:
+            self.wordList = str(decrypt(saveInfo["SecretWordList"], "key")).split(". ")
+        except:
+            self.wordList = saveInfo["WordList"]
 
         self.generate_puzzle_from_load(saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"])
         self.RankIndex()
 
         openfile.close()
+        
         return 0 
         
 
