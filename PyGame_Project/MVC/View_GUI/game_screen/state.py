@@ -7,12 +7,12 @@ import pygame
 @dataclass
 class State:
     pygame.init()
+    puzzle_stats = PuzzleStats()
     display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     start_animation_time = pygame.time.get_ticks()
-    give_up_popup = GiveUpPopup(display)
+    give_up_popup = GiveUpPopup(display, puzzle_stats)
+    save_popup = SavePopup(display, puzzle_stats)
     leave_popup = LeavePopup(display)
-    save_popup = SavePopup(display)
-    puzzle_stats = PuzzleStats()
     current_guess_state = None
     active_popup = None
     guess_state = None

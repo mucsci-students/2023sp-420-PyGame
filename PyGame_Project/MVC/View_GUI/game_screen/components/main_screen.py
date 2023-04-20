@@ -23,6 +23,8 @@ def build_main_screen():
     image_file_path = os.path.join(os.getcwd(), "PyGame_Project/mvc/view_gui/helpicons")
     bg_img = pygame.image.load(os.path.join(image_file_path, "Background_Image.png")).convert()
     fps = pygame.time.Clock()
+    pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
+
 
     while state.running:
         fps.tick(60)
@@ -33,4 +35,7 @@ def build_main_screen():
             create_center(state)
 
         wire_events(state)
+        if state.first_run:
+            state.current_guess = ''
+        
         pygame.display.update()

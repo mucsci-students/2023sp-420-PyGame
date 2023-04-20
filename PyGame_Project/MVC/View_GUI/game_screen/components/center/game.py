@@ -16,6 +16,8 @@ def create_game(state):
         center_hexagon = Hexagon(x, y, hex_size, hex_size, state.required_letter)
         hex_positions = _get_hex_positions(center_x, center_y, hex_size, spacing)
         if state.first_run:
+            pygame.event.set_allowed(pygame.MOUSEBUTTONUP)
+            pygame.time.delay(200)
             state.first_run = False
             state.surrounding_hexagons = [Hexagon(pos[0], pos[1], hex_size, hex_size, letter) for pos, letter in
                                           zip(hex_positions, state.current_puzzle)]

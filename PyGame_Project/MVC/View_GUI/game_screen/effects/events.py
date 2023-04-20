@@ -57,23 +57,23 @@ def wire_events(state):
                     if event.key == pygame.K_BACKSPACE:
                         state.current_guess = ''
 
-            elif event.type == pygame.VIDEORESIZE:
-                if event.w < min_width:
-                    width = min_width
-                else:
-                    width = event.w
-
-                if event.h < min_height:
-                    height = min_height
-                else:
-                    height = event.h
-
-                state.display = pygame.display.set_mode((width, height), pygame.RESIZABLE)
-                state.scroll_position = 0
-                update_hexagon_positions(state)
-
         elif state.active_popup.active:
             state.active_popup.handle_event(event, state)
+        
+        if event.type == pygame.VIDEORESIZE:
+            if event.w < min_width:
+                width = min_width
+            else:
+                width = event.w
+
+            if event.h < min_height:
+                height = min_height
+            else:
+                height = event.h
+
+            state.display = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+            state.scroll_position = 0
+            update_hexagon_positions(state)
 
 
 def clicked_shuffle(state):
