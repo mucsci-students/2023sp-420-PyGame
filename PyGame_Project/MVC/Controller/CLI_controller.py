@@ -23,7 +23,7 @@ def tab_completion(typed_string, command_set):
   if command_set == 1:
     commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/highscores', '/help', '/exit']
   elif command_set == 2:
-    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints', '/giveup', '/highscores', '/createimage']
+    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints', '/giveup', '/highscores']
 
   # finds commands that match what the user started to type
   matches = [c for c in commands if c.startswith(typed_string)]
@@ -57,6 +57,10 @@ def on_key_press(key, typed_letters, command_num):
   # when a user types (most cases)
   if command_num != 3:
 
+    # if the user is entering a save filename
+    if command_num == 4 and key in ["/", "\\", ":", "\"", "<", ">", "|"]:
+        return
+
     # if the tab key is pressed (tab completion)
     if key == '\t':
       typed_string, ending_string = tab_completion(''.join(typed_letters).lower(), command_num)
@@ -74,27 +78,16 @@ def on_key_press(key, typed_letters, command_num):
     else:
       typed_letters.append(key)
       typed_string = ''.join(typed_letters)
-    
-    """ 
-  # if a single alpha/numeric character or '/' is pressed (like: /, a, 1; not like: shift, backspace)
-  elif key.isalpha() or key.isnumeric() or key == '/':
-    typed_letters.append(key)
-    typed_string = ''.join(typed_letters)
-
-  # if the key pressed is not tab, backspace, single alpha char, or '/'
-  else:
-    return
-    """
   
   # if the user is entering a high score (limit of 3 letters)
   else:
-    if len(typed_letters) == 3:
-      return
     # if the backspace key is pressed (unix = \xf7; win = \x08)
-    elif key == '\x7f' or key == '\x08':
+    if key == '\x7f' or key == '\x08':
       typed_letters and typed_letters.pop()
       print("\033[K", end="")
       typed_string = ''.join(typed_letters)
+    elif len(typed_letters) == 3:
+      return
     else:
       typed_letters.append(key)
       typed_string = ''.join(typed_letters)
@@ -197,7 +190,7 @@ def main_response(userInput):
 def load_save_game():
   ## all load options
   print_load_options()
-  file_name = user_input(0)
+  file_name = user_input(4)
 
   ## user confirmation 
   print_load_game()
@@ -235,7 +228,7 @@ def keyStart():
 def saveGamePrompt():
     while(True):
       print("Enter title to save game as:")
-      userInput = user_input(0)  #asks user for an input
+      userInput = user_input(4)  #asks user for an input
       print(userInput)
       input()
       cls()
@@ -252,11 +245,9 @@ def activeGameLoop():
 
 # when an active game is in play
 def activeGame():
-  command_set = 2
-
   print_current_puzzle()
   print("Enter your guess.")
-  userInput = user_input(command_set).lower() #asks user for input to match
+  userInput = user_input(2).lower() #asks user for input to match
   if (userInput == ""):
     return True
   elif (userInput[0] != "/"):
@@ -283,7 +274,7 @@ def active_game_commands(userInput):
     case "/savegame":
       cls()
       print(f"Enter filename: ")
-      file_name = user_input(0)
+      file_name = user_input(4)
       cls()
       save_current_game(file_name)
       return True
@@ -297,7 +288,7 @@ def active_game_commands(userInput):
       print_game_save()
       if(user_input(0).lower() == "y"):
         print(f"Enter filename: ")
-        file_name = user_input(0)
+        file_name = user_input(4)
         cls()
         save_current_game(file_name)
       PuzzleStats().clear()
@@ -334,15 +325,7 @@ def active_game_commands(userInput):
     case "/highscores":
       cls()
       high_score_current_puzzle()
-      return True
-    
-    case "/createimage":
-      cls()
-      print("Please enter a filename for your puzzle image: ")
-      filename = user_input(0)
-      generateImage(filename)
-      print("\nImage Saved!")
-      time.sleep(1)
+      space_out()
       return True
 
     case _:
@@ -437,9 +420,23 @@ def give_up():
       player_score = PuzzleStats().score
       insert_or_update_score(player_name, req_letter, all_letters, player_score)
 
+      # prints the high score table
       cls()
       print_pangram_stats(req_letter, all_letters)
       high_score_current_puzzle()
+      space_out()
+
+      # asks to generate image
+      cls()
+      print_generate_image()
+      answer = user_input(0).lower()
+      match answer:
+        case "y":
+          generate_new_image(player_name)
+        
+        case _:
+          print("Image not saved..")
+          time.sleep(1)
 
       return 1
     
@@ -484,4 +481,9 @@ def high_score_current_puzzle():
   all_letters = PuzzleStats().pangram
   req_letter = PuzzleStats().required_letter
   print_high_scores(req_letter, all_letters)
-  space_out()
+
+# for when the user wants to generate an image for the current puzzle
+def generate_new_image(player_name):
+  generateImage(player_name)
+  print("Image Saved!")
+  time.sleep(1)

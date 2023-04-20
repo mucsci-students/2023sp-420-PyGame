@@ -35,7 +35,7 @@ def print_current_puzzle():
     puzzle = PuzzleStats()
     
     prettyGuesses = get_pretty_guesses(puzzle.guesses)
-    
+
     # variables to store each letter 
     req = puzzle.shuffled_puzzle[0]
     fir = puzzle.shuffled_puzzle[3]
@@ -71,8 +71,7 @@ def print_current_puzzle():
           /back      /showall 
           /share     /savegame 
           /hints     /highscores
-          /giveup    /createimage
-                 /exit
+          /giveup    /exit
         
         """
     print(currentProgress)
@@ -204,7 +203,6 @@ In-Game Commands:
 /hints            Shows the hint matrix and a two-letter list
 /giveup           Finishes the game and lets you enter a name for the current puzzle's high score
 /highscores       Searches for the top 10 high scores from a pangram and required letter for the current puzzle
-/createimage      Creates a Puzzle Card image with statistics of the current puzzle
 /exit             Exits the program
 
 Press the space key to continue...
@@ -248,12 +246,11 @@ def print_all_guesses(stats):
 
 ## Returns a list of all save files able to load (load options)
 def get_load_options():
-    save_path = ''
-    for path in sys.path:
-        if "Saves" in path:
-            save_path = path
-            break
-    options = os.listdir(save_path)
+    options = []
+    for file in os.listdir(os.getcwd()):
+        if ".json" in file:
+            options.append(file)
+
     return options
 
 ## prints a detatiled "Invalid Guess" given a passed value from print_guess_outcome()
@@ -355,7 +352,7 @@ N
 
 
 def print_enter_name():
-    print("Enter a 3-digit name for your high score: ")
+    print("Enter a 3 character name for your high score: ")
 
 
 def print_high_scores(req_letter, all_letters):
@@ -379,3 +376,7 @@ def print_high_scores(req_letter, all_letters):
 def print_pangram_stats(req_letter, all_letters):
     print(f"\n\tPangram: {all_letters}")
     print(f"\tRequired letter: {req_letter}")
+
+
+def print_generate_image():
+    print("Would you like to generate an image for your puzzle?\nY\nN\n")

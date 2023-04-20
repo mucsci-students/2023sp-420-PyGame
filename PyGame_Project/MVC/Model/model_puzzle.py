@@ -370,7 +370,23 @@ class PuzzleStats(Puzzle):
             return 1
             
         ## Loads the local file path for the saved game
-        # saveFile = "PyGame_Project/Saves/" + fileName + ".json"
+        saveFile = os.path.join(os.getcwd(), fileName + ".json")
+        
+        ## reads the json file as a Dict
+        with open(saveFile, "r") as openfile:
+            saveInfo = json.load(openfile)
+
+
+        self.score = saveInfo["CurrentPoints"]
+        self.guesses = saveInfo["GuessedWords"]
+        self.total_points = saveInfo["MaxPoints"]
+        self.wordList = saveInfo["WordList"]
+
+        self.generate_puzzle_from_load(saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"])
+        self.RankIndex()
+
+        openfile.close()
+        return 0
         
 
     ## ----------- Function Block for Shuffle ----------- ##
