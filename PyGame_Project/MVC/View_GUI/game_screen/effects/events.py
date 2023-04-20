@@ -96,11 +96,18 @@ def clicked_give_up(state):
 
 def clicked_leave(state):
     state.active_popup = state.leave_popup
-    state.leave_popup.show()
+    state.active_popup.show()
 
 
 def clicked_hints():
     hint_screen()
+
+
+def clicked_go_back(state):
+    state.active_popup = state.back_popup
+    if state.active_popup.show():
+        state.running = False
+        
 
 
 def reset_timer(state):
