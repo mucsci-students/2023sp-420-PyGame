@@ -1,8 +1,8 @@
 
-import hashlib, Cryptodome
+import hashlib, pycryptodome
 from base64 import b64encode, b64decode
-from Cryptodome.Cipher import AES
-from Cryptodome.Random import get_random_bytes
+from pycryptodome.Cipher import AES
+from pycryptodome.Random import get_random_bytes
 
 
 ## -------- encrypt / decrypt ----------- ##
