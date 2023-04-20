@@ -2,3 +2,4 @@ pygame --pre
 pytest
 pytest-cov
 Pillow
+pycryptodome

@@ -5,6 +5,7 @@ import os, json, random
 
 from PyGame_Project.MVC.Model.Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
 from PyGame_Project.MVC.Model.model_hints import *
+from PyGame_Project.MVC.Model.encryption import *
 
 ## Super Class
 class Puzzle():
@@ -312,7 +313,7 @@ class PuzzleStats(Puzzle):
         "PuzzleLetters": puzzleId 
     }
     """
-    def get_save_game(self, fileName):
+    def  get_save_game(self, fileName, encodeWords = False):
         ## Creates the local file path, plus includes the file extension  
         saveFileName = os.path.join(os.getcwd(), fileName + ".json")
 
@@ -321,15 +322,28 @@ class PuzzleStats(Puzzle):
         for word in self.current_word_list:
             WordList.append(word[0])
 
+        # "secure" key for encryption
+        key = "key"
         ## Create json object
-        saveStat = {
-            "RequiredLetter": self.required_letter,
-            "PuzzleLetters": self.pangram,
-            "CurrentPoints": self.score,
-            "MaxPoints" : self.total_points,
-            "GuessedWords": self.guesses,
-            "WordList" : WordList
-        }
+        if(encodeWords):
+            saveStat = {
+                "RequiredLetter": self.required_letter,
+                "PuzzleLetters": self.pangram,
+                "CurrentPoints": self.score,
+                "MaxPoints" : self.total_points,
+                "GuessedWords": self.guesses,
+                "SecretWordList" : encrypt('. '.join(WordList), key)
+            }
+        else:
+        #if not encrypted
+            saveStat = {
+                "RequiredLetter": self.required_letter,
+                "PuzzleLetters": self.pangram,
+                "CurrentPoints": self.score,
+                "MaxPoints" : self.total_points,
+                "GuessedWords": self.guesses,
+                "WordList" : WordList
+            }
         
         json_object = json.dumps(saveStat, indent=4)
 
@@ -361,7 +375,7 @@ class PuzzleStats(Puzzle):
     Function loads the game from a given file name; Checks for valid file first
         Case 1: File Name is not valid; returns an error message
         Case 2: File Name is valid; populates Global Var with the players stats and load the puzzle
-
+        Reads file for secret word list, if this fails, it must be unencrypted, and continues loading.
     Returns a "1" if the file name couldn"t be found
     """
     def LoadGame(self, fileName):
@@ -379,8 +393,11 @@ class PuzzleStats(Puzzle):
 
         self.score = saveInfo["CurrentPoints"]
         self.guesses = saveInfo["GuessedWords"]
-        self.total_points = saveInfo["MaxPoints"]
-        self.wordList = saveInfo["WordList"]
+        self.total_points = saveInfo["MaxPoints"]   
+        try:
+            self.wordList = str(decrypt(saveInfo["SecretWordList"], "key")).split(". ")
+        except:
+            self.wordList = saveInfo["WordList"]
 
         self.generate_puzzle_from_load(saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"])
         self.RankIndex()
