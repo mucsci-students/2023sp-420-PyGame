@@ -5,7 +5,7 @@ done - RankIndex
  """
 
 
-import os, sys, pytest, pycryptodome
+import os, sys, pytest#, pycryptodome
 if os.name!="nt": 
     sys.path.append(os.getcwd()+"/PyGame_Project/MVC")
     sys.path.append(os.getcwd()+"/PyGame_Project/MVC/Controller")
