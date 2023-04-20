@@ -1,5 +1,5 @@
 from ..shapes import Rectangle, Hexagon
-from ...colors import COLOR_BLACK, COLOR_NEON_ORANGE, COLOR_ORANGE
+from ...colors import COLOR_BLACK, COLOR_NEON_ORANGE, COLOR_ORANGE, COLOR_INVALID_COLOR, COLOR_VALID_COLOR
 
 
 def create_input_box(state):
@@ -8,9 +8,16 @@ def create_input_box(state):
     height = 0.0625 * state.display.get_height()
     y_buffer = state.display.get_height() - (height * 2)
 
+    if state.current_guess_state == state.guess_state.INCORRECT:
+        font_color = COLOR_INVALID_COLOR
+    elif state.current_guess_state == state.guess_state.CORRECT:
+        font_color = COLOR_VALID_COLOR
+    else:
+        font_color = COLOR_ORANGE
+
     shape = Rectangle(
         x=x_buffer, y=y_buffer, w=width, h=height,
-        font_color=COLOR_ORANGE,
+        font_color=font_color,
         text=state.current_guess
     )
 

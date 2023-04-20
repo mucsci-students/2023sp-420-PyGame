@@ -18,6 +18,7 @@ class Rectangle(Shape):
         self.font_surface = self.font.render(text, True, font_color)
         self.font_rect = self.font_surface.get_rect()
         self.grad_surface = pygame.Surface((w, h), pygame.SRCALPHA)
+        self.text = text
 
     def draw(self, display, color):
         pygame.draw.rect(display, color, self.shape, 2)
@@ -32,11 +33,7 @@ class Rectangle(Shape):
 
     def is_hover(self):
         return self.shape.collidepoint(pygame.mouse.get_pos())
-
-    # @property
-    # def position(self):
-    #     return self.x, self.y
-
+    
 
 @dataclass
 class Hexagon(Shape):
@@ -61,6 +58,7 @@ class Hexagon(Shape):
         text_surface = font.render(self.text, True, font_color)
         text_rect = text_surface.get_rect(center=self.center)
         display.blit(text_surface, text_rect)
+
 
     def is_hover(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()

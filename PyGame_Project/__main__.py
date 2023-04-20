@@ -13,7 +13,6 @@ This file is the main controller for the Spelling Bee Game
 def main():
     import sys
     import os
-
     from PyGame_Project.MVC.Controller.CLI_controller import main_menu_handler
     from PyGame_Project.MVC.View_GUI.gui_main_menu import start_gui
 

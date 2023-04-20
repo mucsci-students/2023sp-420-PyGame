@@ -131,7 +131,7 @@ insert_or_update_score('Ethan', 's', 'efdoras', 68)
 insert_or_update_score('Priscilla', 's', 'efdoras', 100)
 insert_or_update_score('Kiah', 's', 'efdoras', 100)
 
-player_rank = get_player_rank('robert', 'f', 'efdoras')
+player_rank = get_player_rank('Benjy', 's', 'efdoras')
 all_scores = get_scores_for_puzzle('s', 'efdoras')
 print(f'Player rank is: {player_rank}')
 print(f'All scores for puzzle are: {all_scores}')
