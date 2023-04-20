@@ -245,6 +245,10 @@ def activeGameLoop():
 
 # when an active game is in play
 def activeGame():
+  if PuzzleStats().check_progress() == True:
+    game_complete()
+    return False
+  
   print_current_puzzle()
   print("Enter your guess.")
   userInput = user_input(2).lower() #asks user for input to match
@@ -482,8 +486,55 @@ def high_score_current_puzzle():
   req_letter = PuzzleStats().required_letter
   print_high_scores(req_letter, all_letters)
 
+
+# when the user completes the current puzzle (score = total points)
+def game_complete():
+  print_game_over()
+  space_out()
+
+  # enter high score
+  print_enter_name()
+  player_name = user_input(3)
+  all_letters = PuzzleStats().pangram
+  req_letter = PuzzleStats().required_letter
+  player_score = PuzzleStats().score
+  insert_or_update_score(player_name, req_letter, all_letters, player_score)
+
+  # show current puzzle's high score
+  cls()
+  print_pangram_stats(req_letter, all_letters)
+  high_score_current_puzzle()
+  space_out()
+
+  # asks to generate image
+  cls()
+  print_generate_image()
+  answer = user_input(0).lower()
+  match answer:
+    case "y":
+      generate_new_image(player_name)
+    
+    case _:
+      print("Image not saved..")
+      time.sleep(1)
+
+  return False
+
+
 # for when the user wants to generate an image for the current puzzle
 def generate_new_image(player_name):
   generateImage(player_name)
   print("Image Saved!")
   time.sleep(1)
+
+
+# not used, might implement later
+"""
+def enter_high_score_name():
+  print_enter_name()
+  player_name = user_input(3)
+  all_letters = PuzzleStats().pangram
+  req_letter = PuzzleStats().required_letter
+  player_score = PuzzleStats().score
+  insert_or_update_score(player_name, req_letter, all_letters, player_score)
+"""

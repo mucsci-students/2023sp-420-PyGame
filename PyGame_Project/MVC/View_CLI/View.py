@@ -225,7 +225,10 @@ def print_game_over():
                (%%%) 
                  !
               Congrats!
-      You Completed the Puzzle                      
+      You Completed the Puzzle!
+
+      
+      Press space to continue...                   
       """
     print(gameOver)
 
