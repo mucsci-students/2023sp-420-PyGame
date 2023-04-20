@@ -326,13 +326,15 @@ class PuzzleStats(Puzzle):
         key = "key"
         ## Create json object
         if(encodeWords):
+            WordList = '. '.join(WordList)
             saveStat = {
                 "RequiredLetter": self.required_letter,
                 "PuzzleLetters": self.pangram,
                 "CurrentPoints": self.score,
                 "MaxPoints" : self.total_points,
                 "GuessedWords": self.guesses,
-                "SecretWordList" : encrypt('. '.join(WordList), key)
+                "SecretWordList" : encrypt(WordList, key),
+                "WordList" : []
             }
         else:
         #if not encrypted
@@ -342,6 +344,7 @@ class PuzzleStats(Puzzle):
                 "CurrentPoints": self.score,
                 "MaxPoints" : self.total_points,
                 "GuessedWords": self.guesses,
+                "SecretWordList" : [],
                 "WordList" : WordList
             }
         
@@ -395,10 +398,10 @@ class PuzzleStats(Puzzle):
         self.guesses = saveInfo["GuessedWords"]
         self.total_points = saveInfo["MaxPoints"]   
         try:
-            self.wordList = str(decrypt(saveInfo["SecretWordList"], "key")).split(". ")
+            self.wordList  = decrypt(saveInfo["SecretWordList"], "key").split(". ")
         except:
             self.wordList = saveInfo["WordList"]
-
+        
         self.generate_puzzle_from_load(saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"])
         self.RankIndex()
 

@@ -8,35 +8,34 @@ from PyGame_Project.MVC.Controller.controller_universal import *
 from model_puzzle import *
 from controller_universal import *
 pytest.fixture
-"""
+
 def puzzleGen():
     PuzzleStats().clear()
     shareable_key = "csqkhzct"
     prep_game_from_share(shareable_key)
-""" 
+
     
 """
 Tests to load a saved game without encryption
-""""""
-def test_save():
+"""
+def test_save_load_without_encryption():
     PuzzleStats().clear()
     puzzleGen()
-    somewordList = Puzzle().current_word_list 
+    somewordList = ["conflux", "flux"]  
     PuzzleStats().get_save_game("didi", False)
+    PuzzleStats().LoadGame("didi")
     assert somewordList == PuzzleStats().wordList
-def test_load():
-    PuzzleStats().clear()
-    puzzleGen()"""
+
 """
 Tests to load a saved game with encryption
-""""""
+"""
 def test_save_load_with_encrypt():
     PuzzleStats().clear()
     puzzleGen()
-    somewordList = Puzzle().current_word_list   
+    somewordList = ["conflux", "flux"]  
     PuzzleStats().get_save_game("yidi", True)
     PuzzleStats().LoadGame("yidi")
-    assert somewordList == PuzzleStats().wordList"""
+    assert somewordList == PuzzleStats().wordList
 
 
 """ def test_save_file():
