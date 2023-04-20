@@ -3,8 +3,8 @@
 """
 import os, json, random
 
-from Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
-from model_hints import * 
+from PyGame_Project.MVC.Model.Database.model_database import get_random_word_info, get_word_info_from_pangram, get_word_info_from_load
+from PyGame_Project.MVC.Model.model_hints import *
 
 ## Super Class
 class Puzzle():
@@ -120,7 +120,6 @@ class PuzzleStats(Puzzle):
         if hasattr(self, 'hints'):
             del self.hints 
         
-
 
     ## ----------- Function Block for Checking Guess Req's ----------- ##
 
@@ -315,7 +314,7 @@ class PuzzleStats(Puzzle):
     """
     def get_save_game(self, fileName):
         ## Creates the local file path, plus includes the file extension  
-        saveFileName = "PyGame_Project/Saves/" + fileName + ".json"
+        saveFileName = os.path.join(os.getcwd(), fileName + ".json")
 
         ## Converting out List-List to List
         WordList = []
@@ -351,7 +350,7 @@ class PuzzleStats(Puzzle):
     def get_check_file(self, fileName):
         # print(f'filename is: {fileName}')
         check = bool
-        saveGames = os.listdir("PyGame_Project/Saves/")
+        saveGames = os.listdir(os.getcwd())
         check = (fileName + ".json") in saveGames
         return check
 
@@ -371,9 +370,7 @@ class PuzzleStats(Puzzle):
             return 1
             
         ## Loads the local file path for the saved game
-        # saveFile = "PyGame_Project/Saves/" + fileName + ".json"
-
-        saveFile = "PyGame_Project/Saves/" + fileName + ".json"
+        saveFile = os.path.join(os.getcwd(), fileName + ".json")
         
         ## reads the json file as a Dict
         with open(saveFile, "r") as openfile:
@@ -389,10 +386,10 @@ class PuzzleStats(Puzzle):
         self.RankIndex()
 
         openfile.close()
-        return 0 
+        return 0
         
 
-    ## ----------- Function Block for Suffle ----------- ##
+    ## ----------- Function Block for Shuffle ----------- ##
 
     """
     ShuffleKey function

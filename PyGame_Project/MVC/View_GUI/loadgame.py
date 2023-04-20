@@ -1,8 +1,8 @@
 # imports
 import pygame, sys, os, math
 from pygame.locals import *
-from game_screen.components.main_screen import build_main_screen
-from controller_universal import *
+from PyGame_Project.MVC.View_GUI.game_screen.components.main_screen import build_main_screen
+from PyGame_Project.MVC.Controller.controller_universal import *
 
 # load start screen
 def start_load():

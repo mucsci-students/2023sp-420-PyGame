@@ -1,8 +1,8 @@
 from dataclasses import dataclass
-from Model.model_puzzle import PuzzleStats
 from .components.pop_ups import LeavePopup, SavePopup, GiveUpPopup, BackPopup
-
+from PyGame_Project.MVC.Model.model_puzzle import PuzzleStats
 import pygame
+
 
 @dataclass
 class State:
@@ -10,13 +10,14 @@ class State:
     puzzle_stats = PuzzleStats()
     running: bool = True
     
-    display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
+    # display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     start_animation_time = pygame.time.get_ticks()
-    give_up_popup = GiveUpPopup(display, puzzle_stats)
-    save_popup = SavePopup(display, puzzle_stats)
-    leave_popup = LeavePopup(display)
-    back_popup = BackPopup(display)
+    # give_up_popup = GiveUpPopup(display, puzzle_stats)
+    # save_popup = SavePopup(display, puzzle_stats)
+    # leave_popup = LeavePopup(display)
+    # back_popup = BackPopup(display)
     current_guess_state = None
+
     active_popup = None
     guess_state = None
 

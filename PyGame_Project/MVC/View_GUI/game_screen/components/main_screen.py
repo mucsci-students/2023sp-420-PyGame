@@ -1,7 +1,7 @@
 import pygame, os
 
-from model_puzzle import *
-from hints_gui import *
+from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.View_GUI.hints_gui import *
 
 from ..effects.events import wire_events, GuessState
 from ..state import State

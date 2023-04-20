@@ -4,10 +4,11 @@ import sys
 import os
 import time
 
-from model_puzzle import *
-from controller_universal import *
-from View import *
-
+from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.Controller.controller_universal import *
+from PyGame_Project.MVC.View_CLI.View import *
+from PyGame_Project.MVC.Model.Database.model_highscores import *
+from PyGame_Project.MVC.Model.imageGen import *
 
 
 ### ------------MAIN CLI Controller--------------- ###
@@ -20,9 +21,9 @@ def tab_completion(typed_string, command_set):
   
   # gets the correct command set, depending on if the user is on the Main Menu or the Active Game screen
   if command_set == 1:
-    commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/help', '/exit']
+    commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/highscores', '/help', '/exit']
   elif command_set == 2:
-    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints']
+    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints', '/giveup', '/highscores']
 
   # finds commands that match what the user started to type
   matches = [c for c in commands if c.startswith(typed_string)]
@@ -53,36 +54,44 @@ def user_input(command_set):
 
 # Figures out information about the key pressed
 def on_key_press(key, typed_letters, command_num):
-  # if the tab key is pressed (tab completion)
-  if key == '\t':
-    typed_string, ending_string = tab_completion(''.join(typed_letters).lower(), command_num)
-    if ending_string:
-      typed_letters.extend(ending_string)
-    typed_string = ''.join(typed_letters)
+  # when a user types (most cases)
+  if command_num != 3:
 
-  # if the backspace key is pressed (unix = \xf7; win = \x08)
-  elif key == '\x7f' or key == '\x08':
-    typed_letters and typed_letters.pop()
-    print("\033[K", end="")
-    typed_string = ''.join(typed_letters)
+    # if the user is entering a save filename
+    if command_num == 4 and key in ["/", "\\", ":", "\"", "<", ">", "|"]:
+        return
+
+    # if the tab key is pressed (tab completion)
+    if key == '\t':
+      typed_string, ending_string = tab_completion(''.join(typed_letters).lower(), command_num)
+      if ending_string:
+        typed_letters.extend(ending_string)
+      typed_string = ''.join(typed_letters)
+
+    # if the backspace key is pressed (unix = \xf7; win = \x08)
+    elif key == '\x7f' or key == '\x08':
+      typed_letters and typed_letters.pop()
+      print("\033[K", end="")
+      typed_string = ''.join(typed_letters)
+
+    # allows all keys to be pressed (as opposed to commented out elif and else statement)
+    else:
+      typed_letters.append(key)
+      typed_string = ''.join(typed_letters)
   
-    """ 
-  # if a single alpha/numeric character or '/' is pressed (like: /, a, 1; not like: shift, backspace)
-  elif key.isalpha() or key.isnumeric() or key == '/':
-    typed_letters.append(key)
-    typed_string = ''.join(typed_letters)
-
-  # if the key pressed is not tab, backspace, single alpha char, or '/'
+  # if the user is entering a high score (limit of 3 letters)
   else:
-    return
-    """
+    # if the backspace key is pressed (unix = \xf7; win = \x08)
+    if key == '\x7f' or key == '\x08':
+      typed_letters and typed_letters.pop()
+      print("\033[K", end="")
+      typed_string = ''.join(typed_letters)
+    elif len(typed_letters) == 3:
+      return
+    else:
+      typed_letters.append(key)
+      typed_string = ''.join(typed_letters)
   
-  # allows all keys to be pressed (as opposed to commented out elif and else statement)
-  else:
-    typed_letters.append(key)
-    typed_string = ''.join(typed_letters)
-  
-
   # outputs the final string after the last key is pressed to the console
   print(typed_string, end='\r')
 
@@ -159,6 +168,9 @@ def main_response(userInput):
     case "/startsharedgame":
       start_shared_game()
 
+    case "/highscores":
+      high_score_lookup()
+
     case "/help":
       cls()
       print_help()
@@ -178,7 +190,7 @@ def main_response(userInput):
 def load_save_game():
   ## all load options
   print_load_options()
-  file_name = user_input(0)
+  file_name = user_input(4)
 
   ## user confirmation 
   print_load_game()
@@ -186,7 +198,7 @@ def load_save_game():
   match answer:
     case "y":
       if (start_game_with_key_from_load(file_name) == 1):
-        print("Was unalbe to Load the File")
+        print("Was unable to load the file")
     case "n":
       cls()
       return
@@ -216,7 +228,7 @@ def keyStart():
 def saveGamePrompt():
     while(True):
       print("Enter title to save game as:")
-      userInput = user_input(0)  #asks user for an input
+      userInput = user_input(4)  #asks user for an input
       print(userInput)
       input()
       cls()
@@ -233,11 +245,13 @@ def activeGameLoop():
 
 # when an active game is in play
 def activeGame():
-  command_set = 2
-
+  if PuzzleStats().check_progress() == True:
+    game_complete()
+    return False
+  
   print_current_puzzle()
   print("Enter your guess.")
-  userInput = user_input(command_set).lower() #asks user for input to match
+  userInput = user_input(2).lower() #asks user for input to match
   if (userInput == ""):
     return True
   elif (userInput[0] != "/"):
@@ -264,7 +278,7 @@ def active_game_commands(userInput):
     case "/savegame":
       cls()
       print(f"Enter filename: ")
-      file_name = user_input(0)
+      file_name = user_input(4)
       cls()
       save_current_game(file_name)
       return True
@@ -272,14 +286,13 @@ def active_game_commands(userInput):
     case "/showall":
       print_all_guesses(PuzzleStats())
       space_out()
-      
       return True
     
     case "/back":
       print_game_save()
       if(user_input(0).lower() == "y"):
         print(f"Enter filename: ")
-        file_name = user_input(0)
+        file_name = user_input(4)
         cls()
         save_current_game(file_name)
       PuzzleStats().clear()
@@ -301,6 +314,21 @@ def active_game_commands(userInput):
       cls()
       PuzzleStats().generate_hints()
       print_hint()
+      space_out()
+      return True
+    
+    case "/giveup":
+      cls()
+      print_giveup_confirmation()
+      if give_up() != 2:
+        PuzzleStats().clear()
+        return False
+      cls()
+      return True
+    
+    case "/highscores":
+      cls()
+      high_score_current_puzzle()
       space_out()
       return True
 
@@ -334,7 +362,6 @@ def start_game_with_key_from_load(file_name):
 
   activeGameLoop()
     
-
 # creates a save file (saves current game)
 def save_current_game(filename):
   PuzzleStats().get_save_game(filename)
@@ -380,8 +407,134 @@ def start_shared_game():
         return start_shared_game()
       elif key == 'n':
         return True
-
   
   activeGameLoop()
 
+
+# for when the user considers giving up their current puzzle
+def give_up():
+  answer = user_input(0).lower()
+  match answer:
+    # you gave up!
+    case "y":
+      print_enter_name()
+      player_name = user_input(3)
+      all_letters = PuzzleStats().pangram
+      req_letter = PuzzleStats().required_letter
+      player_score = PuzzleStats().score
+      insert_or_update_score(player_name, req_letter, all_letters, player_score)
+
+      # prints the high score table
+      cls()
+      print_pangram_stats(req_letter, all_letters)
+      high_score_current_puzzle()
+      space_out()
+
+      # asks to generate image
+      cls()
+      print_generate_image()
+      answer = user_input(0).lower()
+      match answer:
+        case "y":
+          generate_new_image(player_name)
+        
+        case _:
+          print("Image not saved..")
+          time.sleep(1)
+
+      return 1
+    
+    # you didn't give up!
+    case _:
+      return 2
+
+
+# for when the user wants to search for a high score with their selected pangram and required letter
+# accessed through the MAIN MENU
+def high_score_lookup():
+  while True:
+    cls()
+    print("Enter the pangram (including the required letter):")
+    all_letters = user_input(0).lower()
+    if len(set(all_letters)) != 7:
+      print("Pangram does not contain 7 unique letters, try again.")
+      time.sleep(1)
+    else:
+      break
+
+  while True:
+    cls()
+    print(f"\n\tPangram: {all_letters}")
+    print("\nEnter the required letter:")
+    req_letter = user_input(0).lower()
+    if len(req_letter) != 1 or req_letter not in all_letters:
+      print("Required letter should be 1 letter within the above pangram.")
+      time.sleep(1.5)
+    else:
+      cls()
+      print_pangram_stats(req_letter, all_letters)
+      break
   
+  print_high_scores(req_letter, set(all_letters))
+  space_out()
+
+
+# for when the user wants to see the high scores for the current puzzle they're playing
+# accessed through an ACTIVE PUZZLE
+def high_score_current_puzzle():
+  all_letters = PuzzleStats().pangram
+  req_letter = PuzzleStats().required_letter
+  print_high_scores(req_letter, all_letters)
+
+
+# when the user completes the current puzzle (score = total points)
+def game_complete():
+  print_game_over()
+  space_out()
+
+  # enter high score
+  print_enter_name()
+  player_name = user_input(3)
+  all_letters = PuzzleStats().pangram
+  req_letter = PuzzleStats().required_letter
+  player_score = PuzzleStats().score
+  insert_or_update_score(player_name, req_letter, all_letters, player_score)
+
+  # show current puzzle's high score
+  cls()
+  print_pangram_stats(req_letter, all_letters)
+  high_score_current_puzzle()
+  space_out()
+
+  # asks to generate image
+  cls()
+  print_generate_image()
+  answer = user_input(0).lower()
+  match answer:
+    case "y":
+      generate_new_image(player_name)
+    
+    case _:
+      print("Image not saved..")
+      time.sleep(1)
+
+  return False
+
+
+# for when the user wants to generate an image for the current puzzle
+def generate_new_image(player_name):
+  generateImage(player_name)
+  print("Image Saved!")
+  time.sleep(1)
+
+
+# not used, might implement later
+"""
+def enter_high_score_name():
+  print_enter_name()
+  player_name = user_input(3)
+  all_letters = PuzzleStats().pangram
+  req_letter = PuzzleStats().required_letter
+  player_score = PuzzleStats().score
+  insert_or_update_score(player_name, req_letter, all_letters, player_score)
+"""
