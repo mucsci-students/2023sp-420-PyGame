@@ -321,32 +321,26 @@ class PuzzleStats(Puzzle):
         WordList = []
         for word in self.current_word_list:
             WordList.append(word[0])
-
-        # "secure" key for encryption
-        key = "key"
+        saveStat = {
+                "RequiredLetter": self.required_letter,
+                "PuzzleLetters": self.pangram,
+                "CurrentPoints": self.score,
+                "MaxPoints" : self.total_points,
+                "GuessedWords": self.guesses
+            }
         ## Create json object
         if(encodeWords):
             WordList = '. '.join(WordList)
-            saveStat = {
-                "RequiredLetter": self.required_letter,
-                "PuzzleLetters": self.pangram,
-                "CurrentPoints": self.score,
-                "MaxPoints" : self.total_points,
-                "GuessedWords": self.guesses,
-                "SecretWordList" : encrypt(WordList, key),
+            saveStat.update({
+                "SecretWordList" : encrypt(WordList),
                 "WordList" : []
-            }
+            })
         else:
         #if not encrypted
-            saveStat = {
-                "RequiredLetter": self.required_letter,
-                "PuzzleLetters": self.pangram,
-                "CurrentPoints": self.score,
-                "MaxPoints" : self.total_points,
-                "GuessedWords": self.guesses,
+            saveStat.update({
                 "SecretWordList" : [],
                 "WordList" : WordList
-            }
+            })
         
         json_object = json.dumps(saveStat, indent=4)
 
@@ -398,7 +392,7 @@ class PuzzleStats(Puzzle):
         self.guesses = saveInfo["GuessedWords"]
         self.total_points = saveInfo["MaxPoints"]   
         try:
-            self.wordList  = decrypt(saveInfo["SecretWordList"], "key").split(". ")
+            self.wordList  = decrypt(saveInfo["SecretWordList"]).split(". ")
         except:
             self.wordList = saveInfo["WordList"]
         
