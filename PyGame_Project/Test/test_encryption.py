@@ -42,9 +42,9 @@ what humans think is impossible.
 ## ---------- Testing shuffle ---------- ##
 def test_encrypt_decrpyt(): 
     gene = generateString()
-    bee = decrypt(encrypt(gene, "Jazz") , "Jazz")
+    bee = decrypt(encrypt(gene) )
     assert bee == gene
 def test_encrypt():
     gene = generateString()
-    bee = encrypt(gene, "Jazz")
+    bee = encrypt(gene)
     assert bee != gene
