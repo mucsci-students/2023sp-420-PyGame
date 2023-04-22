@@ -18,11 +18,11 @@ def encrypt(wordList):
     cipher_text, tag = cipher_config.encrypt_and_digest(bytes(wordList, "utf-8"))
     # return a dictionary with the encrypted text
     dict = {
-        "cipher_text": b64encode(cipher_text),#.decode("UTF-8"),
-        "nonce": b64encode(cipher_config.nonce),#.decode("UTF-8"),
-        "tag": b64encode(tag),#.decode("UTF-8")
+        "cipher_text": b64encode(cipher_text),
+        "nonce": b64encode(cipher_config.nonce),
+        "tag": b64encode(tag)
     }
-    return str(dict)#.replace('\'' , "\"")
+    return str(dict).replace('\'' , "\"")
 
 def decrypt(enc_dict):
 
@@ -44,4 +44,4 @@ def decrypt(enc_dict):
     # decrypt the cipher text
     decrypted = cipher.decrypt_and_verify(cipher_text, tag)
 
-    return decrypted#.decode("UTF-8")
+    return decrypted
