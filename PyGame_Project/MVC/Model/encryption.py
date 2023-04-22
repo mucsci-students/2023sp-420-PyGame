@@ -44,4 +44,4 @@ def decrypt(enc_dict):
     # decrypt the cipher text
     decrypted = cipher.decrypt_and_verify(cipher_text, tag)
 
-    return decrypted
+    return decrypted.decode("UTF-8")
