@@ -19,10 +19,8 @@ else:
 
 
 
-from model_puzzle import *
-from controller_universal import *
-from Crypto.Cipher import AES
-from Crypto.Random import get_random_bytes
+from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.Controller.controller_universal import *
 
 ## default puzzle generation for testing 
 pytest.fixture
@@ -42,7 +40,9 @@ what humans think is impossible.
 ## ---------- Testing shuffle ---------- ##
 def test_encrypt_decrpyt(): 
     gene = generateString()
-    bee = decrypt(encrypt(gene) )
+
+    bee = encrypt(gene) 
+    bee = decrypt(bee)
     assert bee == gene
 def test_encrypt():
     gene = generateString()
