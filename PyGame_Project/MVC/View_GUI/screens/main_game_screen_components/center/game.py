@@ -1,6 +1,6 @@
 import math, random, pygame, os
 
-from ...components.shapes import Hexagon
+from PyGame_Project.MVC.View_GUI.screens.shapes import Hexagon
 from ...colors import COLOR_BLACK, COLOR_NEON_ORANGE, COLOR_ORANGE
 from ..header import create_header
 from ..footer import create_footer

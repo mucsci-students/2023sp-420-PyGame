@@ -1,4 +1,4 @@
-from ..shapes import Rectangle, Hexagon
+from PyGame_Project.MVC.View_GUI.screens.shapes import Rectangle, Hexagon
 from ...colors import COLOR_BLACK, COLOR_NEON_ORANGE, COLOR_ORANGE, COLOR_INVALID_COLOR, COLOR_VALID_COLOR
 
 

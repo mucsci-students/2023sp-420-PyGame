@@ -2,12 +2,12 @@ import pygame, os
 
 from PyGame_Project.MVC.Model.model_puzzle import *
 from PyGame_Project.MVC.View_GUI.hints_gui import *
-from .pop_ups import LeavePopup, SavePopup, GiveUpPopup, BackPopup
-from ..effects.events import wire_events, GuessState
-from ..state import State
-from .header import create_header
-from .center import create_center
-from .footer import create_footer
+from PyGame_Project.MVC.View_GUI.screens.main_game_screen_components.pop_ups import LeavePopup, SavePopup, GiveUpPopup, BackPopup
+from PyGame_Project.MVC.View_GUI.screens.effects.events import wire_events, GuessState
+from PyGame_Project.MVC.View_GUI.screens.state import State
+from PyGame_Project.MVC.View_GUI.screens.main_game_screen_components.header import create_header
+from PyGame_Project.MVC.View_GUI.screens.main_game_screen_components.center import create_center
+from PyGame_Project.MVC.View_GUI.screens.main_game_screen_components.footer import create_footer
 
 
 def build_main_screen():

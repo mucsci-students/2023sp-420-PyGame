@@ -1,5 +1,5 @@
 from enum import Enum
-from ..components.center.game import update_hexagon_positions
+from ..main_game_screen_components.center.game import update_hexagon_positions
 from PyGame_Project.MVC.Model.model_puzzle import *
 from PyGame_Project.MVC.View_GUI.hints_gui import *
 import pygame
