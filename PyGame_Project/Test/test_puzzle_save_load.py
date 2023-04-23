@@ -21,10 +21,10 @@ Tests to load a saved game without encryption
 def test_save_load_without_encryption():
     PuzzleStats().clear()
     puzzleGen()
-    somewordList = ["conflux", "flux"]  
+    somewordList = [bytes("conflux"), bytes("flux")]
     PuzzleStats().get_save_game("didi", False)
     PuzzleStats().LoadGame("didi")
-    assert somewordList == Puzzle().current_word_list
+    assert somewordList == PuzzleStats().wordList
 
 """
 Tests to load a saved game with encryption
@@ -32,10 +32,10 @@ Tests to load a saved game with encryption
 def test_save_load_with_encrypt():
     PuzzleStats().clear()
     puzzleGen()
-    somewordList = ["conflux", "flux"]  
+    somewordList = [bytes("conflux"), bytes("flux")]
     PuzzleStats().get_save_game("yidi", True)
     PuzzleStats().LoadGame("yidi")
-    assert somewordList == Puzzle().current_word_list
+    assert somewordList == PuzzleStats().wordList
 
 
 """ def test_save_file():
