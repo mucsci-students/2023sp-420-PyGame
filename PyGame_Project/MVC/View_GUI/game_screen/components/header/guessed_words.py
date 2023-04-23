@@ -72,7 +72,7 @@ def create_show_words(state):
         font_height = font.get_height() + 10
         
         # Calculate total possible columns
-        state.column_width = width // max(len(word) for word in state.puzzle_stats.wordList) + input_box_font_size + 35
+        state.column_width = width // max(len(word) for word in state.puzzle_stats.current_word_list) + input_box_font_size + 35
         state.displayable_columns = int(max(1, (shape.shape.size[0]) // state.column_width))
         
         # Calculate total rows that can be displayed at once
