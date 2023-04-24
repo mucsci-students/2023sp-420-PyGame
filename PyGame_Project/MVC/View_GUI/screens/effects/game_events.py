@@ -1,8 +1,8 @@
-from enum import Enum
 from ..main_game_screen_components.center.game import update_hexagon_positions
-from PyGame_Project.MVC.Model.model_puzzle import *
 from PyGame_Project.MVC.View_GUI.hints_gui import *
+from enum import Enum
 import pygame
+
 
 class GuessState(Enum):
     CORRECT = 1
@@ -18,7 +18,6 @@ def wire_events(state):
 
     if state.correct_guess_timer or state.incorrect_guess_timer:
         if pygame.time.get_ticks() - state.start_animation_time >= state.animation_duration:
-            print('We actually got in here')
             reset_timer(state)
 
     if state.active_popup is not None:
@@ -107,7 +106,6 @@ def clicked_go_back(state):
     state.active_popup = state.back_popup
     if state.active_popup.show():
         state.running = False
-        
 
 
 def reset_timer(state):
@@ -131,20 +129,22 @@ def clicked_submit(state):
         state.incorrect_guess_timer = True
     
     state.start_animation_time = pygame.time.get_ticks()
-    print(state.start_animation_time)
 
 
 def clicked_clear(state):
     state.current_guess = ''
 
+
 def clicked_show_words(state):
     state.show_guessed_words = not state.show_guessed_words
+
 
 def handle_scroll(state, event):
     if event == 4:
         state.scroll_position = max(0, state.scroll_position - 1)
     else:
         state.scroll_position = min(state.max_scroll_position, state.scroll_position + 1)
+
 
 def handle_button_press(state, event):
     if not (event.button == 4 or event.button == 5):

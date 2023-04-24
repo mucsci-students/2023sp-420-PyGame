@@ -2,6 +2,7 @@ import pygame
 from PyGame_Project.MVC.View_GUI.newgame import *
 from PyGame_Project.MVC.View_GUI.loadgame import *
 from PyGame_Project.MVC.View_GUI.helpgui import *
+from PyGame_Project.MVC.View_GUI.screens.highscore_components.high_score_screen import build_high_score_screen
 
 def start_gui():
     pygame.init()
@@ -110,8 +111,10 @@ def start_gui():
                         start_load()
                         
                     elif help_box.collidepoint(mouse_pos):
-                        start_help()
-                        
+                        # start_help()
+                        build_high_score_screen('s', 'efdoras', 'bob', 0)
+
+
                     elif exit_box.collidepoint(mouse_pos):
                         running = False
                     

@@ -1,5 +1,5 @@
 import sqlite3
-import hashlib
+import hashlib, os
 
 def generate_tables():
     conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
@@ -111,6 +111,7 @@ def get_player_rank(player_name, required_letter, all_letters):
 
     return result
 
+
 def generate_puzzle_identifier(required_letter, all_letters):
     # Combine the required letter and other letters into a single string
     combined_letters = required_letter + ''.join(sorted(all_letters))
@@ -123,16 +124,16 @@ def generate_puzzle_identifier(required_letter, all_letters):
 
 
 # tests
-"""
-# generate_tables()
-insert_or_update_score('Robert', 's', 'efdoras', 421)
-insert_or_update_score('Benjy', 's', 'efdoras', 69)
-insert_or_update_score('Ethan', 's', 'efdoras', 68)
-insert_or_update_score('Priscilla', 's', 'efdoras', 100)
-insert_or_update_score('Kiah', 's', 'efdoras', 100)
 
-player_rank = get_player_rank('Benjy', 's', 'efdoras')
-all_scores = get_scores_for_puzzle('s', 'efdoras')
-print(f'Player rank is: {player_rank}')
-print(f'All scores for puzzle are: {all_scores}')
-"""
+# generate_tables()
+# insert_or_update_score('Robertss', 's', 'efdoras', 4211)
+# insert_or_update_score('Benjyss', 's', 'efdoras', 9)
+# insert_or_update_score('Ethans', 's', 'efdoras', 6)
+# insert_or_update_score('Priscilsla', 's', 'efdoras', 1001)
+# insert_or_update_score('Kiahs', 's', 'efdoras', 10)
+
+# player_rank = get_player_rank('Benjy', 's', 'efdoras')
+# all_scores = get_scores_for_puzzle('s', 'efdoras')
+# print(f'Player rank is: {player_rank}')
+# print(f'All scores for puzzle are: {all_scores}')
+

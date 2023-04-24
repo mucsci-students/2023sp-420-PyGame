@@ -1,9 +1,91 @@
-# imports
-import pygame, sys, os, math
-from pygame.locals import *
-from PyGame_Project.MVC.Model.Database.model_highscores import *
-from PyGame_Project.MVC.Model.imageGen import *
-from PyGame_Project.MVC.View_GUI.gui_main_menu import *
+import datetime
+
+from PyGame_Project.MVC.Model.Database.model_highscores import insert_or_update_score, get_scores_for_puzzle
+from PyGame_Project.MVC.View_GUI.screens.highscore_components.highscore_state import HighScoreState
+from PyGame_Project.MVC.View_GUI.screens.highscore_components.header import create_header
+from PyGame_Project.MVC.View_GUI.screens.highscore_components.center import create_center
+import pygame, os, sys, math
+
+minimum_width = 800
+minimum_height = 600
+
+
+def build_high_score_screen(required_letter='', pangram='', name='', score=0):
+    state = HighScoreState()
+    pygame.display.set_caption('High Scores')
+    state.display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
+
+    insert_or_update_score(name, required_letter, pangram, score)
+    state.all_scores = get_scores_for_puzzle(required_letter, pangram)
+
+    print(state.all_scores)
+
+    state.required_letter = required_letter
+
+    state.current_puzzle = pangram
+    i = 1
+    for score in state.all_scores:
+        state.edited_scores.append((i, score[0], score[1]))
+        i += 1
+
+    print(type(state.edited_scores))
+
+    print(f'required letter: {required_letter}')
+    print(f'pangram: {pangram}')
+    print(f'state.edited_scores: {state.edited_scores}')
+
+    image_file_path = os.path.join(os.getcwd(), "PyGame_Project/mvc/view_gui/helpicons")
+    bg_img = pygame.image.load(os.path.join(image_file_path, "Background_Image.png")).convert()
+
+    fps = pygame.time.Clock()
+
+    while state.running:
+        fps.tick(60)
+        state.display.blit(bg_img, (0, 0))
+        create_header(state)
+        create_center(state)
+
+        high_score_events(state)
+        pygame.display.update()
+
+
+def high_score_events(state):
+    events = pygame.event.get()
+    for event in events:
+        if event.type == pygame.QUIT:
+            state.running = False
+            pygame.quit()
+            sys.exit()
+
+        if event.type == pygame.VIDEORESIZE:
+            handle_screen_resize(state, event)
+
+        if event.type == pygame.MOUSEBUTTONDOWN and (event.button == 4 or event.button == 5):
+            handle_scroll(state, event.button)
+
+
+def handle_screen_resize(state, event):
+    if event.w < minimum_width:
+        width = minimum_width
+    else:
+        width = event.w
+
+    if event.h < minimum_height:
+        height = minimum_height
+    else:
+        height = event.h
+
+    state.display = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+
+
+def handle_scroll(state, event):
+    if event == 4:
+        state.scroll_position = max(0, state.scroll_position - 1)
+        print(f'4 state.scroll_pos = {state.scroll_position}')
+    else:
+        state.scroll_position = min(state.max_scroll_position, state.scroll_position + 1)
+        print(f'5 state.scroll_pos = {state.scroll_position}')
+
 
 # load start screen
 def start_hs(player_name, req_letter, pangram, player_score):
@@ -63,6 +145,7 @@ def start_hs(player_name, req_letter, pangram, player_score):
                     hs_line = (f"{rank_num}    {score[0]}     {score[1]}")
                 else:
                     hs_line = (f"{rank_num}     {score[0]}     {score[1]}")
+
                 draw_text(hs_line, font, ('black'), screen, 160, y_axis)
                 rank_num += 1
                 y_axis += 30

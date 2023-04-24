@@ -1,5 +1,5 @@
-from ...colors import COLOR_BLACK, COLOR_ORANGE, COLOR_WHITE
-from PyGame_Project.MVC.View_GUI.screens.shapes import Rectangle
+from PyGame_Project.MVC.View_GUI.screens.effects.colors import COLOR_BLACK, COLOR_ORANGE, COLOR_WHITE
+from PyGame_Project.MVC.View_GUI.screens.effects.shapes import Rectangle
 import pygame
 
 def create_arrows(state):

@@ -1,10 +1,10 @@
 import pygame, sys, re
 from pygame import *
-from PyGame_Project.MVC.View_GUI.high_score import start_hs
-
+from PyGame_Project.MVC.View_GUI.screens.highscore_components.high_score_screen import build_high_score_screen
 
 min_width = 800
 min_height = 600
+
 
 class Popup:
     def __init__(self, screen, message, on_yes, on_no, show_input=True):
@@ -174,18 +174,19 @@ class Popup:
 
 
 class SavePopup(Popup):
-    def __init__(self, screen, puzzle_stats):
-        self.puzzle_stats = puzzle_stats
+    def __init__(self, state):
+        self.puzzle_stats = state.puzzle_stats
+        self.state = state
         self.message = "Would you like to save your game?"
         self.confirmation_bool = False
         self.finished_saving = False
-        super().__init__(screen, self.message, self.on_yes, self.on_no, show_input=False)
+        super().__init__(state.display, self.message, self.on_yes, self.on_no, show_input=False)
 
     def on_no(self):
         self.message = "Returning to game..."
         self.update_screen()
         pygame.time.wait(1000)
-        self.__init__(self.screen, self.puzzle_stats)
+        self.__init__(self.state)
 
     def on_yes(self):
         # User chose they wanted to save their game
@@ -255,26 +256,27 @@ class SavePopup(Popup):
 
 
 class LeavePopup(Popup):
-    def __init__(self, screen):
+    def __init__(self, state):
+        self.state = state
         self.message = "Are you sure you want to leave the game?"
-        super().__init__(screen, self.message, self.on_yes, self.on_no, show_input=False)
+        super().__init__(state.display, self.message, self.on_yes, self.on_no, show_input=False)
 
     def on_yes(self, input_text=None):
-        print("Exiting the game")
         pygame.quit()
         sys.exit()
 
     def on_no(self):
-        self.__init__(self.screen)
+        self.__init__(self.state)
 
 
 class GiveUpPopup(Popup):
-    def __init__(self, screen, puzzle_stats):
-        self.puzzle_stats = puzzle_stats
+    def __init__(self, state):
+        self.state = state
+        self.puzzle_stats = state.puzzle_stats
         self.message = "Are you sure you want to give up?"
         self.confirmation_bool = False
         self.name_check = False
-        super().__init__(screen, self.message, self.on_yes, self.on_no, show_input=False)
+        super().__init__(state.display, self.message, self.on_yes, self.on_no, show_input=False)
 
     def on_yes(self):
         if not self.show_input:
@@ -286,20 +288,23 @@ class GiveUpPopup(Popup):
             self.update_screen()
 
         elif self.confirmation_bool:
-            print("Popups.py Line 225 - This would call the highscore screen.")
-            start_hs(self.text_input, self.puzzle_stats.required_letter, self.puzzle_stats.pangram, self.puzzle_stats.score)
+            self.state.running = False
+            build_high_score_screen(self.puzzle_stats.required_letter, self.puzzle_stats.pangram, self.text_input,
+                                    self.puzzle_stats.score)
+            # start_hs(self.text_input, self.puzzle_stats.required_letter, self.puzzle_stats.pangram, self.puzzle_stats.score)
 
     def on_no(self):
-        self.__init__(self.screen, self.puzzle_stats)
+        self.__init__(self.state)
+
 
 class BackPopup(Popup):
-    def __init__(self, screen):
+    def __init__(self, state):
+        self.state = state
         self.message = "Are you sure you want to leave the game?"
-        super().__init__(screen, self.message, self.on_yes, self.on_no, show_input=False)
+        super().__init__(state.display, self.message, self.on_yes, self.on_no, show_input=False)
 
     def on_yes(self, input_text=None):
         return True
 
-
     def on_no(self):
-        self.__init__(self.screen)
+        self.__init__(self.state)
