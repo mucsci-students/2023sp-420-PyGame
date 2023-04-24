@@ -40,7 +40,7 @@ A simple game where a player is to create English words using a number of given 
     - Mac:
     ``` python3 -m venv venv ``` 
     - Windows:
-    ``` python -m venv ven ```
+    ``` python -m venv venv ```
 4. Activate the virtual environment with:
     - Mac:
     ``` source venv/bin/activate ```
