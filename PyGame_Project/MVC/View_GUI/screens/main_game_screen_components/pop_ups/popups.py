@@ -180,33 +180,17 @@ class SavePopup(Popup):
         self.message = "Would you like to save your game?"
         self.confirmation_bool = False
         self.finished_saving = False
-        self.chose_encryption_option = False
-        self.user_choice = False
-        super().__init__(screen, self.message, self.on_yes, self.on_no, show_input=False)
+        super().__init__(state.display, self.message, self.on_yes, self.on_no, show_input=False)
 
     def on_no(self):
-        if not self.chose_encryption_option:
-            self.chose_encryption_option = True
-            self.show_input = True
-            self.message = "Please enter a filename:"
-            self.yes_button_text = "Enter"
-            self.no_button_text = "Cancel"
-        else:
-            self.message = "Returning to game..."
-            self.update_screen()
-            pygame.time.wait(1000)
-            self.__init__(self.screen, self.puzzle_stats)
+        self.message = "Returning to game..."
+        self.update_screen()
+        pygame.time.wait(1000)
+        self.__init__(self.state)
 
     def on_yes(self):
-        if not self.chose_encryption_option:
-            self.chose_encryption_option = True
-            self.user_choice = True
-            self.message = "Would you like to make your game shareable?"
-            self.yes_button_text = "Yes"
-            self.no_button_text = "No"
-        
         # User chose they wanted to save their game
-        elif not self.show_input and self.chose_encryption_option:
+        if not self.show_input:
             self.show_input = True
             self.message = "Please enter a filename:"
             self.yes_button_text = "Enter"
@@ -221,7 +205,7 @@ class SavePopup(Popup):
         if self.check_windows_reserved_name(self.text_input):
             if (not self.puzzle_stats.get_check_file(self.text_input) and not self.confirmation_bool) or self.confirmation_bool:
                 self.message = "Game saved successfully!"
-                self.puzzle_stats.get_save_game(self.text_input, self.user_choice)
+                self.puzzle_stats.get_save_game(self.text_input)
                 self.finished_saving = True
             else:
                 self.message = "File already exists. Overwrite?"
