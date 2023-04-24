@@ -37,7 +37,7 @@ A simple game where a player is to create English words using a number of given 
 1. Download and install [Python 3.11.1](https://www.python.org/downloads/). 
 2. Clone the main branch of [PyGame's repository](https://github.com/mucsci-students/2023sp-420-PyGame) from Github to your local machine.
 3. Navigate to the cloned repository and set up virtual environment with the following command
-    - Max
+    - Mac:
     ``` python3 -m venv venv ``` 
     - Windows:
     ``` python -m venv ven ```
