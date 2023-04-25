@@ -1,7 +1,7 @@
 import sys
 import os
 
-from model_puzzle import *
+from PyGame_Project.MVC.Model.model_puzzle import *
 
 
 """

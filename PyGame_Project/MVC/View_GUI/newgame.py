@@ -1,8 +1,9 @@
 # imports
 import pygame, sys,math
 from pygame.locals import *
-from gui_main_game import Game
-from controller_universal import *
+from PyGame_Project.MVC.View_GUI.gui_main_game import Game
+from PyGame_Project.MVC.View_GUI.game_screen.components.main_screen import build_main_screen
+from PyGame_Project.MVC.Controller.controller_universal import *
 from pygame.locals import *
 
 # starting new game screen
@@ -101,9 +102,7 @@ def start_new_game():
     # function is called when the "START FROM RANDOM" button is clicked on
     def random_screen():
         prep_new_game()
-        
-        game = Game()
-        game.run()
+        build_main_screen()
 
  
     # function is called when the "START FROM KEY" button is clicked on
@@ -273,9 +272,9 @@ def start_new_game():
 
         if prep_value == 1:
             return 1
-
-        game = Game()
-        game.run()
+        build_main_screen()
+        # game = Game()
+        # game.run()
     
     #function start from share
     def start_from_share(shared_key):    
@@ -284,7 +283,8 @@ def start_new_game():
         if prep_value == 1:
             return 1
 
-        game = Game()
-        game.run()
+        build_main_screen()
+        # game = Game()
+        # game.run()
 
     load_game()

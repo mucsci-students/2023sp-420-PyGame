@@ -1,6 +1,6 @@
 import pygame, os, random
-from model_puzzle import *
-from hints_gui import *
+from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.View_GUI.hints_gui import *
 
 
 class Game:

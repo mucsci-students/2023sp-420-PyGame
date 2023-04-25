@@ -1,20 +1,41 @@
-import os, sys
+import os, sys, pytest
 
-if os.name!="nt": 
-    sys.path.append(os.getcwd()+"/PyGame_Project/MVC")
-    sys.path.append(os.getcwd()+"/PyGame_Project/MVC/Controller")
-    sys.path.append(os.getcwd()+"/PyGame_Project/MVC/Model")
-    sys.path.append(os.getcwd()+"/PyGame_Project/MVC/Model/Database")
-else:
-    sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC")
-    sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC\\Controller")
-    sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC\\Model")
-    sys.path.append(os.getcwd()+"\\PyGame_Project\\MVC\\Model\\Database")
+from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.Controller.controller_universal import *
 
 
+from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.Controller.controller_universal import *
+pytest.fixture
 
-from model_puzzle import *
-from controller_universal import *
+def puzzleGen():
+    PuzzleStats().clear()
+    shareable_key = "csqkhzct"
+    prep_game_from_share(shareable_key)
+
+    
+"""
+Tests to load a saved game without encryption
+"""
+def test_save_load_without_encryption():
+    PuzzleStats().clear()
+    puzzleGen()
+    somewordList = ["conflux", "flux"]
+    PuzzleStats().get_save_game("didi", False)
+    PuzzleStats().LoadGame("didi")
+    assert somewordList == PuzzleStats().wordList
+
+"""
+Tests to load a saved game with encryption
+"""
+def test_save_load_with_encrypt():
+    PuzzleStats().clear()
+    puzzleGen()
+    somewordList = ["conflux", "flux"]
+    PuzzleStats().get_save_game("yidi", True)
+    PuzzleStats().LoadGame("yidi")
+    assert somewordList == PuzzleStats().wordList
+
 
 """ def test_save_file():
 

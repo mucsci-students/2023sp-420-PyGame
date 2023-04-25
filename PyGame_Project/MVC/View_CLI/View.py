@@ -1,7 +1,8 @@
 import os
 import sys
 
-from model_puzzle import *
+from PyGame_Project.MVC.Model.model_puzzle import *
+from PyGame_Project.MVC.Model.Database.model_highscores import *
 
 ## prints the start up "Loading" screen
 def print_start_screen():
@@ -34,8 +35,8 @@ def print_current_puzzle():
     puzzle = PuzzleStats()
     
     prettyGuesses = get_pretty_guesses(puzzle.guesses)
-    # variables to store each letter 
 
+    # variables to store each letter 
     req = puzzle.shuffled_puzzle[0]
     fir = puzzle.shuffled_puzzle[3]
     sec = puzzle.shuffled_puzzle[1]
@@ -69,7 +70,8 @@ def print_current_puzzle():
           /help      /shuffle 
           /back      /showall 
           /share     /savegame 
-          /exit      /hints
+          /hints     /highscores
+          /giveup    /exit
         
         """
     print(currentProgress)
@@ -105,12 +107,13 @@ Main Menu
     /loadgame
     /startfromkey
     /startsharedgame
+    /highscores
     /help
     /exit
 """
     print(mainMenu)
 
-## Promtps user if he wants to exit the game or not
+## Prompts user if he wants to exit the game or not
 def print_exit():
     exit = f"""
 Confirm exit?
@@ -119,7 +122,7 @@ N
 """
     print(exit)
 
-## Promtps user if he wants to save the game or not
+## Prompts user if he wants to save the game or not
 def print_game_save():
     gameSave = f"""
 
@@ -129,7 +132,7 @@ N
 """
     print(gameSave)
 
-## Promtps user if he wants to load the game or not
+## Prompts user if he wants to load the game or not
 def print_load_game():
     load = f"""
     
@@ -174,7 +177,7 @@ Instructions
 ~ Create words using letters from the hive and try to get the maximum score. 
 ~ Words must have at least four unique letters and include the center letter in brackets.
 ~ All optional letters will be surrounding the required center letter.   
-~ Letters can be used more than once. 
+~ Letters can be used more than once.
 ~ Words with hyphens, proper nouns, vulgarities, and especially obscure words are not in the word list. 
 ~ Score points to increase your rating.
 ~ 4-letter words are worth 1 point each.
@@ -186,18 +189,21 @@ Main Menu Commands:
 /loadgame         Loads a saved game
 /startfromkey     Enter a 7 letter key to start a new puzzle
 /startsharedgame  Copies the key to your clipboard
-/help             Get instructions and commands 
+/highscores       Searches for the top 10 high scores from a pangram and required letter
+/help             Get instructions and commands
 /exit             Exits the program
 
 In-Game Commands:
 /help             Get instructions and commands
 /back             Go back to the main menu screen
 /share            Shows a sharable key (usable for CLI and GUI)
-/exit             Exits the program
 /shuffle          Shuffles the outer letters of the hive
 /showall          Prints a list of correct guessed words
 /savegame         Saves the current state of the game
 /hints            Shows the hint matrix and a two-letter list
+/giveup           Finishes the game and lets you enter a name for the current puzzle's high score
+/highscores       Searches for the top 10 high scores from a pangram and required letter for the current puzzle
+/exit             Exits the program
 
 Press the space key to continue...
 """ 
@@ -219,7 +225,10 @@ def print_game_over():
                (%%%) 
                  !
               Congrats!
-      You Completed the Puzzle                      
+      You Completed the Puzzle!
+
+      
+      Press space to continue...                   
       """
     print(gameOver)
 
@@ -240,12 +249,11 @@ def print_all_guesses(stats):
 
 ## Returns a list of all save files able to load (load options)
 def get_load_options():
-    save_path = ''
-    for path in sys.path:
-        if "Saves" in path:
-            save_path = path
-            break
-    options = os.listdir(save_path)
+    options = []
+    for file in os.listdir(os.getcwd()):
+        if ".json" in file:
+            options.append(file)
+
     return options
 
 ## prints a detatiled "Invalid Guess" given a passed value from print_guess_outcome()
@@ -291,11 +299,11 @@ def print_hint():
     print_hint_pangram()
     print_hint_matrix()
     Print_hint_two_Let_Dict()
-    print("\n\t  ... Press the space key to continue ...")
+    print("\n\tPress the space key to continue ...")
 
 def print_hint_pangram():
     puzzle = PuzzleStats()
-    print("\tPangram Over-view: \n")
+    print("\tPangram Overview: \n")
     print(f"\t -> Center letter is {puzzle.shuffled_puzzle[0].upper()}; Remaining letters are: {puzzle.shuffled_puzzle[1:7].upper()}")
     print(f"\t -> Words: {len(puzzle.current_word_list)}; Points: {puzzle.total_points}")
     rem_words = len(puzzle.current_word_list) - len(puzzle.guesses)
@@ -334,3 +342,44 @@ def Print_hint_two_Let_Dict():
             count += 1
 
     print (two_letter_str)
+
+
+def print_giveup_confirmation():
+    giveup = f"""
+
+You are about to GIVE UP your current puzzle. Are you sure you want to GIVE UP?
+Y
+N
+"""
+    print(giveup)
+
+
+def print_enter_name():
+    print("Enter a 3 character name for your high score: ")
+
+
+def print_high_scores(req_letter, all_letters):
+    all_scores = get_scores_for_puzzle(req_letter, all_letters)
+
+    print("\n\n\tTOP 10 HIGH SCORES:\n")
+    print("\tRANK  PLAYER  SCORE")
+    print("\t--------------------")
+
+    rank_num = 1
+    for score in all_scores:
+        print(f"\t{rank_num}     {score[0]}     {score[1]}")
+        rank_num += 1
+        if rank_num > 10:
+            break
+
+    print("\n\n\tPress the space key to continue...")
+    return
+
+
+def print_pangram_stats(req_letter, all_letters):
+    print(f"\n\tPangram: {all_letters}")
+    print(f"\tRequired letter: {req_letter}")
+
+
+def print_generate_image():
+    print("Would you like to generate an image for your puzzle?\nY\nN\n")

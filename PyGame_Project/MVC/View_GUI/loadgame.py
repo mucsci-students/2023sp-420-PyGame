@@ -1,8 +1,8 @@
 # imports
 import pygame, sys, os, math
 from pygame.locals import *
-from gui_main_game import Game
-from controller_universal import *
+from PyGame_Project.MVC.View_GUI.game_screen.components.main_screen import build_main_screen
+from PyGame_Project.MVC.Controller.controller_universal import *
 
 # load start screen
 def start_load():
@@ -42,12 +42,11 @@ def start_load():
     
     # main function
     def load_menu():
-        save_path = ''
-        for path in sys.path:
-            if "Saves" in path:
-                save_path = path
-                break
-        options = os.listdir(save_path)
+        options = []
+        for file in os.listdir(os.getcwd()):
+            if ".json" in file:
+                options.append(file)
+
         option_count = len(options)
         curr_count = 0
         if not option_count > 0:
@@ -126,6 +125,7 @@ def start_load():
     
     # function is called when the "LOAD" button is clicked on
     def load_game(file_name):
+
         print(f'loadgame.py - def load_game(file_name): Selected filename is: {file_name}')
         spacer = 0 
         prep_value = prep_game_from_load(file_name)
@@ -163,8 +163,7 @@ def start_load():
                         running = False
                 if event.type == MOUSEBUTTONDOWN and event.button == 1:
                     if yes.collidepoint((mx, my)):
-                        game = Game()
-                        game.run()
+                        build_main_screen()
                         running = False
                     if no.collidepoint((mx, my)):
                         return
