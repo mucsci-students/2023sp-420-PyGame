@@ -114,11 +114,13 @@ def reset_timer(state):
         state.current_guess = ''
     state.incorrect_guess_timer = False
     state.correct_guess_timer = False
+    pygame.event.set_allowed(pygame.KEYDOWN)
 
 
 def clicked_submit(state):
     if state.puzzle_stats.get_check_guess(state.current_guess) == 0:
         state.current_guess_state = GuessState.CORRECT
+        pygame.event.set_blocked(pygame.KEYDOWN)
         state.correct_guess_timer = True
         if len(state.current_guess) == 4:
                 state.current_guess = f'+ {state.puzzle_stats.get_word_points(state.current_guess)} point!'

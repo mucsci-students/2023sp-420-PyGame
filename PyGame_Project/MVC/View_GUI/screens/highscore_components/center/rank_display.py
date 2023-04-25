@@ -55,7 +55,7 @@ def create_rank_display(state):
 
     # Draw the words
     for i in range(displayable_rows):
-        word_y = y_offset + (header_render.get_height() + font_height) + (i * font_height) - (state.scroll_position * font_height)
+        word_y = y_offset + (header_render.get_height() + spacer) + (i * font_height) - (state.scroll_position * font_height)
 
         if word_y >= show_rank[1] and word_y + font_height <= show_rank[1] + (state.display.get_height() * .75):
             for col in range(displayable_columns):
@@ -64,7 +64,7 @@ def create_rank_display(state):
                     word = str(state.edited_scores[index][col])  # Convert the rank (integer) to a string
                     word_render = font.render(word, True, COLOR_ORANGE)
                     text_rect = word_render.get_rect(
-                        center=(buffer + col * column_width + column_width / 2, word_y))
+                        center=(buffer + col * column_width + column_width / 2, word_y + header_render.get_height() + spacer))
                     state.display.blit(word_render, text_rect)
 
     # Set scroll cutoff

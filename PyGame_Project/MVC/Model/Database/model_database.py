@@ -8,7 +8,7 @@ import random
 '''
 
 def generate_table():
-  conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/wordDB")
+  conn = sqlite3.connect("MVC/Model/Database/wordDB")
   cursor = conn.cursor()
 
   # Create the table to store the words
@@ -18,7 +18,7 @@ def generate_table():
 
   # Loop through each file and add one word from each file to the table
   for i in range(26):
-      with open(f'PyGame_Project/MVC/Model/Database/Individual_letters/words_with_{i+1}.txt', 'r') as file:
+      with open(f'MVC/Model/Database/Individual_letters/words_with_{i+1}.txt', 'r') as file:
           lines = file.readlines()
           for j, line in enumerate(lines):
               cursor.execute(f"UPDATE words SET {chr(97+i)}=? WHERE id=?", (line.strip(), j+1))
@@ -42,7 +42,7 @@ def generate_table():
 
 def get_word_info_from_pangram(pangram):
   # Make connection to DB.
-  conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/wordDB")
+  conn = sqlite3.connect("MVC/Model/Database/wordDB")
   cursor = conn.cursor()
   letter, pangram = get_puzzle_from_pangram(pangram)
 
@@ -86,7 +86,7 @@ def get_puzzle_from_pangram(pangram):
 def get_random_word_info():
   # Make connection to DB.
 
-  conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/wordDB")
+  conn = sqlite3.connect("MVC/Model/Database/wordDB")
   cursor = conn.cursor()
   while True:
     letter, word = get_random_puzzle_word(cursor)

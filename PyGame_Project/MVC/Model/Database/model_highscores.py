@@ -2,7 +2,7 @@ import sqlite3
 import hashlib, os
 
 def generate_tables():
-    conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
+    conn = sqlite3.connect("MVC/Model/Database/highscoreDB")
     cursor = conn.cursor()
 
     # Create the 'puzzles' table
@@ -31,7 +31,7 @@ def generate_tables():
 def get_scores_for_puzzle(required_letter, all_letters):
     
     identifier = generate_puzzle_identifier(required_letter, all_letters)
-    conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
+    conn = sqlite3.connect("MVC/Model/Database/highscoreDB")
     cursor = conn.cursor()
 
     # Fetch scores for the puzzle with the given unique_identifier
@@ -55,7 +55,7 @@ def get_scores_for_puzzle(required_letter, all_letters):
 def insert_or_update_score(player_name, required_letter, all_letters, score):
     
     identifier = generate_puzzle_identifier(required_letter, all_letters)
-    conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
+    conn = sqlite3.connect("MVC/Model/Database/highscoreDB")
     cursor = conn.cursor()
 
     # Insert puzzle into puzzle table if it doesn't exist.

@@ -34,7 +34,7 @@ def build_high_score_screen(required_letter='', pangram='', name='', score=0):
     print(f'pangram: {pangram}')
     print(f'state.edited_scores: {state.edited_scores}')
 
-    image_file_path = os.path.join(os.getcwd(), "PyGame_Project/mvc/view_gui/helpicons")
+    image_file_path = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
     bg_img = pygame.image.load(os.path.join(image_file_path, "Background_Image.png")).convert()
 
     fps = pygame.time.Clock()
