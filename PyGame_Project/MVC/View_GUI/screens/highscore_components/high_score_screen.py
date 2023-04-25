@@ -34,7 +34,7 @@ def build_high_score_screen(required_letter='', pangram='', name='', score=0):
     print(f'pangram: {pangram}')
     print(f'state.edited_scores: {state.edited_scores}')
 
-    image_file_path = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
+    image_file_path = os.path.join(os.getcwd(), "PyGame_Project/MVC/View_GUI/helpicons")
     bg_img = pygame.image.load(os.path.join(image_file_path, "Background_Image.png")).convert()
 
     fps = pygame.time.Clock()
@@ -56,6 +56,9 @@ def high_score_events(state):
             state.running = False
             pygame.quit()
             sys.exit()
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            handle_button_press(state, event)
 
         if event.type == pygame.VIDEORESIZE:
             handle_screen_resize(state, event)
@@ -86,6 +89,15 @@ def handle_scroll(state, event):
         state.scroll_position = min(state.max_scroll_position, state.scroll_position + 1)
         print(f'5 state.scroll_pos = {state.scroll_position}')
 
+
+def handle_button_press(state, event):
+    if not (event.button == 4 or event.button == 5):
+        for key in state.buttons:
+            if key.strip().casefold() == 'Leave'.casefold() and state.buttons[key]:
+                clicked_leave(state)
+
+def clicked_leave(state):
+    state.running = False
 
 # load start screen
 def start_hs(player_name, req_letter, pangram, player_score):
