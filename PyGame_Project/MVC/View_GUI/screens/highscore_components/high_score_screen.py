@@ -1,9 +1,9 @@
-import datetime
-
 from PyGame_Project.MVC.Model.Database.model_highscores import insert_or_update_score, get_scores_for_puzzle
 from PyGame_Project.MVC.View_GUI.screens.highscore_components.highscore_state import HighScoreState
 from PyGame_Project.MVC.View_GUI.screens.highscore_components.header import create_header
 from PyGame_Project.MVC.View_GUI.screens.highscore_components.center import create_center
+from PyGame_Project.MVC.Model.imageGen import generateImage
+
 import pygame, os, sys, math
 
 minimum_width = 800
@@ -11,28 +11,22 @@ minimum_height = 600
 
 
 def build_high_score_screen(required_letter='', pangram='', name='', score=0):
+
     state = HighScoreState()
+    state.player_name = name
     pygame.display.set_caption('High Scores')
     state.display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
 
     insert_or_update_score(name, required_letter, pangram, score)
     state.all_scores = get_scores_for_puzzle(required_letter, pangram)
 
-    print(state.all_scores)
-
     state.required_letter = required_letter
-
     state.current_puzzle = pangram
+
     i = 1
     for score in state.all_scores:
         state.edited_scores.append((i, score[0], score[1]))
         i += 1
-
-    print(type(state.edited_scores))
-
-    print(f'required letter: {required_letter}')
-    print(f'pangram: {pangram}')
-    print(f'state.edited_scores: {state.edited_scores}')
 
     image_file_path = os.path.join(os.getcwd(), "PyGame_Project/MVC/View_GUI/helpicons")
     bg_img = pygame.image.load(os.path.join(image_file_path, "Background_Image.png")).convert()
@@ -84,10 +78,8 @@ def handle_screen_resize(state, event):
 def handle_scroll(state, event):
     if event == 4:
         state.scroll_position = max(0, state.scroll_position - 1)
-        print(f'4 state.scroll_pos = {state.scroll_position}')
     else:
         state.scroll_position = min(state.max_scroll_position, state.scroll_position + 1)
-        print(f'5 state.scroll_pos = {state.scroll_position}')
 
 
 def handle_button_press(state, event):
@@ -95,9 +87,17 @@ def handle_button_press(state, event):
         for key in state.buttons:
             if key.strip().casefold() == 'Leave'.casefold() and state.buttons[key]:
                 clicked_leave(state)
+            elif key.strip().casefold() == 'Share'.casefold() and state.buttons[key]:
+                generateImage(state.player_name)
+
 
 def clicked_leave(state):
     state.running = False
+
+
+def clicked_share(state):
+    pass
+
 
 # load start screen
 def start_hs(player_name, req_letter, pangram, player_score):
@@ -111,7 +111,6 @@ def start_hs(player_name, req_letter, pangram, player_score):
     pygame.display.set_caption('Load A Game')
     font_title = pygame.font.SysFont(None, 50)
     font = pygame.font.SysFont("couriernew", 30)
-    
 
     # create hexagon points (NOT the lines between the points)
     hex_radius = 60 # change this for bigger hexagons, considered midpoint

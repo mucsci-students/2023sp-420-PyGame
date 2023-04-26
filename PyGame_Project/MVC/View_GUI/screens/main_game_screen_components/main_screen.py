@@ -18,7 +18,7 @@ def build_main_screen():
     current_puzzle = state.puzzle_stats.pangram.replace(state.puzzle_stats.required_letter, '', 1)
     state.current_puzzle = current_puzzle.upper()
     print(current_puzzle)
-    image_file_path = os.path.join(os.getcwd(), "mvc/view_gui/helpicons")
+    image_file_path = os.path.join(os.getcwd(), "PyGame_Project/mvc/view_gui/helpicons")
     bg_img = pygame.image.load(os.path.join(image_file_path, "Background_Image.png")).convert()
     fps = pygame.time.Clock()
     pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)

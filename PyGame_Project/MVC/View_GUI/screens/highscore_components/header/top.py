@@ -16,15 +16,25 @@ def create_top(state):
 
 
 def create_back_button(state):
-        left_x_offset = (state.display.get_width() / 6) * .3
-        height = 0.062 * state.display.get_height()
-        back_x_pos = left_x_offset
-        text = 'Leave'
+    back_x_pos = (state.display.get_width() / 6)
+    share_x_pos = (state.display.get_width() / 6 * 5)
+    height = 0.062 * state.display.get_height()
+    y_pos = (.125 * state.display.get_height() + 5) - height
 
-        back_hex = Hexagon(back_x_pos, height, height, height, text)
-        back_hex.draw(state.display, COLOR_ORANGE, COLOR_BLACK, COLOR_NEON_ORANGE)
-        back_hex.draw(state.display, COLOR_BLACK, COLOR_BLACK, COLOR_BLACK, 3)
-        state.buttons[text] = back_hex.is_hover()
+    back_text = 'Leave'
+    share_text = 'Share'
+
+    back_hex = Hexagon(back_x_pos, y_pos, height, height, back_text)
+    share_hex = Hexagon(share_x_pos, y_pos, height, height, share_text)
+
+    back_hex.draw(state.display, COLOR_ORANGE, COLOR_BLACK, COLOR_NEON_ORANGE)
+    back_hex.draw(state.display, COLOR_BLACK, COLOR_BLACK, COLOR_BLACK, 3)
+
+    share_hex.draw(state.display, COLOR_ORANGE, COLOR_BLACK, COLOR_NEON_ORANGE)
+    share_hex.draw(state.display, COLOR_BLACK, COLOR_BLACK, COLOR_BLACK, 3)
+
+    state.buttons[back_text] = back_hex.is_hover()
+    state.buttons[share_text] = share_hex.is_hover()
 
 
 def create_description(state):

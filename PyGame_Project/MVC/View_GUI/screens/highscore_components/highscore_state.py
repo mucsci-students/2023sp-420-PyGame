@@ -23,6 +23,7 @@ class HighScoreState:
 
     required_letter = ''
     current_puzzle = ''
+    player_name = ''
 
     display = None
     font = None

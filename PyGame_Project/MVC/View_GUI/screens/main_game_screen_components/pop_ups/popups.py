@@ -92,7 +92,6 @@ class Popup:
 
         self.setup_ui()
 
-    
     def handle_event(self, event, state):
         if event.type == MOUSEBUTTONUP:
             if self.yes_button.collidepoint(event.pos):
@@ -179,28 +178,46 @@ class SavePopup(Popup):
         self.state = state
         self.message = "Would you like to save your game?"
         self.confirmation_bool = False
+        self.confirm_save_game = False
+        self.made_encryption_choice = False
         self.finished_saving = False
         super().__init__(state.display, self.message, self.on_yes, self.on_no, show_input=False)
 
-    def on_no(self):
-        self.message = "Returning to game..."
-        self.update_screen()
-        pygame.time.wait(1000)
-        self.__init__(self.state)
-
     def on_yes(self):
-        # User chose they wanted to save their game
-        if not self.show_input:
+        # User confirmed they wanted to save their game.
+        if not self.confirm_save_game:
+            self.confirm_save_game = True
+
+            self.message = "Would you like to make your game shareable?"
+            self.yes_button_text = "Yes"
+            self.no_button_text = "No"
+
+        # Ask user if they want to encrypt their save.
+        elif self.confirm_save_game and not self.made_encryption_choice and not self.show_input:
+            self.made_encryption_choice = True
             self.show_input = True
             self.message = "Please enter a filename:"
-            self.yes_button_text = "Enter"
+            self.yes_button_text = "Save"
             self.no_button_text = "Cancel"
-        
+
+        # User pressed yes after entering a filename.
         elif self.show_input:
             self.check_file_name()
+            self.update_screen()
 
-        self.update_screen()
-    
+    def on_no(self):
+        # User chose not to encrypt their game.
+        if self.confirm_save_game and not self.show_input:
+            self.show_input = True
+            self.message = "Please enter a filename:"
+
+        # User hit cancel on filename input.
+        else:
+            self.message = "Returning to game..."
+            self.update_screen()
+            pygame.time.wait(1000)
+            self.__init__(self.state)
+
     def check_file_name(self):
         if self.check_windows_reserved_name(self.text_input):
             if (not self.puzzle_stats.get_check_file(self.text_input) and not self.confirmation_bool) or self.confirmation_bool:
