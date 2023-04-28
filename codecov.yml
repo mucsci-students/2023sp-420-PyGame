@@ -3,8 +3,8 @@ codecov:
   require_ci_to_pass: yes
 
 ignore:
-  - "PyGame_Project/MVC/View_CLI"
-  - "PyGame_Project/MVC/View_GUI"
+  - "**/PyGame_Project/MVC/View_CLI/*"
+  - "**/PyGame_Project/MVC/View_GUI/*"
 
 coverage:
   round: down
