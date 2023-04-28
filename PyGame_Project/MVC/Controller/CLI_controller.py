@@ -232,9 +232,25 @@ def saveGamePrompt():
       print(userInput)
       input()
       cls()
-      PuzzleStats().get_save_game(userInput)
+      encrypt_bool = encryption_prompt()
+      PuzzleStats().get_save_game(userInput, encrypt_bool)
       print(f"{userInput} has been saved.")
       return
+
+#Prompts the user with the option to make their file sharable, if not, then it will be encrypted soon alhamdulillah
+def encryption_prompt():
+  while(True):
+    print("Allow Puzzle Sharing? Y/N")
+    userInput = user_input(0).lower()  #asks user for an input
+    print(userInput)
+    cls()  
+    match userInput:
+      case "y":
+        return False
+      case "n":
+        return True
+      case _: # if any other command not in the list is entered, then this output will be returned
+        print("Command Not Recognized")
 
 #Loops thru the active game screens
 def activeGameLoop():
@@ -363,8 +379,9 @@ def start_game_with_key_from_load(file_name):
   activeGameLoop()
     
 # creates a save file (saves current game)
-def save_current_game(filename):
-  PuzzleStats().get_save_game(filename)
+def save_current_game(filename):  
+  encrypt_bool = encryption_prompt()
+  PuzzleStats().get_save_game(filename, encrypt_bool)
 
 # closes the CLI
 def exit_game():

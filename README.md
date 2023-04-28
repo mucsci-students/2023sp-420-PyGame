@@ -21,7 +21,11 @@ A simple game where a player is to create English words using a number of given 
 - Large selection of randomly generated puzzles.
 - Ability to create your own puzzle by inputting a word with seven unique characters.
 - Word puzzles can be stored and accessed at a later time.
+    - Allow for encrypted file save and unencrypted for cross compatibility
 - Share a puzzle with a friend by generating a sharable key, unique to that puzzle.
+- Accumulate points to reach the top of the high score listings
+- Generate a PNG to share your accomplishments on the puzzle with others
+    - The title at the top of the image can be used to start the same puzzle, using the "Share Key" load option
 - Display usefull hints generated for each puzzle
 - Choice of playing the game on a CLI or GUI.
 
@@ -33,7 +37,10 @@ A simple game where a player is to create English words using a number of given 
 1. Download and install [Python 3.11.1](https://www.python.org/downloads/). 
 2. Clone the main branch of [PyGame's repository](https://github.com/mucsci-students/2023sp-420-PyGame) from Github to your local machine.
 3. Navigate to the cloned repository and set up virtual environment with the following command
-    - ``` python3 -m venv venv ``` 
+    - Mac:
+    ``` python3 -m venv venv ``` 
+    - Windows:
+    ``` python -m venv venv ```
 4. Activate the virtual environment with:
     - Mac:
     ``` source venv/bin/activate ```
