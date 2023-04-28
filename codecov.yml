@@ -14,10 +14,8 @@ coverage:
       default:
         target: auto
         threshold: 0%
-        
-
 
 comment:
   layout: "diff, flags, files"
-  behavior: update
+  behavior: default
   require_changes: false
