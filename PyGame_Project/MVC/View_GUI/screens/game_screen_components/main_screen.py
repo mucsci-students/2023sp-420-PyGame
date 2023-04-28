@@ -1,8 +1,8 @@
-from PyGame_Project.MVC.View_GUI.screens.main_game_screen_components.pop_ups import LeavePopup, SavePopup, GiveUpPopup, BackPopup
-from PyGame_Project.MVC.View_GUI.screens.main_game_screen_components.center import create_center
-from PyGame_Project.MVC.View_GUI.screens.main_game_screen_components.footer import create_footer
-from PyGame_Project.MVC.View_GUI.screens.main_game_screen_components.header import create_header
-from PyGame_Project.MVC.View_GUI.screens.main_game_screen_components.state import State
+from PyGame_Project.MVC.View_GUI.screens.game_screen_components.pop_ups import LeavePopup, SavePopup, GiveUpPopup, BackPopup
+from PyGame_Project.MVC.View_GUI.screens.game_screen_components.center import create_center
+from PyGame_Project.MVC.View_GUI.screens.game_screen_components.footer import create_footer
+from PyGame_Project.MVC.View_GUI.screens.game_screen_components.header import create_header
+from PyGame_Project.MVC.View_GUI.screens.game_screen_components.state import State
 from PyGame_Project.MVC.View_GUI.screens.effects.game_events import wire_events, GuessState
 from PyGame_Project.MVC.Model.model_puzzle import PuzzleStats
 import pygame, os

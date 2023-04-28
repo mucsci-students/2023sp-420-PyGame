@@ -275,12 +275,19 @@ class SavePopup(Popup):
 class LeavePopup(Popup):
     def __init__(self, state):
         self.state = state
+        self.is_quitting = False
+        self.is_leaving = False
         self.message = "Are you sure you want to leave the game?"
         super().__init__(state.display, self.message, self.on_yes, self.on_no, show_input=False)
 
     def on_yes(self, input_text=None):
-        pygame.quit()
-        sys.exit()
+        if self.is_quitting:
+            pygame.quit()
+            sys.exit()
+        else:
+            self.is_leaving = True
+            print('is leaving is true')
+            self.state.running = False
 
     def on_no(self):
         self.__init__(self.state)

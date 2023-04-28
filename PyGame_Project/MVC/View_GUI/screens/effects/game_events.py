@@ -1,4 +1,4 @@
-from ..main_game_screen_components.center.game import update_hexagon_positions
+from ..game_screen_components.center.game import update_hexagon_positions
 from PyGame_Project.MVC.View_GUI.hints_gui import *
 from enum import Enum
 import pygame
@@ -75,14 +75,6 @@ def wire_events(state):
             update_hexagon_positions(state)
 
 
-def clicked_shuffle(state):
-    if not state.is_animating:
-        pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
-        state.is_animating = True
-        state.start_animation_time = pygame.time.get_ticks()
-        state.elapsed_animation_time = 0
-
-
 def clicked_save(state):
     state.active_popup = state.save_popup
     state.active_popup.show()
@@ -95,42 +87,17 @@ def clicked_give_up(state):
 
 def clicked_leave(state):
     state.active_popup = state.leave_popup
+    state.active_popup.is_quitting = True
+    state.active_popup.show()
+
+
+def clicked_go_back(state):
+    state.active_popup = state.leave_popup
     state.active_popup.show()
 
 
 def clicked_hints():
     hint_screen()
-
-
-def clicked_go_back(state):
-    state.active_popup = state.back_popup
-    if state.active_popup.show():
-        state.running = False
-
-
-def reset_timer(state):
-    state.current_guess_state = GuessState.NEUTRAL
-    if state.correct_guess_timer:
-        state.current_guess = ''
-    state.incorrect_guess_timer = False
-    state.correct_guess_timer = False
-    pygame.event.set_allowed(pygame.KEYDOWN)
-
-
-def clicked_submit(state):
-    if state.puzzle_stats.get_check_guess(state.current_guess) == 0:
-        state.current_guess_state = GuessState.CORRECT
-        pygame.event.set_blocked(pygame.KEYDOWN)
-        state.correct_guess_timer = True
-        if len(state.current_guess) == 4:
-                state.current_guess = f'+ {state.puzzle_stats.get_word_points(state.current_guess)} point!'
-        else:
-                state.current_guess= f'+ {state.puzzle_stats.get_word_points(state.current_guess)} points!'
-    else:
-        state.current_guess_state = GuessState.INCORRECT
-        state.incorrect_guess_timer = True
-    
-    state.start_animation_time = pygame.time.get_ticks()
 
 
 def clicked_clear(state):
@@ -146,6 +113,39 @@ def handle_scroll(state, event):
         state.scroll_position = max(0, state.scroll_position - 1)
     else:
         state.scroll_position = min(state.max_scroll_position, state.scroll_position + 1)
+
+
+def reset_timer(state):
+    state.current_guess_state = GuessState.NEUTRAL
+    if state.correct_guess_timer:
+        state.current_guess = ''
+    state.incorrect_guess_timer = False
+    state.correct_guess_timer = False
+    pygame.event.set_allowed(pygame.KEYDOWN)
+
+
+def clicked_shuffle(state):
+    if not state.is_animating:
+        pygame.event.set_blocked(pygame.MOUSEBUTTONDOWN)
+        state.is_animating = True
+        state.start_animation_time = pygame.time.get_ticks()
+        state.elapsed_animation_time = 0
+
+
+def clicked_submit(state):
+    if state.puzzle_stats.get_check_guess(state.current_guess) == 0:
+        state.current_guess_state = GuessState.CORRECT
+        pygame.event.set_blocked(pygame.KEYDOWN)
+        state.correct_guess_timer = True
+        if len(state.current_guess) == 4:
+            state.current_guess = f'+ {state.puzzle_stats.get_word_points(state.current_guess)} point!'
+        else:
+            state.current_guess = f'+ {state.puzzle_stats.get_word_points(state.current_guess)} points!'
+    else:
+        state.current_guess_state = GuessState.INCORRECT
+        state.incorrect_guess_timer = True
+
+    state.start_animation_time = pygame.time.get_ticks()
 
 
 def handle_button_press(state, event):
@@ -166,7 +166,7 @@ def handle_button_press(state, event):
                 elif key.strip().casefold() == "Hints".casefold() and state.buttons[key]:
                     clicked_hints()
                 elif key.strip().casefold() == "Leave Game".casefold() and state.buttons[key]:
-                    clicked_leave(state)
+                    clicked_go_back(state)
                 elif key.strip() in state.puzzle_stats.pangram.upper() and state.buttons[key] and state.can_guess:
                     state.current_guess += key.upper()
             
