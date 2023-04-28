@@ -10,9 +10,9 @@ coverage:
         threshold: 0%
         
   ignore:
-    - "**/View_CLI"
-    - "**/View_GUI"
-    - "**/__main__.py"
+    - "*/View_CLI/*"
+    - "*/View_GUI/*"
+    - "*/__main__.py"
 
 comment:
   layout: "diff, flags, files"
