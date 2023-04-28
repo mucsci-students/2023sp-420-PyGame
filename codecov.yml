@@ -9,11 +9,11 @@ coverage:
         target: auto
         threshold: 0%
         
-  ignore:
-    - "PyGame_Project/MVC/View_GUI/"
-    - "*/View_CLI/*"
-    - "*/View_GUI/*"
-    - "*/__main__.py"
+ignore:
+  - "PyGame_Project/MVC/View_GUI/*"
+  - "*/View_CLI/*"
+  - "*/View_GUI/*"
+  - "*/__main__.py"
 
 comment:
   layout: "diff, flags, files"
