@@ -322,6 +322,7 @@ class PuzzleStats(Puzzle):
         for word in self.current_word_list:
             WordList.append(word[0])
         saveStat = {
+                "Author":  "PyGame",
                 "RequiredLetter": self.required_letter,
                 "PuzzleLetters": self.pangram,
                 "CurrentPoints": self.score,
@@ -332,13 +333,11 @@ class PuzzleStats(Puzzle):
         if(encodeWords):
             WordList = '. '.join(WordList)
             saveStat.update({
-                "SecretWordList" : encrypt(WordList),
-                "WordList" : []
+                "SecretWordList" : encrypt(WordList)
             })
         else:
         #if not encrypted
             saveStat.update({
-                "SecretWordList" : [],
                 "WordList" : WordList
             })
         
@@ -390,12 +389,17 @@ class PuzzleStats(Puzzle):
 
         self.score = saveInfo["CurrentPoints"]
         self.guesses = saveInfo["GuessedWords"]
-        self.total_points = saveInfo["MaxPoints"]   
-        try:
-            self.wordList  = decrypt(saveInfo["SecretWordList"]).split(". ")
-        except:
-            self.wordList = saveInfo["WordList"]
-        
+        self.total_points = saveInfo["MaxPoints"] 
+        if(saveInfo["Author"] == "PyGame"):  
+            try:
+                self.wordList  = decrypt(saveInfo["SecretWordList"]).split(". ")
+            except:
+                self.wordList = saveInfo["WordList"]
+        else:
+            try:
+                self.wordList = saveInfo["WordList"]
+            except:
+                raise Exception("WordList can not be read from save file.")
         self.generate_puzzle_from_load(saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"])
         self.RankIndex()
 
