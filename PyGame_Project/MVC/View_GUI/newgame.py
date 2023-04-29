@@ -1,8 +1,6 @@
 # imports
-import pygame, sys,math
-from pygame.locals import *
-from PyGame_Project.MVC.View_GUI.gui_main_game import Game
-from PyGame_Project.MVC.View_GUI.game_screen.components.main_screen import build_main_screen
+import pygame, math
+from PyGame_Project.MVC.View_GUI.screens.game_screen_components.main_screen import build_main_screen
 from PyGame_Project.MVC.Controller.controller_universal import *
 from pygame.locals import *
 

@@ -1,5 +1,5 @@
-from ..shapes import Rectangle, Hexagon
-from ...colors import COLOR_BLACK, COLOR_NEON_ORANGE, COLOR_ORANGE, COLOR_INVALID_COLOR, COLOR_VALID_COLOR
+from PyGame_Project.MVC.View_GUI.screens.effects.shapes import Rectangle, Hexagon
+from PyGame_Project.MVC.View_GUI.screens.effects.colors import COLOR_BLACK, COLOR_NEON_ORANGE, COLOR_ORANGE, COLOR_INVALID_COLOR, COLOR_VALID_COLOR
 
 
 def create_input_box(state):

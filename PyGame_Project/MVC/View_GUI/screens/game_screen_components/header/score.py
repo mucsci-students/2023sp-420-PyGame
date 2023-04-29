@@ -1,5 +1,5 @@
-from ...colors import COLOR_BLACK, COLOR_NEON_ORANGE
-from ...components.shapes import Rectangle
+from PyGame_Project.MVC.View_GUI.screens.effects.colors import COLOR_BLACK, COLOR_NEON_ORANGE
+from PyGame_Project.MVC.View_GUI.screens.effects.shapes import Rectangle
 
 
 def create_score(state):
