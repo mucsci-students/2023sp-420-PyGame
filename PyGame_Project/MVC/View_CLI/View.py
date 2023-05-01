@@ -72,6 +72,8 @@ def print_current_puzzle():
           /share     /savegame 
           /hints     /highscores
           /giveup    /exit
+          /shareimage
+
         
         """
     print(currentProgress)
