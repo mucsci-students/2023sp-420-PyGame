@@ -3,8 +3,10 @@ from PyGame_Project.MVC.View_GUI.screens.highscore_components.highscore_state im
 from PyGame_Project.MVC.View_GUI.screens.highscore_components.header import create_header
 from PyGame_Project.MVC.View_GUI.screens.highscore_components.center import create_center
 from PyGame_Project.MVC.Model.imageGen import generateImage
-
-import pygame, os, sys, math
+import pygame
+import random
+import sys
+import os
 
 minimum_width = 800
 minimum_height = 600
@@ -22,7 +24,7 @@ def build_high_score_screen(required_letter='', pangram='', name='', score=0):
     state.all_scores = get_scores_for_puzzle(required_letter, pangram)
 
     state.required_letter = required_letter
-    state.current_puzzle = pangram
+    state.current_puzzle = ''.join(random.sample(pangram, len(pangram)))
 
     i = 1
     for score in state.all_scores:

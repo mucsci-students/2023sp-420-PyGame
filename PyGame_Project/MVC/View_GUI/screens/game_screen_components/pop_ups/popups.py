@@ -1,6 +1,7 @@
-import pygame, sys, re
-from pygame import *
 from PyGame_Project.MVC.View_GUI.screens.highscore_components.high_score_screen import build_high_score_screen
+import pygame
+import sys
+import re
 
 min_width = 800
 min_height = 600
@@ -93,15 +94,15 @@ class Popup:
         self.setup_ui()
 
     def handle_event(self, event, state):
-        if event.type == MOUSEBUTTONUP:
+        if event.type == pygame.MOUSEBUTTONUP:
             if self.yes_button.collidepoint(event.pos):
                 self.on_yes()
             elif self.no_button.collidepoint(event.pos):
                 self.on_no()
-        elif event.type == KEYDOWN:
-            if event.key == K_BACKSPACE:
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
                 self.text_input = self.text_input[:-1]
-            elif event.key == K_RETURN:
+            elif event.key == pygame.K_RETURN:
                 self.on_yes()
 
             elif self.show_input: 
@@ -236,16 +237,16 @@ class SavePopup(Popup):
         self.update_screen()
 
     def handle_event(self, event, state):
-        if event.type == MOUSEBUTTONUP:
+        if event.type == pygame.MOUSEBUTTONUP:
             if self.yes_button.collidepoint(event.pos):
                 self.on_yes()
             elif self.no_button.collidepoint(event.pos):
                 self.on_no()
         
-        elif event.type == KEYDOWN:
-            if event.key == K_BACKSPACE:
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
                 self.text_input = self.text_input[:-1]
-            elif event.key == K_RETURN:
+            elif event.key == pygame.K_RETURN:
                 self.on_yes()
             
             elif self.show_input: 
@@ -382,16 +383,16 @@ class HighScorePopup(Popup):
         self.__init__(self.state)
 
     def handle_event(self, event, state):
-        if event.type == MOUSEBUTTONUP:
+        if event.type == pygame.MOUSEBUTTONUP:
             if self.yes_button.collidepoint(event.pos):
                 self.on_yes()
             elif self.no_button.collidepoint(event.pos):
                 self.on_no()
 
-        elif event.type == KEYDOWN:
-            if event.key == K_BACKSPACE:
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
                 self.text_input = self.text_input[:-1]
-            elif event.key == K_RETURN:
+            elif event.key == pygame.K_RETURN:
                 self.on_yes()
 
             elif self.show_input:

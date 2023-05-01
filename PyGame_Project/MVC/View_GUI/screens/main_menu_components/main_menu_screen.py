@@ -1,12 +1,13 @@
-from PyGame_Project.MVC.View_GUI.screens.highscore_components.high_score_screen import build_high_score_screen
-from PyGame_Project.MVC.View_GUI.screens.game_screen_components.pop_ups import HighScorePopup
 from PyGame_Project.MVC.View_GUI.screens.main_menu_components.main_menu_state import MainMenuState
+from PyGame_Project.MVC.View_GUI.screens.game_screen_components.pop_ups import HighScorePopup
 from PyGame_Project.MVC.View_GUI.screens.main_menu_components.center import build_center
 from PyGame_Project.MVC.View_GUI.screens.main_menu_components.header import build_top
 from PyGame_Project.MVC.View_GUI.newgame import start_new_game
 from PyGame_Project.MVC.View_GUI.loadgame import start_load
 from PyGame_Project.MVC.View_GUI.helpgui import start_help
-import pygame, os, sys, math
+import pygame
+import os
+import sys
 
 minimum_width = 800
 minimum_height = 600
@@ -77,16 +78,17 @@ def handle_screen_resize(state, event):
 def handle_button_press(state, event):
     if not (event.button == 4 or event.button == 5):
         for key in state.buttons:
-            if key.strip().casefold() == 'New Game'.casefold() and state.buttons[key]:
-                start_new_game()
-            elif key.strip().casefold() == 'Load Game'.casefold() and state.buttons[key]:
-                start_load()
-            elif key.strip().casefold() == 'Help'.casefold() and state.buttons[key]:
-                start_help()
-            elif key.strip().casefold() == 'High Scores'.casefold() and state.buttons[key]:
-                clicked_high_score(state)
-            elif key.strip().casefold() == 'Exit'.casefold() and state.buttons[key]:
-                clicked_leave(state)
+            if state.buttons[key]:
+                if key.strip().casefold() == 'Help'.casefold():
+                    start_help()
+                elif key.strip().casefold() == 'Exit'.casefold():
+                    clicked_leave(state)
+                elif key.strip().casefold() == 'New Game'.casefold():
+                    start_new_game()
+                elif key.strip().casefold() == 'Load Game'.casefold():
+                    start_load()
+                elif key.strip().casefold() == 'High Scores'.casefold():
+                    clicked_high_score(state)
 
 
 def clicked_leave(state):
@@ -96,4 +98,3 @@ def clicked_leave(state):
 def clicked_high_score(state):
     state.active_popup = state.highscore_popup
     state.active_popup.show()
-
