@@ -6,6 +6,9 @@ import pygame
 class MainMenuState:
     running: bool = True
 
+    active_popup = None
+    highscore_popup = None
+
     pygame.init()
     buttons = {}
 

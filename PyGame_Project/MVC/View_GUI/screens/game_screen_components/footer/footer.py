@@ -34,8 +34,11 @@ def create_buttons(state):
     right_x_offset = state.display.get_width() - left_x_offset
     height = 0.0625 * state.display.get_height()
     spacer = left_x_offset * 2.3
-    y_pos = state.display.get_height() - height * 1.5
-    y_pos_offset = y_pos - left_x_offset * 1.65
+    y_pos = state.display.get_height() - (height * 3.5)
+    # y_pos_top_offset = y_pos - left_x_offset * 1.65
+    # y_pos_bottom_offset = y_pos + left_x_offset * 1.65
+    y_pos_top_offset = y_pos - (height * 2)
+    y_pos_bottom_offset = y_pos + (height * 2)
 
     save_x_pos = left_x_offset
     clear_x_pos = right_x_offset
@@ -45,11 +48,13 @@ def create_buttons(state):
     hints_x_pos = clear_x_pos - (spacer * .5)
 
     draw_button(state, " Save ", save_x_pos, y_pos)
-    draw_button(state, " Give Up ", giveup_x_pos, y_pos_offset)
+    draw_button(state, " Give Up ", giveup_x_pos, y_pos_top_offset)
     draw_button(state, " Shuffle ", shuffle_x_pos, y_pos)
     draw_button(state, " Submit ", submit_x_pos, y_pos)
-    draw_button(state, " Hints ", hints_x_pos, y_pos_offset)
+    draw_button(state, " Hints ", hints_x_pos, y_pos_top_offset)
     draw_button(state, " Clear ", clear_x_pos, y_pos)
+    draw_button(state, " Scores ", giveup_x_pos, y_pos_bottom_offset)
+    draw_button(state, " Share ", hints_x_pos, y_pos_bottom_offset)
 
 
 def draw_button(state, text, x, y):

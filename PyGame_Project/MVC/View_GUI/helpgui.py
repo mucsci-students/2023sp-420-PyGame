@@ -1,5 +1,4 @@
 import pygame, os, math
-from PyGame_Project.MVC.View_GUI.gui_main_menu import *
 
 def start_help():
 
