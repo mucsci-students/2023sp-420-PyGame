@@ -333,12 +333,11 @@ class PuzzleStats(Puzzle):
             WordList = '. '.join(WordList)
             saveStat.update({
                 "SecretWordList" : encrypt(WordList),
-                "WordList" : []
+                "Author":  "PyGame"
             })
         else:
         #if not encrypted
             saveStat.update({
-                "SecretWordList" : [],
                 "WordList" : WordList
             })
         
@@ -390,12 +389,16 @@ class PuzzleStats(Puzzle):
 
         self.score = saveInfo["CurrentPoints"]
         self.guesses = saveInfo["GuessedWords"]
-        self.total_points = saveInfo["MaxPoints"]   
+        self.total_points = saveInfo["MaxPoints"] 
+          
         try:
-            self.wordList  = decrypt(saveInfo["SecretWordList"]).split(". ")
+            if(saveInfo["Author"] == "PyGame"):
+                self.wordList  = decrypt(saveInfo["SecretWordList"]).split(". ")
+            else:
+                self.wordList = saveInfo["WordList"]
         except:
             self.wordList = saveInfo["WordList"]
-        
+            
         self.generate_puzzle_from_load(saveInfo["PuzzleLetters"], saveInfo["RequiredLetter"])
         self.RankIndex()
 

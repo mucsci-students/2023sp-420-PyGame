@@ -240,10 +240,9 @@ def saveGamePrompt():
 #Prompts the user with the option to make their file sharable, if not, then it will be encrypted soon alhamdulillah
 def encryption_prompt():
   while(True):
-    print("Allow Puzzle Sharing? Y/N")
-    userInput = user_input(0).lower()  #asks user for an input
-    print(userInput)
-    cls()  
+    cls()
+    print_enable_encryption()
+    userInput = user_input(0).lower()  #asks user for an input  
     match userInput:
       case "y":
         return False
@@ -251,6 +250,8 @@ def encryption_prompt():
         return True
       case _: # if any other command not in the list is entered, then this output will be returned
         print("Command Not Recognized")
+        time.sleep(1)
+        cls()
 
 #Loops thru the active game screens
 def activeGameLoop():
