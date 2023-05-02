@@ -16,6 +16,8 @@ def new_game_menu_events(state):
             state.active_popup.draw()
             if state.active_popup == state.shared_game_popup:
                 if state.active_popup.confirmation_bool:
+                    state.active_popup.on_no()
+                    state.active_popup = None
                     build_main_screen()
 
     events = pygame.event.get()

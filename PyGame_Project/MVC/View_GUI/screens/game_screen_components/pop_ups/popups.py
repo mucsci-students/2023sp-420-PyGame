@@ -148,7 +148,13 @@ class Popup:
 
         lines.append(current_line.strip())
         return lines
-    
+
+    def check_input_width(self):
+        if len(self.text_input) <= self.input_box.width // self.font.size('B')[0] - 2:
+            return True
+
+        return False
+
     @staticmethod
     def check_character_is_allowed(string):
         allowed_char_pattern = r'[A-Za-z0-9_!@#$%^&*()\-=+\[\]{};,. ]'
@@ -292,6 +298,7 @@ class LeavePopup(Popup):
         else:
             self.is_leaving = True
             print('is leaving is true')
+            print(type(self.state))
             self.state.running = False
 
     def on_no(self):
@@ -354,15 +361,16 @@ class HighScorePopup(Popup):
 
     def on_yes(self):
         if not self.confirmation_bool:
-            if len(self.text_input) == 7 and len(self.text_input) == len(set(self.text_input)):
+            unique_letters = ''.join(set(self.text_input))
+            if len(unique_letters) == 7:
                 self.confirmation_bool = True
-                self.puzzle_letters = self.text_input
+                self.puzzle_letters = unique_letters
                 self.text_input = ''
                 self.message = f"Enter the required letter for this puzzle: {self.puzzle_letters}"
                 self.no_button_text = "Cancel"
                 self.yes_button_text = "Confirm"
             else:
-                self.message = 'All letters must be unique.'
+                self.message = 'Make sure there are 7 unique characters.'
 
         elif self.confirmation_bool:
             if self.text_input in self.puzzle_letters:
@@ -402,7 +410,8 @@ class HighScorePopup(Popup):
                 self.on_yes()
 
             elif self.show_input:
-                if len(self.text_input) + 1 < 8:
+                # if len(self.text_input) + 1 < 8:
+                if self.check_input_width():
                     self.text_input += event.unicode
 
         elif event.type == pygame.VIDEORESIZE:
@@ -450,6 +459,7 @@ class SharedGamePopup(Popup):
                 else:
                     self.confirmation_bool = True
 
+
         except Exception:
             if self.is_shared_game:
                 self.message = "Invalid key, please double check and try again."
@@ -462,9 +472,7 @@ class SharedGamePopup(Popup):
         self.__init__(self.state)
 
     def show(self):
-
         self.active = True
-
         if self.is_shared_game:
             self.message = "Enter your shared game key:"
         else:
@@ -505,9 +513,3 @@ class SharedGamePopup(Popup):
             state.display = pygame.display.set_mode((width, height), pygame.RESIZABLE)
             self.setup_ui()
             self.draw()
-
-    def check_input_width(self):
-        if len(self.text_input) <= self.input_box.width // self.font.size('B')[0] - 2:
-            return True
-
-        return False
