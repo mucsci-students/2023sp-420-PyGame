@@ -297,8 +297,6 @@ class LeavePopup(Popup):
             sys.exit()
         else:
             self.is_leaving = True
-            print('is leaving is true')
-            print(type(self.state))
             self.state.running = False
 
     def on_no(self):

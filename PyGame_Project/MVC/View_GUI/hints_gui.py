@@ -150,7 +150,9 @@ def hint_screen():
     while running:
         clock.tick(fps)
 
-        for event in pygame.event.get():
+        events = pygame.event.get()
+
+        for event in events:
 
             # if the user exits the window
             if event.type == pygame.QUIT:
