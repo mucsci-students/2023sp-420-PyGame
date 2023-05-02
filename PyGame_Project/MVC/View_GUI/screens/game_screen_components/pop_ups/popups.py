@@ -385,6 +385,9 @@ class HighScorePopup(Popup):
     def on_no(self):
         self.__init__(self.state)
 
+    def on_show(self):
+        self.active = True
+
     def handle_event(self, event, state):
         if event.type == pygame.MOUSEBUTTONUP:
             if self.yes_button.collidepoint(event.pos):
@@ -459,6 +462,7 @@ class SharedGamePopup(Popup):
         self.__init__(self.state)
 
     def show(self):
+
         self.active = True
 
         if self.is_shared_game:

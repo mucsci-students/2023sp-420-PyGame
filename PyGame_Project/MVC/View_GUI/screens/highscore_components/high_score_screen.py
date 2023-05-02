@@ -16,6 +16,7 @@ def build_high_score_screen(required_letter='', pangram='', name='', score=0):
 
     state = HighScoreState()
     state.player_name = name
+    state.edited_scores = []
     pygame.display.set_caption('High Scores')
     state.display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     if len(name) <= 3:
