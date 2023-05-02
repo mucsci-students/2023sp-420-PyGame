@@ -140,9 +140,11 @@ def start_help():
     running = True
     while running:
         clock.tick(fps)
+        events = pygame.event.get()
+        for event in events:
 
-        for event in pygame.event.get():
-            print("here")
+        # for event in pygame.event.get():
+
 
             # if the user exits the window
             if event.type == pygame.QUIT:
