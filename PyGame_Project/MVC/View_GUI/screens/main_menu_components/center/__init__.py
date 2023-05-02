@@ -8,3 +8,5 @@ def build_center(state):
         create_middle(state, main_menu_buttons)
     elif state.current_active_screen is state.current_active_screen.NEW_GAME:
         create_middle(state, new_game_buttons)
+    elif state.current_active_screen is state.current_active_screen.LOAD_GAME:
+        create_middle(state, state.saved_games)

@@ -14,6 +14,8 @@ class MainMenuState:
     active_screen = None
     current_active_screen = None
 
+    saved_games = None
+
     pygame.init()
     buttons = {}
 

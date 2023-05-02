@@ -3,6 +3,7 @@ from PyGame_Project.MVC.View_GUI.screens.game_screen_components.pop_ups import H
 from PyGame_Project.MVC.View_GUI.screens.main_menu_components.center import build_center
 from PyGame_Project.MVC.View_GUI.screens.main_menu_components.header import build_top
 from PyGame_Project.MVC.View_GUI.screens.main_menu_components.new_game_screen import new_game_menu_events
+from PyGame_Project.MVC.View_GUI.screens.main_menu_components.load_game_screen import load_game_menu_events
 from PyGame_Project.MVC.View_GUI.loadgame import start_load
 from PyGame_Project.MVC.View_GUI.helpgui import start_help
 from enum import Enum
@@ -26,6 +27,13 @@ def build_main_menu_screen():
     state = MainMenuState()
 
     pygame.display.set_caption('Main Menu')
+    state.saved_games = []
+    for file in os.listdir(os.getcwd()):
+        if ".json" in file:
+            state.saved_games.append(file)
+
+    state.saved_games.append("Back")
+
     state.display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     state.highscore_popup = HighScorePopup(state)
     state.shared_game_popup = SharedGamePopup(state)
@@ -49,6 +57,14 @@ def build_main_menu_screen():
             main_menu_events(state)
         elif state.current_active_screen is state.active_screen.NEW_GAME:
             new_game_menu_events(state)
+        elif state.current_active_screen is state.active_screen.LOAD_GAME:
+            state.saved_games = []
+            for file in os.listdir(os.getcwd()):
+                if ".json" in file:
+                    state.saved_games.append(file)
+            state.saved_games.append("Back")
+            load_game_menu_events(state)
+
         pygame.display.update()
 
 
@@ -103,13 +119,17 @@ def handle_button_press(state, event):
                     elif key.strip().casefold() == 'New Game'.casefold():
                         clicked_new_game(state)
                     elif key.strip().casefold() == 'Load Game'.casefold():
-                        start_load()
+                        clicked_load_game(state)
                     elif key.strip().casefold() == 'High Scores'.casefold():
                         clicked_high_score(state)
 
 
 def clicked_leave(state):
     state.running = False
+
+
+def clicked_load_game(state):
+    state.current_active_screen = state.active_screen.LOAD_GAME
 
 
 def clicked_new_game(state):

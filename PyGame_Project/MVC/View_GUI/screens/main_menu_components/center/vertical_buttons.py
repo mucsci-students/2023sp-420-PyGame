@@ -13,6 +13,7 @@ def create_middle(state, all_button_text):
 
     button_gap = button_height * .5
     next_button_y_pos = spacer + (button_height * 2)
+    total_rows = len(all_button_text) + 1
 
     # Calculate the total height of the button group
     num_rows = (len(all_button_text) + 1) // 2
@@ -26,32 +27,40 @@ def create_middle(state, all_button_text):
 
     # Compute the starting y-coordinate for the first button, placing the middle button at the center
     middle_button_index = len(all_button_text) // 2
-    start_y = (remaining_screen_height - total_height) / 2 + header_height_offset - middle_button_index * next_button_y_pos - button_gap
 
     width = state.display.get_width() / 3
 
     for i in range(len(all_button_text)):
+        start_y = (remaining_screen_height - total_height) / 2 + header_height_offset - middle_button_index * \
+                  next_button_y_pos - button_gap + (state.scroll_position * (next_button_y_pos + button_gap))
+
         button_x = left_x_offset
         if i % 2 == 1:
             button_x = right_x_offset
         button_y = start_y + i * next_button_y_pos
 
-        hex_button = draw_button(state, '', button_x, button_y, button_height)
+        index = state.scroll_position + i
+        if index < len(all_button_text):
 
-        rec = Rectangle(
-            x=button_x + button_height + spacer, y=button_y - button_gap, w=width, h=button_height,
-            font_color=COLOR_NEON_ORANGE,
-            text=all_button_text[i]
-        )
-        rec.draw(state.display, COLOR_BLACK)
+            hex_button = draw_button(state, '', button_x, button_y, button_height)
 
-        if rec.is_hover():
-            rec.change_colors(state.display, COLOR_ORANGE, COLOR_ORANGE, rec.text)
+            rec = Rectangle(
+                x=button_x + button_height + spacer, y=button_y - button_gap, w=width, h=button_height,
+                font_color=COLOR_NEON_ORANGE,
+                text=all_button_text[i]
+            )
+            rec.draw(state.display, COLOR_BLACK)
 
-        if rec.is_hover() or hex_button.is_hover():
-            state.buttons[rec.text] = True
-        else:
-            state.buttons[rec.text] = False
+            if rec.is_hover():
+                rec.change_colors(state.display, COLOR_ORANGE, COLOR_ORANGE, rec.text)
+
+            if rec.is_hover() or hex_button.is_hover():
+                state.buttons[rec.text] = True
+            else:
+                state.buttons[rec.text] = False
+
+    state.max_scroll_position = max(0, total_rows - 1)
+    print(state.scroll_position)
 
 
 def draw_button(state, text, x, y, w):
