@@ -142,6 +142,7 @@ def start_help():
         clock.tick(fps)
 
         for event in pygame.event.get():
+            print("here")
 
             # if the user exits the window
             if event.type == pygame.QUIT:
@@ -176,6 +177,6 @@ def start_help():
         pygame.display.update()
 
     # when running is False, reset the window size to the gui_main_menu window size
-    window = pygame.display.set_mode((600, 600))
+    window = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     return
     pygame.quit()

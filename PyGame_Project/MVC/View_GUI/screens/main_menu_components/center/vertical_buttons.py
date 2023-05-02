@@ -60,7 +60,6 @@ def create_middle(state, all_button_text):
                 state.buttons[rec.text] = False
 
     state.max_scroll_position = max(0, total_rows - 1)
-    print(state.scroll_position)
 
 
 def draw_button(state, text, x, y, w):
