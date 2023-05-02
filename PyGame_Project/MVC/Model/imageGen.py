@@ -6,7 +6,7 @@ from PyGame_Project.MVC.Model.Database.model_highscores import *
 from PIL import Image, ImageFont, ImageDraw 
 
 
-def generateImage(saveName):
+def generateImage():
     puzzle = PuzzleStats()
 
     ## Load in card template
@@ -64,11 +64,12 @@ def generateImage(saveName):
     image_editable.text((40,680), aaaaa_text, (64, 45, 24), font=cardFontS)
     
     ##def get_player_rank(player_name, required_letter, all_letters):
+    """  
     playerRank = get_player_rank(saveName, puzzle.required_letter, puzzle.pangram)
 
     aaaaa_text = "\t High Score Rank: " + str(playerRank[2]) + "/" + str(playerRank[3])  
     image_editable.text((40,720), aaaaa_text, (64, 45, 24), font=cardFontS)
-
+    """
     """ 
     aaaaa_text = "\t #######"
     image_editable.text((40,760), aaaaa_text, (64, 45, 24), font=cardFontS)
@@ -76,4 +77,4 @@ def generateImage(saveName):
 
 
     ## Save the new image 
-    my_image.save(os.path.join(os.getcwd(), saveName + ".png"))
+    my_image.save(os.path.join(os.getcwd(), PuzzleStats().encode_puzzle_key().upper() + ".png"))

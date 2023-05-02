@@ -23,7 +23,7 @@ def tab_completion(typed_string, command_set):
   if command_set == 1:
     commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/highscores', '/help', '/exit']
   elif command_set == 2:
-    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints', '/giveup', '/highscores']
+    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints', '/giveup', '/highscores', '/shareimage']
 
   # finds commands that match what the user started to type
   matches = [c for c in commands if c.startswith(typed_string)]
@@ -245,9 +245,9 @@ def encryption_prompt():
     userInput = user_input(0).lower()  #asks user for an input  
     match userInput:
       case "y":
-        return False
-      case "n":
         return True
+      case "n":
+        return False
       case _: # if any other command not in the list is entered, then this output will be returned
         print("Command Not Recognized")
         time.sleep(1)
@@ -347,6 +347,10 @@ def active_game_commands(userInput):
       cls()
       high_score_current_puzzle()
       space_out()
+      return True
+    
+    case "/shareimage":
+      generate_new_image()
       return True
 
     case _:
@@ -454,7 +458,7 @@ def give_up():
       answer = user_input(0).lower()
       match answer:
         case "y":
-          generate_new_image(player_name)
+          generate_new_image()
         
         case _:
           print("Image not saved..")
@@ -530,7 +534,7 @@ def game_complete():
   answer = user_input(0).lower()
   match answer:
     case "y":
-      generate_new_image(player_name)
+      generate_new_image()
     
     case _:
       print("Image not saved..")
@@ -540,8 +544,8 @@ def game_complete():
 
 
 # for when the user wants to generate an image for the current puzzle
-def generate_new_image(player_name):
-  generateImage(player_name)
+def generate_new_image():
+  generateImage()
   print("Image Saved!")
   time.sleep(1)
 
