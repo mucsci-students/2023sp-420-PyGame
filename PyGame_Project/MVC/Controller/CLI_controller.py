@@ -245,9 +245,9 @@ def encryption_prompt():
     userInput = user_input(0).lower()  #asks user for an input  
     match userInput:
       case "y":
-        return False
-      case "n":
         return True
+      case "n":
+        return False
       case _: # if any other command not in the list is entered, then this output will be returned
         print("Command Not Recognized")
         time.sleep(1)
@@ -351,6 +351,7 @@ def active_game_commands(userInput):
     
     case "/shareimage":
       generate_new_image()
+      return True
 
     case _:
       print("Command Not Recognized")
