@@ -1,4 +1,5 @@
 from PyGame_Project.MVC.View_GUI.screens.highscore_components.high_score_screen import build_high_score_screen
+from PyGame_Project.MVC.Controller.controller_universal import prep_game_from_share, prep_game_with_key
 import pygame
 import sys
 import re
@@ -414,3 +415,93 @@ class HighScorePopup(Popup):
             self.setup_ui()
             self.draw()
 
+
+class SharedGamePopup(Popup):
+    def __init__(self, state, is_shared_game=None):
+        self.state = state
+        self.required_letter = ''
+        self.puzzle_letters = ''
+        self.message = ''
+        self.is_shared_game = is_shared_game
+
+        super().__init__(state.display, self.message, self.on_yes, self.on_no)
+
+        self.confirmation_bool = False
+        self.no_button_text = "Cancel"
+        self.yes_button_text = "Confirm"
+
+    def on_yes(self):
+        try:
+            if self.is_shared_game:
+                check_key = prep_game_from_share(self.text_input)
+                if check_key == 1:
+                    self.message = "Invalid key, please double check and try again."
+                else:
+                    self.confirmation_bool = True
+            else:
+                check_key = prep_game_with_key(self.text_input)
+                if check_key == 1:
+                    self.message = "Invalid key, please double check and try again."
+                else:
+                    self.confirmation_bool = True
+
+        except Exception:
+            if self.is_shared_game:
+                self.message = "Invalid key, please double check and try again."
+            else:
+                self.message = "Ensure there are 7 unique characters."
+
+        self.update_screen()
+
+    def on_no(self):
+        self.__init__(self.state)
+
+    def show(self):
+        self.active = True
+
+        if self.is_shared_game:
+            self.message = "Enter your shared game key:"
+        else:
+            self.message = "Enter a word with 7 unique characters:"
+
+    def handle_event(self, event, state):
+        if event.type == pygame.MOUSEBUTTONUP:
+            if self.yes_button.collidepoint(event.pos):
+                self.on_yes()
+            elif self.no_button.collidepoint(event.pos):
+                self.on_no()
+
+        elif event.type == pygame.KEYDOWN:
+            if event.key == pygame.K_BACKSPACE:
+                self.text_input = self.text_input[:-1]
+            elif event.key == pygame.K_RETURN:
+                self.on_yes()
+
+            elif self.show_input:
+                if self.is_shared_game:
+                    if len(self.text_input) + 1 < 9:
+                        self.text_input += event.unicode
+                else:
+                    if self.check_input_width():
+                        self.text_input += event.unicode
+
+        elif event.type == pygame.VIDEORESIZE:
+            if event.w < min_width:
+                width = min_width
+            else:
+                width = event.w
+
+            if event.h < min_height:
+                height = min_height
+            else:
+                height = event.h
+
+            state.display = pygame.display.set_mode((width, height), pygame.RESIZABLE)
+            self.setup_ui()
+            self.draw()
+
+    def check_input_width(self):
+        if len(self.text_input) <= self.input_box.width // self.font.size('B')[0] - 2:
+            return True
+
+        return False
