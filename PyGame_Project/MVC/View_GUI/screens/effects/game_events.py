@@ -88,7 +88,7 @@ def clicked_hints():
 
 
 def clicked_share():
-    generateImage('')
+    generateImage()
 
 
 def clicked_clear(state):

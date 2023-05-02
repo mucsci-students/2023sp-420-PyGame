@@ -100,6 +100,6 @@ def clicked_leave(state):
 
 
 def clicked_share(state):
-    generateImage(state.player_name)
+    generateImage()
 
 
