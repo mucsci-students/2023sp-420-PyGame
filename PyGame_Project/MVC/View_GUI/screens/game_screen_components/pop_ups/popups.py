@@ -298,6 +298,7 @@ class LeavePopup(Popup):
         else:
             self.is_leaving = True
             self.state.running = False
+            self.state.puzzle_stats.clear()
 
     def on_no(self):
         self.__init__(self.state)
@@ -323,6 +324,7 @@ class GiveUpPopup(Popup):
 
         elif self.confirmation_bool:
             self.state.running = False
+            self.state.puzzle_stats.clear()
             build_high_score_screen(self.puzzle_stats.required_letter, self.puzzle_stats.pangram, self.text_input,
                                     self.puzzle_stats.score)
 
