@@ -213,6 +213,8 @@ class SavePopup(Popup):
         if self.confirm_save_game and not self.show_input:
             self.show_input = True
             self.message = "Please enter a filename:"
+            self.yes_button_text = "Save"
+            self.no_button_text = "Cancel"
 
         # User hit cancel on filename input.
         else:
@@ -225,7 +227,7 @@ class SavePopup(Popup):
         if self.check_windows_reserved_name(self.text_input):
             if (not self.puzzle_stats.get_check_file(self.text_input) and not self.confirmation_bool) or self.confirmation_bool:
                 self.message = "Game saved successfully!"
-                self.puzzle_stats.get_save_game(self.text_input)
+                self.puzzle_stats.get_save_game(self.text_input, self.made_encryption_choice)
                 self.finished_saving = True
             else:
                 self.message = "File already exists. Overwrite?"

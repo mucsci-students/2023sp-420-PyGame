@@ -382,4 +382,8 @@ def print_pangram_stats(req_letter, all_letters):
 
 
 def print_generate_image():
-    print("Would you like to generate an image for your puzzle?\nY\nN\n")
+    print("Would you like to generate an image for your puzzle? (Y/N)")
+
+
+def print_enable_encryption():
+    print("Would you like to enable an Encrypted Word List for this puzzle? (Y/N)")
