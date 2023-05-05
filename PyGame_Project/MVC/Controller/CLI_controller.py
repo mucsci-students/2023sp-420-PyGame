@@ -563,6 +563,7 @@ def game_complete():
   space_out()
 
   # enter high score
+  cls()
   print_enter_name()
   player_name = user_input(3)
   all_letters = PuzzleStats().pangram
