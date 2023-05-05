@@ -105,11 +105,18 @@ def print_main_menu():
 """
     print(mainMenu)
 
-## Prompts user if they want to exit the game or not
-def print_exit():
-    exit = f"""
+## Prompts user if they want to exit the game or not from the main menu
+def print_exit_menu():
+    exit_m = f"""
 Are you sure you want to exit? (Y/N)"""
-    print(exit)
+    print(exit_m)
+
+
+## Prompts user if they want to exit the game or not from their active puzzle
+def print_exit_puzzle():
+    exit_p = f"""
+Are you sure you want to exit? (Any unsaved puzzle progress will be lost!) (Y/N)"""
+    print(exit_p)
 
 ## Prompts user if he wants to save the game or not
 def print_game_save():
@@ -140,7 +147,7 @@ def print_load_options():
 
 ## prints string for when you select start puzzle from Base
 def print_base_input():
-    print("\nEnter a panagram with seven unique letters: ")
+    print("\nEnter a pangram with seven unique letters: ")
 
 ## prints outcome for players guesses to active puzzle
 def print_guess_outcome(outcome):
@@ -304,7 +311,7 @@ def get_detailed_response(outcome):
             print("\n\t... Input has non-given letters ...")
     
 def print_shared_key_input():
-    print("Enter a shared game key: ")
+    print("\nEnter a shared game key: ")
 
 ## prints out the sharable key
 def print_shared_key_output(key):
@@ -364,10 +371,7 @@ def Print_hint_two_Let_Dict():
 def print_giveup_confirmation():
     giveup = f"""
 
-You are about to GIVE UP your current puzzle. Are you sure you want to GIVE UP?
-Y
-N
-"""
+You are about to GIVE UP your current puzzle. Are you sure you want to GIVE UP? (Y/N)"""
     print(giveup)
 
 

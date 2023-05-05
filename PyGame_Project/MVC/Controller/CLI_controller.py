@@ -195,7 +195,7 @@ def main_response(userInput):
         
     case "/exit":
       cls()
-      print_exit()
+      print_exit_menu()
       exit_game()
 
     case _:
@@ -239,7 +239,7 @@ def load_save_game():
   if answer == "y":
     print("Loading file...")
     time.sleep(.5)
-    if (start_game_with_key_from_load(file_name) == 1):
+    if start_game_with_key_from_load(file_name) == 1:
         print("Unable to load the file.")
   else:
     print("File loading canceled, returning to main menu...")
@@ -259,9 +259,9 @@ def keyStart():
     if check_value == 1:
     # Turn into custom error call to Output.py with key
       cls()
-      print("Invalid word, not a valid pangram. Return to main menu? (Y/N) \n")
+      print("\nInvalid pangram. Try again? (Y/N) \n")
       response = user_input(0).lower()
-      if(response == "y"):
+      if response != "y":
         main_menu_handler()
 
 # function to save game
@@ -307,9 +307,9 @@ def activeGame():
   print_current_puzzle()
   print("Enter your guess.")
   userInput = user_input(2).lower() #asks user for input to match
-  if (userInput == ""):
+  if userInput == "":
     return True
-  elif (userInput[0] != "/"):
+  elif userInput[0] != "/":
     outcome = print_guess_outcome(PuzzleStats().get_check_guess(userInput))
     time.sleep(1)
     return outcome
@@ -351,11 +351,17 @@ def active_game_commands(userInput):
     
     case "/mainmenu":
       print_game_save()
-      if(user_input(0).lower() == "y"):
+      answer = user_input(0).lower()
+      if answer == "y":
+        cls()
         print(f"Enter filename: ")
         file_name = user_input(4)
         cls()
         save_current_game(file_name)
+      elif answer != "n":
+        print("Command not recognized, returning to game...")
+        time.sleep(1)
+        return True
       PuzzleStats().clear()
       return False
 
@@ -368,7 +374,7 @@ def active_game_commands(userInput):
 
     case "/exit":
       cls()
-      print_exit()
+      print_exit_puzzle()
       return exit_game()
     
     case "/hints":
@@ -455,26 +461,23 @@ def cls():
 
 # Start a game from a shared key
 def start_shared_game():
-  cls()
-  print_shared_key_input()
-  shared_key = user_input(0).lower()
-  
-  prep_value = prep_game_from_share(shared_key)
-  
-  if prep_value == 1:
+  while True:
     cls()
-    print("Invalid Code Input.")
-    print("\nPress the space key to try again...")
-    print("Press 'n' to quit to main menu...")
-
-    while True:
-      key = get_os_name()
-      if key == ' ':
-        return start_shared_game()
-      elif key == 'n':
-        return True
-  
-  activeGameLoop()
+    print_shared_key_input()
+    shared_key = user_input(0).lower()
+    prep_value = prep_game_from_share(shared_key)
+    
+    # checks for valid share key (invalid = 1)
+    if prep_value == 1:
+      cls()
+      print("\nInvalid share key. Try again? (Y/N)")
+      answer = user_input(0).lower()
+      if answer != "y":
+        return False
+      continue
+    else:
+      activeGameLoop()
+      break
 
 
 # for when the user considers giving up their current puzzle
@@ -483,6 +486,7 @@ def give_up():
   match answer:
     # you gave up!
     case "y":
+      cls()
       print_enter_name()
       player_name = user_input(3)
       all_letters = PuzzleStats().pangram
