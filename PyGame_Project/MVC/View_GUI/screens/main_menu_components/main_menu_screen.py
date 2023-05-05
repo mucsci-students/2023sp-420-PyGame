@@ -69,7 +69,6 @@ def build_main_menu_screen():
 
 
 def main_menu_events(state):
-
     if state.active_popup is not None:
         if state.active_popup.active:
             state.active_popup.draw()

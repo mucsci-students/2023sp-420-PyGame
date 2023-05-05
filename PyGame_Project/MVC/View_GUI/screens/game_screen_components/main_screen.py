@@ -14,7 +14,6 @@ def build_main_screen():
     state = State()
     state.guess_state = GuessState
     state.puzzle_stats = PuzzleStats()
-    # state.puzzle_stats.clear()
     pygame.display.set_caption('PyGame - Spelling Bee')
     state.required_letter = state.puzzle_stats.required_letter.upper()
 
