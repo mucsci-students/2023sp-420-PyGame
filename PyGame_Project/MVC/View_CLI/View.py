@@ -230,23 +230,23 @@ def print_commands():
 ## prints the nice message when the puzzle is completed
 def print_game_over():
     gameOver = f"""
-          \             /
-           \   o ^ o   /            
-            \ (     ) /
- ____________(%%%%%%%)____________      
-(     /   /  )%%%%%%%(  \   \     )          
-(___/___/__/           \__\___\___)
-   (     /  /(%%%%%%%)\  \     )
-    (__/___/ (%%%%%%%) \___\__)        
-            /(       )\ 
-          /   (%%%%%)   \ 
-               (%%%) 
-                 !
-              Congrats!
-      You Completed the Puzzle!
+              \             /
+               \   o ^ o   /            
+                \ (     ) /
+     ____________(%%%%%%%)____________      
+    (     /   /  )%%%%%%%(  \   \     )          
+    (___/___/__/           \__\___\___)
+       (     /  /(%%%%%%%)\  \     )
+        (__/___/ (%%%%%%%) \___\__)        
+                /(       )\ 
+              /   (%%%%%)   \ 
+                   (%%%) 
+                     !
+                  Congrats!
+          You Completed the Puzzle!
 
       
-      Press space to continue...
+         Press space to continue...
       """
     print(gameOver)
 
