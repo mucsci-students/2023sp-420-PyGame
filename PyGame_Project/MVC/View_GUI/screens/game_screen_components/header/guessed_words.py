@@ -2,8 +2,8 @@ from PyGame_Project.MVC.View_GUI.screens.effects.colors import COLOR_BLACK, COLO
 from PyGame_Project.MVC.View_GUI.screens.effects.shapes import Rectangle
 import pygame
 
-def create_arrows(state):
 
+def create_arrows(state):
     x_buffer = state.display.get_width() / 10
     y_buffer = state.display.get_height() + 10
     
@@ -29,14 +29,6 @@ def create_arrows(state):
         text='Down'
     )
 
-    if up_arrow.is_hover():
-        print("up true")
-    elif down_arrow.is_hover():
-        print("down true")
-
-    state.buttons[up_arrow.text] = up_arrow.is_hover()
-    state.buttons[down_arrow.text] = down_arrow.is_hover()
-
     if state.show_guessed_words:
 
         if state.scroll_position == 0:
@@ -48,6 +40,9 @@ def create_arrows(state):
             pygame.draw.polygon(state.display, COLOR_BLACK, (down_arrow.shape.topleft, down_arrow.shape.topright, down_arrow.shape.midbottom))
         else:
             pygame.draw.polygon(state.display, COLOR_WHITE, (down_arrow.shape.topleft, down_arrow.shape.topright, down_arrow.shape.midbottom))
+
+        state.buttons[up_arrow.text] = up_arrow.is_hover()
+        state.buttons[down_arrow.text] = down_arrow.is_hover()
 
 
 def create_show_words(state):

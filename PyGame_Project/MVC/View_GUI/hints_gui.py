@@ -9,8 +9,8 @@ def hint_screen():
     pygame.init()
 
     # create window dimensions, and minimum window dimensions (when window is resized)
-    winX, winY = 700, 400
-    minX, minY = 700, 400
+    winX, winY = 800, 600
+    minX, minY = 800, 600
     window = pygame.display.set_mode((winX, winY), pygame.RESIZABLE)
 
     # set window name and icon
@@ -150,7 +150,9 @@ def hint_screen():
     while running:
         clock.tick(fps)
 
-        for event in pygame.event.get():
+        events = pygame.event.get()
+
+        for event in events:
 
             # if the user exits the window
             if event.type == pygame.QUIT:
@@ -186,6 +188,6 @@ def hint_screen():
         pygame.display.update()
 
     # when running is False, reset the window size to the gui_main_menu window size
-    window = pygame.display.set_mode((600, 600), pygame.RESIZABLE)
+    window = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     return
     pygame.quit()

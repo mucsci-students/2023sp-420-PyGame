@@ -106,8 +106,6 @@ def update_hexagon_positions(state):
     spacing = x * .04
     hex_size = min(state.display.get_width(), state.display.get_height()) // 9
     center_x, center_y = state.display.get_width() // 2, state.display.get_height() // 2
-
     hex_positions = _get_hex_positions(center_x, center_y, hex_size, spacing)
-
     state.surrounding_hexagons = [Hexagon(pos[0], pos[1], hex_size, hex_size, old_hex.text) for pos, old_hex in
                                   zip(hex_positions, state.surrounding_hexagons)]

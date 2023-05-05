@@ -59,7 +59,6 @@ class Hexagon(Shape):
         text_rect = text_surface.get_rect(center=self.center)
         display.blit(text_surface, text_rect)
 
-
     def is_hover(self):
         mouse_x, mouse_y = pygame.mouse.get_pos()
         num_points = len(self.hex_points)

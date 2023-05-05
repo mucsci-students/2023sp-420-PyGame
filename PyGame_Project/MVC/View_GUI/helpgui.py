@@ -1,5 +1,6 @@
 import pygame, os, math
-from PyGame_Project.MVC.View_GUI.screens.main_menu_components.main_menu_screen import *
+# from PyGame_Project.MVC.View_GUI.screens.main_menu_components.main_menu_screen import *
+
 
 def start_help():
 
@@ -139,8 +140,11 @@ def start_help():
     running = True
     while running:
         clock.tick(fps)
+        events = pygame.event.get()
+        for event in events:
 
-        for event in pygame.event.get():
+        # for event in pygame.event.get():
+
 
             # if the user exits the window
             if event.type == pygame.QUIT:
@@ -175,6 +179,6 @@ def start_help():
         pygame.display.update()
 
     # when running is False, reset the window size to the gui_main_menu window size
-    window = pygame.display.set_mode((600, 600))
+    window = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
     return
     pygame.quit()

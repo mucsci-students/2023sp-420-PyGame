@@ -3,8 +3,10 @@ from PyGame_Project.MVC.View_GUI.screens.highscore_components.highscore_state im
 from PyGame_Project.MVC.View_GUI.screens.highscore_components.header import create_header
 from PyGame_Project.MVC.View_GUI.screens.highscore_components.center import create_center
 from PyGame_Project.MVC.Model.imageGen import generateImage
-
-import pygame, os, sys, math
+import pygame
+import random
+import sys
+import os
 
 minimum_width = 800
 minimum_height = 600
@@ -14,14 +16,16 @@ def build_high_score_screen(required_letter='', pangram='', name='', score=0):
 
     state = HighScoreState()
     state.player_name = name
+    state.edited_scores = []
     pygame.display.set_caption('High Scores')
     state.display = pygame.display.set_mode((800, 600), pygame.RESIZABLE)
+    if len(name) <= 3:
+        insert_or_update_score(name, required_letter, pangram, score)
 
-    insert_or_update_score(name, required_letter, pangram, score)
     state.all_scores = get_scores_for_puzzle(required_letter, pangram)
 
     state.required_letter = required_letter
-    state.current_puzzle = pangram
+    state.current_puzzle = ''.join(random.sample(pangram, len(pangram)))
 
     i = 1
     for score in state.all_scores:
@@ -88,7 +92,7 @@ def handle_button_press(state, event):
             if key.strip().casefold() == 'Leave'.casefold() and state.buttons[key]:
                 clicked_leave(state)
             elif key.strip().casefold() == 'Share'.casefold() and state.buttons[key]:
-                generateImage(state.player_name)
+                clicked_share(state)
 
 
 def clicked_leave(state):
@@ -96,107 +100,6 @@ def clicked_leave(state):
 
 
 def clicked_share(state):
-    pass
+    generateImage()
 
 
-# load start screen
-def start_hs(player_name, req_letter, pangram, player_score):
-    clock = pygame.time.Clock()
-
-    # settings
-    pygame.init()
-    width = 600
-    height = 600
-    screen = pygame.display.set_mode((width,height),pygame.RESIZABLE)
-    pygame.display.set_caption('Load A Game')
-    font_title = pygame.font.SysFont(None, 50)
-    font = pygame.font.SysFont("couriernew", 30)
-
-    # create hexagon points (NOT the lines between the points)
-    hex_radius = 60 # change this for bigger hexagons, considered midpoint
-    hex_points = []
-    for i in range(6):
-        hex_angle = (math.pi / 180) * (60 * i) # converts from degrees to radians
-        hex_x = hex_radius * math.cos(hex_angle) + 70 # the + 70 changes x position
-        hex_y = hex_radius * math.sin(hex_angle) + 70
-        hex_points.append((hex_x, hex_y))
-
-    # create back arrow points
-    arrow_vertices = [(10, 15), (5, 20), (10, 25), (5, 20), (22, 20), (5, 20), (10, 25)]
-    arrow_rect_vertices = [(0, 0), (0, 25), (30, 25), (30, 0)]
-    
-    # function that writes text onto the screen and buttons
-    def draw_text(text, font, color, surface, x, y):
-        textobj = font.render(text, 1, color)
-        textrect = textobj.get_rect()
-        textrect.topleft = (x, y)
-        surface.blit(textobj, textrect)
-    
-    # variable to check for clicking status
-    click = False
-    
-    # main function
-    def hs_menu(player_name, req_letter, pangram, player_score):
-        # from shapes import Rectangle, Hexagon
-        
-        while True:
-            # creates screen and titles
-            screen.fill(('white'))
-            draw_text('HIGH SCORES', font_title, ('black'), screen, 180, 50)
-
-            insert_or_update_score(player_name, req_letter, pangram, player_score)
-
-            all_scores = get_scores_for_puzzle(req_letter, pangram)
-
-
-            y_axis = 100
-            rank_num = 1
-            for score in all_scores:
-                if rank_num == 10:
-                    hs_line = (f"{rank_num}    {score[0]}     {score[1]}")
-                else:
-                    hs_line = (f"{rank_num}     {score[0]}     {score[1]}")
-
-                draw_text(hs_line, font, ('black'), screen, 160, y_axis)
-                rank_num += 1
-                y_axis += 30
-                if rank_num > 10:
-                    break
-    
-            mx, my = pygame.mouse.get_pos()
-
-            # creating buttons
-            share = pygame.draw.polygon(screen, ('black'), [(hex_x + 225, hex_y + 450) for hex_x, hex_y in hex_points], 3)
-
-            # defining statements when clicked on
-            if share.collidepoint((mx, my)):
-                if click:
-                    generateImage(player_name)
-
-        
-            # draws the back arrow in the window
-            pygame.draw.polygon(screen, ("black"), arrow_vertices, 0)
-            pygame.draw.polygon(screen, ("white"), arrow_rect_vertices, 1)
-    
-            # writing text over buttons
-            draw_text('SHARE', font, ('black'), screen, 250, 505)
-           
-            # commands that lead to actions
-            click = False
-            for event in pygame.event.get():
-                if event.type == QUIT:
-                    pygame.quit()
-                    sys.exit()
-                if event.type == KEYDOWN:
-                    if event.key == K_ESCAPE:
-                        pygame.quit()
-                        sys.exit()
-                if event.type == MOUSEBUTTONUP:
-                    generateImage(player_name)
-                    if share.collidepoint(event.pos):
-                        print("here")
-
-            pygame.display.update()
-            clock.tick(60)
-        
-    hs_menu(player_name, req_letter, pangram, player_score)
