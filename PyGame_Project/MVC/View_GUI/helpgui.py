@@ -160,17 +160,18 @@ def start_help():
                     window = pygame.display.set_mode((event.w, minY), pygame.RESIZABLE)
                 else:
                     window = pygame.display.set_mode(event.size, pygame.RESIZABLE)
-            
-            # if the user left-clicks on a hexagon
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                if pygame.draw.polygon(window, ("white"), hex_points).collidepoint(event.pos):
-                    new_text = htp_text
-                elif pygame.draw.polygon(window, ("white"), [(x, y + 125) for x, y in hex_points]).collidepoint(event.pos):
-                    new_text = ptsys_text
-                elif pygame.draw.polygon(window, ("white"), [(x, y + 250) for x, y in hex_points]).collidepoint(event.pos):
-                    new_text = ranks_text
-                elif pygame.draw.polygon(window, ("white"), arrow_rect_vertices).collidepoint(event.pos):
-                    running = False
+
+        mouse_button = pygame.mouse.get_pressed()
+        if mouse_button[0]:
+            mouse_pos = pygame.mouse.get_pos()
+            if pygame.draw.polygon(window, ("white"), hex_points).collidepoint(mouse_pos):
+                new_text = htp_text
+            elif pygame.draw.polygon(window, ("white"), [(x, y + 125) for x, y in hex_points]).collidepoint(mouse_pos):
+                new_text = ptsys_text
+            elif pygame.draw.polygon(window, ("white"), [(x, y + 250) for x, y in hex_points]).collidepoint(mouse_pos):
+                new_text = ranks_text
+            elif pygame.draw.polygon(window, ("white"), arrow_rect_vertices).collidepoint(mouse_pos):
+                running = False
 
         add_elements()
         wrap_text(new_text)
