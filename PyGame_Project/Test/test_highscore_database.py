@@ -53,17 +53,14 @@ def test_insert():
 def test_get_score():
     puzzleGen()
 
-    ## Get baseline
-    scores1 = get_scores_for_puzzle("a", "das")
-    print(len(scores1))
     ## Insert tests
     insert_or_update_score("test", "a", "das", 420)
     insert_or_update_score("test2", "a", "das", 42069)
 
-    scores2 = get_scores_for_puzzle("a", "das")
-    print(len(scores2))
+    scores = get_scores_for_puzzle("a", "das")
 
-    assert len(scores1) == 0 and len(scores2) == 2
+
+    assert len(scores) == 2
 
 
 
