@@ -1,4 +1,4 @@
-import os, sys, pytest
+import os, sys, time, pytest
 
 from PyGame_Project.MVC.Model.model_puzzle import *
 from PyGame_Project.MVC.Model.imageGen import *
@@ -21,7 +21,7 @@ def test_share_imageGen():
     oldDirectory = os.listdir(os.getcwd())
 
     generateImage()
-    
+    time.sleep(10)
     ## makes list of everything in the current direcotry, after the image is created 
     newDirectory = os.listdir(os.getcwd())
 
