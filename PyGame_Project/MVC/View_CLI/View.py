@@ -1,5 +1,4 @@
 import os
-import sys
 
 from PyGame_Project.MVC.Model.model_puzzle import *
 from PyGame_Project.MVC.Model.Database.model_highscores import *
@@ -7,21 +6,21 @@ from PyGame_Project.MVC.Model.Database.model_highscores import *
 ## prints the start up "Loading" screen
 def print_start_screen():
     startingScreen = f"""
-          \             /
-           \   o ^ o   /            
-            \ (     ) /
- ____________(%%%%%%%)____________      
-(     /   /  )%%%%%%%(  \   \     )          
-(___/___/__/           \__\___\___)
-   (     /  /(%%%%%%%)\  \     )
-    (__/___/ (%%%%%%%) \___\__)        
-            /(       )\ 
-          /   (%%%%%)   \ 
-               (%%%) 
-                 !                      
-    Spelling Bee Game by PyGame
+               \             /
+                \   o ^ o   /            
+                 \ (     ) /
+      ____________(%%%%%%%)____________      
+     (     /   /  )%%%%%%%(  \   \     )          
+     (___/___/__/           \__\___\___)
+        (     /  /(%%%%%%%)\  \     )
+         (__/___/ (%%%%%%%) \___\__)        
+                 /(       )\ 
+               /   (%%%%%)   \ 
+                    (%%%) 
+                      !                      
+         Spelling Bee Game by PyGame
       """
-    print (startingScreen)
+    print(startingScreen)
 
 """
 Prints the Current Puzzle menu, using current passed stats.
@@ -51,29 +50,20 @@ def print_current_puzzle():
         Score: {puzzle.score} / {puzzle.total_points} 
         Words Guessed: {prettyGuesses}
         
+        
                 ,---.
                /     \\
-          ,---<   {fir}   >---.
-         /     \     /     \\
-         "  {sec}  ">---<"  {thi}  "
-         \     /     \     /
-          >---<   {req}   >---<
-         /     \     /     \\
-         "  {fou}  ">---<"  {fif}  "
+          ,---<   {fir}   >---.                              
+         /     \     /     \\                         Puzzle Commands
+         "  {sec}  ">---<"  {thi}  "              --------------------------------------
+         \     /     \     /               /shuffle    /highscores    /help
+          >---<   {req}   >---<                /hints      /sharekey      /commands
+         /     \     /     \\               /showall    /shareimage    /mainmenu
+         "  {fou}  ">---<"  {fif}  "               /savegame   /giveup        /exit
          \     /     \     /
           `---<   {six}   >---'
                \     /
                 "---"
-
-               Commands
-         ---------------------
-          /help      /shuffle 
-          /back      /showall 
-          /share     /savegame 
-          /hints     /highscores
-          /giveup    /exit
-          /shareimage
-
         
         """
     print(currentProgress)
@@ -104,57 +94,60 @@ def get_pretty_guesses(guesses):
 ## prints the main start up menu
 def print_main_menu():
     mainMenu = f"""
-Main Menu
-    /newgame
-    /loadgame
-    /startfromkey
-    /startsharedgame
-    /highscores
-    /help
-    /exit
+             Main Menu Commands
+      ________________________________
+      
+       /newgame           /highscores
+       /loadgame          /help
+       /startfromkey      /commands
+       /startsharedgame   /exit
+   
 """
     print(mainMenu)
 
-## Prompts user if he wants to exit the game or not
-def print_exit():
-    exit = f"""
-Confirm exit?
-Y
-N
-"""
-    print(exit)
+## Prompts user if they want to exit the game or not from the main menu
+def print_exit_menu():
+    exit_m = f"""
+Are you sure you want to exit? (Y/N)"""
+    print(exit_m)
+
+
+## Prompts user if they want to exit the game or not from their active puzzle
+def print_exit_puzzle():
+    exit_p = f"""
+Are you sure you want to exit? (Any unsaved puzzle progress will be lost!) (Y/N)"""
+    print(exit_p)
 
 ## Prompts user if he wants to save the game or not
 def print_game_save():
     gameSave = f"""
 
-Save Game?
-Y
-N
-"""
+Save Game? (Y/N)"""
     print(gameSave)
 
+## not used
 ## Prompts user if he wants to load the game or not
 def print_load_game():
     load = f"""
     
-Load Game?
-Y
-N
-"""
+Load Game? (Y/N)"""
+    
     print(load)
 
 ## prints screen shwoing all avaiable saves, prompting for input
 def print_load_options():
-    print("All Saved Games:")
+    print("\n  All Saved Games:\n")
+
+    counter = 1
     for option in get_load_options():
-        print("-- " + option.replace(".json",""))
-    print("\n(Type just the name in):")
-    print("\nSelect Game to load:")
+        print(f"    [ {counter} ] " + option.replace(".json",""))
+        counter += 1
+
+    print("\n\n")
 
 ## prints string for when you select start puzzle from Base
 def print_base_input():
-    print("Enter a panagram with seven unique letters: ")
+    print("\nEnter a pangram with seven unique letters: ")
 
 ## prints outcome for players guesses to active puzzle
 def print_guess_outcome(outcome):
@@ -162,92 +155,121 @@ def print_guess_outcome(outcome):
         print_game_over()
         return False
     elif(outcome != 0):
-        print("\n\tWrong!")
+        print("\n\n\tWrong!")
         ## Prints detailed explanation as to why guess is wrong
         get_detailed_response(outcome)
         return True
     else:
-        print("\n\tCorrect!")
+        print("\n\n\tCorrect!")
         return True
 
 ## prints the generic help screen including game instructions
 def print_help():
     help = f"""
+    How to Play:
+    ~ Create words using letters from the hive and try to get the maximum score. 
+    ~ Words must have at least four letters and include the required letter in the center of the hive.
+    ~ Letters can be used more than once.
+    ~ Words with hyphens, proper nouns, vulgarities, and especially obscure words are not in the word list.
+    ~ Score points by correctly guessing words to increase your rating.
+    
+    Scoring Points:
+    ~ 4-letter words are worth 1 point each.
+    ~ Longer words earn 1 point per letter.
+    ~ Pangrams earn 1 point per letter, plus an additional 7 more points.
+    ~ Each puzzle contains at least one “pangram”, which uses every letter in the hive at least once.
 
-Instructions
+    Ranks:                                 Ranking Up:
+    Beginner    0%                         ~ Every puzzle has 10 ranks that progress and change based on
+    Good Start  2%                           the percentage of the puzzle completed.
+    Moving Up   5%                         ~ When you reach the "Queen Bee" rank, you will be able to enter
+    Good        8%                           your name to be used for a local high score for the current
+    Solid       15%                          puzzle.
+    Nice        25%
+    Great       40%
+    Amazing     50%
+    Genius      70%
+    Queen Bee   100%
+    
 
-~ Create words using letters from the hive and try to get the maximum score. 
-~ Words must have at least four unique letters and include the center letter in brackets.
-~ All optional letters will be surrounding the required center letter.   
-~ Letters can be used more than once.
-~ Words with hyphens, proper nouns, vulgarities, and especially obscure words are not in the word list. 
-~ Score points to increase your rating.
-~ 4-letter words are worth 1 point each.
-~ Longer words earn 1 point per letter. 
-~ Each puzzle includes at least one “pangram” which uses every letter, which are worth double points.
-
-Main Menu Commands:
-/newgame          Loads a new game
-/loadgame         Loads a saved game
-/startfromkey     Enter a 7 letter key to start a new puzzle
-/startsharedgame  Copies the key to your clipboard
-/highscores       Searches for the top 10 high scores from a pangram and required letter
-/help             Get instructions and commands
-/exit             Exits the program
-
-In-Game Commands:
-/help             Get instructions and commands
-/back             Go back to the main menu screen
-/share            Shows a sharable key (usable for CLI and GUI)
-/shuffle          Shuffles the outer letters of the hive
-/showall          Prints a list of correct guessed words
-/savegame         Saves the current state of the game
-/hints            Shows the hint matrix and a two-letter list
-/giveup           Finishes the game and lets you enter a name for the current puzzle's high score
-/highscores       Searches for the top 10 high scores from a pangram and required letter for the current puzzle
-/exit             Exits the program
-
-Press the space key to continue...
-""" 
+    Press the space key to continue...
+"""
     print(help)
+
+
+def print_commands():
+    commands = f"""
+    Main Menu Commands:
+    /newgame          Loads a new game
+    /loadgame         Loads a saved game
+    /startfromkey     Enter a 7 letter key to start a new puzzle
+    /startsharedgame  Copies the key to your clipboard
+    /highscores       Searches for the top 10 high scores from a pangram and required letter
+    /help             Get instructions and commands
+    /exit             Exits the program
+
+    Puzzle Commands:
+    /shuffle          Shuffles the outer letters of the hive
+    /hints            Shows the hint matrix and a two-letter list
+    /showall          Prints a list of correct guessed words
+    /savegame         Saves the current state of the game
+    /highscores       Searches for the top 10 high scores from a pangram and required letter for the current puzzle
+    /sharekey         Shows a sharable key (usable for CLI and GUI)
+    /shareimage       Creates a Puzzle Card containing the current statistics of your puzzle
+    /giveup           Finishes the game and lets you enter a name for the current puzzle's high score
+    /help             Get help on how to play the puzzle
+    /commands         Get help on how to use commands in the main menu and puzzle
+    /mainmenu         Go back to the main menu screen
+    /exit             Exits the program
+
+    
+    Press the space key to continue...
+""" 
+    print(commands)
 
 ## prints the nice message when the puzzle is completed
 def print_game_over():
     gameOver = f"""
-          \             /
-           \   o ^ o   /            
-            \ (     ) /
- ____________(%%%%%%%)____________      
-(     /   /  )%%%%%%%(  \   \     )          
-(___/___/__/           \__\___\___)
-   (     /  /(%%%%%%%)\  \     )
-    (__/___/ (%%%%%%%) \___\__)        
-            /(       )\ 
-          /   (%%%%%)   \ 
-               (%%%) 
-                 !
-              Congrats!
-      You Completed the Puzzle!
+              \             /
+               \   o ^ o   /            
+                \ (     ) /
+     ____________(%%%%%%%)____________      
+    (     /   /  )%%%%%%%(  \   \     )          
+    (___/___/__/           \__\___\___)
+       (     /  /(%%%%%%%)\  \     )
+        (__/___/ (%%%%%%%) \___\__)        
+                /(       )\ 
+              /   (%%%%%)   \ 
+                   (%%%) 
+                     !
+                  Congrats!
+          You Completed the Puzzle!
 
       
-      Press space to continue...                   
+         Press space to continue...
       """
     print(gameOver)
 
 ## Prints all the players correct word guesses 
 ## Layout: four coulmns and N amount of rows depending on the list size
 def print_all_guesses(stats):
-    print("\n\t WORDS CORRECTLY GUESSED:")
+    print("\n\tWORDS CORRECTLY GUESSED:\n")
+
     prettyGuesses = "\t\t"
     counter = 0
     for guess in stats.guesses:
         counter += 1
-        prettyGuesses = prettyGuesses + guess + ", "
-        if(counter == 4):
+        if len(guess) < 8:
+            prettyGuesses = prettyGuesses + guess + "\t\t"
+        else:
+            prettyGuesses = prettyGuesses + guess + "\t"
+
+        if(counter == 5):
             prettyGuesses = prettyGuesses + "\n\t\t"
             counter = 0
+
     print(prettyGuesses)
-    print("\t Press the space key to continue...")
+    print("\n\n\tPress the space key to continue...")
 
 ## Returns a list of all save files able to load (load options)
 def get_load_options():
@@ -289,7 +311,7 @@ def get_detailed_response(outcome):
             print("\n\t... Input has non-given letters ...")
     
 def print_shared_key_input():
-    print("Enter a shared game key: ")
+    print("\nEnter a shared game key: ")
 
 ## prints out the sharable key
 def print_shared_key_output(key):
@@ -343,16 +365,13 @@ def Print_hint_two_Let_Dict():
             two_letter_str = two_letter_str + "\t"
             count += 1
 
-    print (two_letter_str)
+    print(two_letter_str)
 
 
 def print_giveup_confirmation():
     giveup = f"""
 
-You are about to GIVE UP your current puzzle. Are you sure you want to GIVE UP?
-Y
-N
-"""
+You are about to GIVE UP your current puzzle. Are you sure you want to GIVE UP? (Y/N)"""
     print(giveup)
 
 
@@ -375,7 +394,6 @@ def print_high_scores(req_letter, all_letters):
             break
 
     print("\n\n\tPress the space key to continue...")
-    return
 
 
 def print_pangram_stats(req_letter, all_letters):
@@ -384,8 +402,8 @@ def print_pangram_stats(req_letter, all_letters):
 
 
 def print_generate_image():
-    print("Would you like to generate an image for your puzzle? (Y/N)")
+    print("\nWould you like to generate an image for your puzzle? (Y/N)")
 
 
 def print_enable_encryption():
-    print("Would you like to enable an Encrypted Word List for this puzzle? (Y/N)")
+    print("\nWould you like to enable an Encrypted Word List for this puzzle? (Y/N)")

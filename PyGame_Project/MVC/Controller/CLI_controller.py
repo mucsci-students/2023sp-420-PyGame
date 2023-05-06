@@ -11,7 +11,7 @@ from PyGame_Project.MVC.Model.Database.model_highscores import *
 from PyGame_Project.MVC.Model.imageGen import *
 
 
-### ------------MAIN CLI Controller--------------- ###
+### ---- KEYBOARD, USER INPUT, TAB COMPLETION ---- ###
 
 # auto completes the command name when the TAB key is pressed
 def tab_completion(typed_string, command_set):
@@ -21,9 +21,9 @@ def tab_completion(typed_string, command_set):
   
   # gets the correct command set, depending on if the user is on the Main Menu or the Active Game screen
   if command_set == 1:
-    commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/highscores', '/help', '/exit']
+    commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/highscores', '/help', '/commands','/exit']
   elif command_set == 2:
-    commands = ['/help', '/back', '/share', '/exit', '/shuffle', '/showall', '/savegame', '/hints', '/giveup', '/highscores', '/shareimage']
+    commands = ['/shuffle', '/hints', '/showall', '/savegame', '/highscores', '/sharekey', '/shareimage', '/giveup', '/help', '/commands', '/mainmenu', '/exit']
 
   # finds commands that match what the user started to type
   matches = [c for c in commands if c.startswith(typed_string)]
@@ -59,10 +59,22 @@ def on_key_press(key, typed_letters, command_num):
 
     # if the user is entering a save filename
     if command_num == 4 and key in ["/", "\\", ":", "\"", "<", ">", "|"]:
+      return
+    
+    # if the user is selecting a game to load
+    if command_num == 5:
+      if key.isnumeric():
+        typed_letters.append(key)
+        typed_string = ''.join(typed_letters)
+      elif key == '\x7f' or key == '\x08':
+        typed_letters and typed_letters.pop()
+        print("\033[K", end="")
+        typed_string = ''.join(typed_letters)
+      else:
         return
 
     # if the tab key is pressed (tab completion)
-    if key == '\t':
+    elif key == '\t':
       typed_string, ending_string = tab_completion(''.join(typed_letters).lower(), command_num)
       if ending_string:
         typed_letters.extend(ending_string)
@@ -137,7 +149,7 @@ def space_out():
       break
     
 
-### ------------MAIN CLI Controller--------------- ###
+### ----------- MAIN CLI CONTROLLER -------------- ###
 
 
 # starts the cli main menu
@@ -175,10 +187,15 @@ def main_response(userInput):
       cls()
       print_help()
       space_out()
+
+    case "/commands":
+      cls()
+      print_commands()
+      space_out()
         
     case "/exit":
       cls()
-      print_exit()
+      print_exit_menu()
       exit_game()
 
     case _:
@@ -188,23 +205,46 @@ def main_response(userInput):
 
 # when user wants to load a saved game
 def load_save_game():
-  ## all load options
+  # gets all of the save file names (removes the ".json" for nicer printing in command window)
+  save_files = [file.split(".json")[0] for file in get_load_options()]
+
+  if len(save_files) == 0:
+    print("\n\n\tNo save files found...")
+    time.sleep(1.2)
+    return
+
+  # prints all found save files, with a number corresponding to each file
+  while True:
+    cls()
+    print_load_options()
+    print("Type the game number to load:")
+    user_num = user_input(5)
+
+    if user_num == "" or int(user_num) == 0 or len(save_files) < int(user_num):
+      print("Please choose a file number on the list.")
+      time.sleep(1.5)
+    else:
+      break
+
+  # gets the file name that the user chose
+  file_name = save_files[int(user_num) - 1]
+
+  # user confirmation
+  cls()
   print_load_options()
-  file_name = user_input(4)
-
-  ## user confirmation 
-  print_load_game()
+  #print_load_game()
+  print(f"Load \"{file_name}\"? (Y/N)")
   answer = user_input(0).lower()
-  match answer:
-    case "y":
-      if (start_game_with_key_from_load(file_name) == 1):
-        print("Was unable to load the file")
-    case "n":
-      cls()
-      return
 
-    case _: # if any other command not in the list is entered, then this output will be returned
-      print("Command Not Recognized")
+  if answer == "y":
+    print("Loading file...")
+    time.sleep(.5)
+    if start_game_with_key_from_load(file_name) == 1:
+        print("Unable to load the file.")
+  else:
+    print("File loading canceled, returning to main menu...")
+
+  time.sleep(1.5)
 
 # when user wants to load a game with a key
 def keyStart():
@@ -219,9 +259,9 @@ def keyStart():
     if check_value == 1:
     # Turn into custom error call to Output.py with key
       cls()
-      print("Invalid word, not a valid pangram. Return to main menu? Y/N \n")
+      print("\nInvalid pangram. Try again? (Y/N) \n")
       response = user_input(0).lower()
-      if(response == "y"):
+      if response != "y":
         main_menu_handler()
 
 # function to save game
@@ -230,14 +270,13 @@ def saveGamePrompt():
       print("Enter title to save game as:")
       userInput = user_input(4)  #asks user for an input
       print(userInput)
-      input()
       cls()
       encrypt_bool = encryption_prompt()
       PuzzleStats().get_save_game(userInput, encrypt_bool)
       print(f"{userInput} has been saved.")
       return
 
-#Prompts the user with the option to make their file sharable, if not, then it will be encrypted soon alhamdulillah
+#Prompts the user with the option to make their file sharable, if not, then it will be encrypted soon
 def encryption_prompt():
   while(True):
     cls()
@@ -251,7 +290,6 @@ def encryption_prompt():
       case _: # if any other command not in the list is entered, then this output will be returned
         print("Command Not Recognized")
         time.sleep(1)
-        cls()
 
 #Loops thru the active game screens
 def activeGameLoop():
@@ -269,9 +307,9 @@ def activeGame():
   print_current_puzzle()
   print("Enter your guess.")
   userInput = user_input(2).lower() #asks user for input to match
-  if (userInput == ""):
+  if userInput == "":
     return True
-  elif (userInput[0] != "/"):
+  elif userInput[0] != "/":
     outcome = print_guess_outcome(PuzzleStats().get_check_guess(userInput))
     time.sleep(1)
     return outcome
@@ -285,7 +323,12 @@ def active_game_commands(userInput):
       cls()
       print_help()
       space_out()
-
+      return True
+    
+    case "/commands":
+      cls()
+      print_commands()
+      space_out()
       return True
 
     case "/shuffle":
@@ -301,21 +344,28 @@ def active_game_commands(userInput):
       return True
     
     case "/showall":
+      cls()
       print_all_guesses(PuzzleStats())
       space_out()
       return True
     
-    case "/back":
+    case "/mainmenu":
       print_game_save()
-      if(user_input(0).lower() == "y"):
+      answer = user_input(0).lower()
+      if answer == "y":
+        cls()
         print(f"Enter filename: ")
         file_name = user_input(4)
         cls()
         save_current_game(file_name)
+      elif answer != "n":
+        print("Command not recognized, returning to game...")
+        time.sleep(1)
+        return True
       PuzzleStats().clear()
       return False
 
-    case "/share":
+    case "/sharekey":
       cls()
       print_shared_key_output(PuzzleStats().encode_puzzle_key())
       space_out()
@@ -324,7 +374,7 @@ def active_game_commands(userInput):
 
     case "/exit":
       cls()
-      print_exit()
+      print_exit_puzzle()
       return exit_game()
     
     case "/hints":
@@ -411,26 +461,23 @@ def cls():
 
 # Start a game from a shared key
 def start_shared_game():
-  cls()
-  print_shared_key_input()
-  shared_key = user_input(0).lower()
-  
-  prep_value = prep_game_from_share(shared_key)
-  
-  if prep_value == 1:
+  while True:
     cls()
-    print("Invalid Code Input.")
-    print("\nPress the space key to try again...")
-    print("Press 'n' to quit to main menu...")
-
-    while True:
-      key = get_os_name()
-      if key == ' ':
-        return start_shared_game()
-      elif key == 'n':
-        return True
-  
-  activeGameLoop()
+    print_shared_key_input()
+    shared_key = user_input(0).lower()
+    prep_value = prep_game_from_share(shared_key)
+    
+    # checks for valid share key (invalid = 1)
+    if prep_value == 1:
+      cls()
+      print("\nInvalid share key. Try again? (Y/N)")
+      answer = user_input(0).lower()
+      if answer != "y":
+        return False
+      continue
+    else:
+      activeGameLoop()
+      break
 
 
 # for when the user considers giving up their current puzzle
@@ -439,6 +486,7 @@ def give_up():
   match answer:
     # you gave up!
     case "y":
+      cls()
       print_enter_name()
       player_name = user_input(3)
       all_letters = PuzzleStats().pangram
