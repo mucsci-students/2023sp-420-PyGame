@@ -457,7 +457,7 @@ You are about to GIVE UP your current puzzle. Are you sure you want to GIVE UP? 
 
 
 def print_enter_name():
-    print("\nEnter a 3 character name for your high score: ")
+    print("Enter a 3 character name for your high score: ")
 
 
 def print_high_scores(req_letter, all_letters):
