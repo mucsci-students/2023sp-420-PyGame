@@ -55,12 +55,12 @@ def print_current_puzzle():
                /     \\
           ,---<   {fir}   >---.                              
          /     \     /     \\                         Puzzle Commands
-         "  {sec}  ">---<"  {thi}  "              --------------------------------------
-         \     /     \     /               /shuffle    /highscores    /help
-          >---<   {req}   >---<                /hints      /sharekey      /commands
-         /     \     /     \\               /showall    /shareimage    /mainmenu
-         "  {fou}  ">---<"  {fif}  "               /savegame   /giveup        /exit
-         \     /     \     /
+         "  {sec}   >---<   {thi}  "              ______________________________________
+         \     /     \     /                          
+          >---<   {req}   >---<                /shuffle    /highscores    /help 
+         /     \     /     \\               /hints      /sharekey      /commands
+         "  {fou}  ">---<   {fif}  "               /showall    /shareimage    /mainmenu
+         \     /     \     /               /savegame   /giveup        /exit
           `---<   {six}   >---'
                \     /
                 "---"
