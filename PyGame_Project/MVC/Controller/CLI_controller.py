@@ -4,9 +4,6 @@ import sys
 import os
 import time
 
-from prompt_toolkit import prompt
-from prompt_toolkit.completion import WordCompleter
-
 from PyGame_Project.MVC.Model.model_puzzle import *
 from PyGame_Project.MVC.Controller.controller_universal import *
 from PyGame_Project.MVC.View_CLI.View import *
@@ -24,9 +21,9 @@ def tab_completion(typed_string, command_set):
   
   # gets the correct command set, depending on if the user is on the Main Menu or the Active Game screen
   if command_set == 1:
-    commands = get_command_set(1)
+    commands = ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/highscores', '/help', '/commands','/exit']
   elif command_set == 2:
-    commands = get_command_set(2)
+    commands = ['/shuffle', '/hints', '/showall', '/savegame', '/highscores', '/sharekey', '/shareimage', '/giveup', '/help', '/commands', '/mainmenu', '/exit']
 
   # finds commands that match what the user started to type
   matches = [c for c in commands if c.startswith(typed_string)]
@@ -152,17 +149,6 @@ def space_out():
       break
     
 
-
-def get_command_set(num):
-  match num:
-    case 1:
-      return ['/newgame', '/loadgame', '/startfromkey', '/startsharedgame', '/highscores', '/help', '/commands','/exit']
-    case 2:
-      return ['/shuffle', '/hints', '/showall', '/savegame', '/highscores', '/sharekey', '/shareimage', '/giveup', '/help', '/commands', '/mainmenu', '/exit']
-    case 6:
-      return ['/shuffle', '/hints', '/savegame', '/giveup', '/help', '/commands', '/mainmenu', '/exit']
-
-
 ### ----------- MAIN CLI CONTROLLER -------------- ###
 
 
@@ -231,6 +217,7 @@ def load_save_game():
   while True:
     cls()
     print_load_options()
+    print("Type the game number to load:")
     user_num = user_input(5)
 
     if user_num == "" or int(user_num) == 0 or len(save_files) < int(user_num):

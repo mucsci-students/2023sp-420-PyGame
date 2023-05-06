@@ -53,7 +53,7 @@ def print_current_puzzle():
         
                 ,---.
                /     \\
-          ,---<   {fir}   >---.
+          ,---<   {fir}   >---.                              
          /     \     /     \\                         Puzzle Commands
          "  {sec}  ">---<"  {thi}  "              --------------------------------------
          \     /     \     /               /shuffle    /highscores    /help
@@ -67,87 +67,6 @@ def print_current_puzzle():
         
         """
     print(currentProgress)
-
-
-#------------------------------------------------------------------------------
-def print_hive(puzzle):
-
-    req = puzzle.shuffled_puzzle[0]
-    fir = puzzle.shuffled_puzzle[3]
-    sec = puzzle.shuffled_puzzle[1]
-    thi = puzzle.shuffled_puzzle[2]
-    fou = puzzle.shuffled_puzzle[4]
-    fif = puzzle.shuffled_puzzle[5]
-    six = puzzle.shuffled_puzzle[6]
-
-    hive = f"""
-                ,---.
-               /     \\
-          ,---<   {fir}   >---.
-         /     \     /     \\
-         "  {sec}  ">---<"  {thi}  "
-         \     /     \     /
-          >---<   {req}   >---<
-         /     \     /     \\
-         "  {fou}  ">---<"  {fif}  "
-         \     /     \     /
-          `---<   {six}   >---'
-               \     /
-                "---"
-    """
-    return hive
-
-
-def print_puzzle_commands(command_list):
-    commands_str = "Puzzle Commands\n"
-    commands_str += "--------------------------------------\n"
-
-    for i, command in enumerate(command_list):
-        commands_str += f"{command: <12}"
-        if (i + 1) % 3 == 0:
-            commands_str += "\n"
-
-    return commands_str
-
-
-def print_current_puzzleeee(command_list=None):
-    puzzle = PuzzleStats()
-    prettyGuesses = get_pretty_guesses(puzzle.guesses)
-
-    if command_list is None:
-        command_list = ["/shuffle", "/hints", "/savegame", "/giveup", "/help", "/mainmenu", "/morecommands"]
-    
-    hive_lines = print_hive(puzzle).splitlines()
-    commands_lines = print_puzzle_commands(command_list).splitlines()
-    
-    max_lines = max(len(hive_lines), len(commands_lines))
-    
-    print(f"\nRank: {puzzle.get_rank()}")
-    print(f"Score: {puzzle.score} / {puzzle.total_points}")
-    print(f"Words Guessed: {prettyGuesses}\n")
-
-
-    for i in range(max_lines):
-        hive_line = hive_lines[i] if i < len(hive_lines) else ""
-        commands_line = commands_lines[i] if i < len(commands_lines) else ""
-        print(f"{hive_line: <40} {commands_line}")
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 """
 Turns players list of valid guesses into a string with the last 4 entered words
@@ -224,7 +143,7 @@ def print_load_options():
         print(f"    [ {counter} ] " + option.replace(".json",""))
         counter += 1
 
-    print("\n\nType the game number to load:")
+    print("\n\n")
 
 ## prints string for when you select start puzzle from Base
 def print_base_input():
