@@ -59,7 +59,7 @@ def print_current_puzzle():
          \     /     \     /                          
           >---<   {req}   >---<                /shuffle    /highscores    /help 
          /     \     /     \\               /hints      /sharekey      /commands
-         "  {fou}  ">---<   {fif}  "               /showall    /shareimage    /mainmenu
+         "  {fou}   >---<   {fif}  "               /showall    /shareimage    /mainmenu
          \     /     \     /               /savegame   /giveup        /exit
           `---<   {six}   >---'
                \     /
