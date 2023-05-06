@@ -19,11 +19,14 @@ def test_share_imageGen():
 
     ## makes list of everything in the current direcotry 
     oldDirectory = os.listdir(os.getcwd())
-
+    print(oldDirectory)
+    print("-------------------")
     generateImage()
     time.sleep(10)
     ## makes list of everything in the current direcotry, after the image is created 
     newDirectory = os.listdir(os.getcwd())
+    print(newDirectory)
+    print("-------------------")
 
     check = False
     newFileCount = 0
