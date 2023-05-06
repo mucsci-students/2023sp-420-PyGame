@@ -7,8 +7,7 @@ from PyGame_Project.MVC.Controller.controller_universal import *
 pytest.fixture
 def puzzleGen():
     PuzzleStats().clear()
-    shareable_key = "csqkhzct"
-    prep_game_from_share(shareable_key)
+    prep_new_game()
 
     
 """
