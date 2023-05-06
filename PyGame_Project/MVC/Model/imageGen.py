@@ -8,6 +8,8 @@ from PIL import Image, ImageFont, ImageDraw
 
 def generateImage():
     puzzle = PuzzleStats()
+    if not len(puzzle.pangram) == 7:
+        return 1
 
     ## Load in card template
 
@@ -78,3 +80,4 @@ def generateImage():
 
     ## Save the new image 
     my_image.save(os.path.join(os.getcwd(), PuzzleStats().encode_puzzle_key().upper() + ".png"))
+    return 0
