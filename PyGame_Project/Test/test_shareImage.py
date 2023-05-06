@@ -32,7 +32,7 @@ def test_share_imageGen():
         if not file in oldDirectory:
             ## Check if the new file is a PNG
             if ".png" in file.lower():
-                newFileCount = 1
+                newFileCount += 1
                 check = True
 
     assert check and (newFileCount == 1)
