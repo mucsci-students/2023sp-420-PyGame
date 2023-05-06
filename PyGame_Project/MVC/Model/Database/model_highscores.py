@@ -77,39 +77,40 @@ def insert_or_update_score(player_name, required_letter, all_letters, score):
     conn.close()
 
 
-def get_player_rank(player_name, required_letter, all_letters):
+## Feature Not used
+# def get_player_rank(player_name, required_letter, all_letters):
 
-    identifier = generate_puzzle_identifier(required_letter, all_letters)
-    conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
-    cursor = conn.cursor()
+#     identifier = generate_puzzle_identifier(required_letter, all_letters)
+#     conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
+#     cursor = conn.cursor()
 
-    # Fetch rank for a specific player
-    query = """
-    WITH ranked_scores AS (
-        SELECT hs.player_name,
-               hs.score,
-               RANK() OVER (PARTITION BY pz.unique_identifier ORDER BY hs.score DESC) AS rank
-        FROM highscores AS hs
-        JOIN puzzles AS pz ON hs.puzzle_id = pz.id
-        WHERE pz.unique_identifier = ?
-    ),
-    total_players AS (
-        SELECT COUNT(*) AS total
-        FROM highscores AS hs
-        JOIN puzzles AS pz ON hs.puzzle_id = pz.id
-        WHERE pz.unique_identifier = ?
-    )
-    SELECT rs.player_name, rs.score, rs.rank, tp.total
-    FROM ranked_scores AS rs, total_players AS tp
-    WHERE rs.player_name = ?;
-    """
+#     # Fetch rank for a specific player
+#     query = """
+#     WITH ranked_scores AS (
+#         SELECT hs.player_name,
+#                hs.score,
+#                RANK() OVER (PARTITION BY pz.unique_identifier ORDER BY hs.score DESC) AS rank
+#         FROM highscores AS hs
+#         JOIN puzzles AS pz ON hs.puzzle_id = pz.id
+#         WHERE pz.unique_identifier = ?
+#     ),
+#     total_players AS (
+#         SELECT COUNT(*) AS total
+#         FROM highscores AS hs
+#         JOIN puzzles AS pz ON hs.puzzle_id = pz.id
+#         WHERE pz.unique_identifier = ?
+#     )
+#     SELECT rs.player_name, rs.score, rs.rank, tp.total
+#     FROM ranked_scores AS rs, total_players AS tp
+#     WHERE rs.player_name = ?;
+#     """
 
-    # Execute and fetch the results
-    cursor.execute(query, (identifier, identifier, player_name))
-    result = cursor.fetchone()
-    conn.close()
+#     # Execute and fetch the results
+#     cursor.execute(query, (identifier, identifier, player_name))
+#     result = cursor.fetchone()
+#     conn.close()
 
-    return result
+#     return result
 
 
 def generate_puzzle_identifier(required_letter, all_letters):
