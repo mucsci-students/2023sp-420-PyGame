@@ -1,5 +1,5 @@
 import sqlite3
-import hashlib
+import hashlib, os
 
 def generate_tables():
     conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
@@ -77,39 +77,41 @@ def insert_or_update_score(player_name, required_letter, all_letters, score):
     conn.close()
 
 
-def get_player_rank(player_name, required_letter, all_letters):
+## Feature Not used
+# def get_player_rank(player_name, required_letter, all_letters):
 
-    identifier = generate_puzzle_identifier(required_letter, all_letters)
-    conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
-    cursor = conn.cursor()
+#     identifier = generate_puzzle_identifier(required_letter, all_letters)
+#     conn = sqlite3.connect("PyGame_Project/MVC/Model/Database/highscoreDB")
+#     cursor = conn.cursor()
 
-    # Fetch rank for a specific player
-    query = """
-    WITH ranked_scores AS (
-        SELECT hs.player_name,
-               hs.score,
-               RANK() OVER (PARTITION BY pz.unique_identifier ORDER BY hs.score DESC) AS rank
-        FROM highscores AS hs
-        JOIN puzzles AS pz ON hs.puzzle_id = pz.id
-        WHERE pz.unique_identifier = ?
-    ),
-    total_players AS (
-        SELECT COUNT(*) AS total
-        FROM highscores AS hs
-        JOIN puzzles AS pz ON hs.puzzle_id = pz.id
-        WHERE pz.unique_identifier = ?
-    )
-    SELECT rs.player_name, rs.score, rs.rank, tp.total
-    FROM ranked_scores AS rs, total_players AS tp
-    WHERE rs.player_name = ?;
-    """
+#     # Fetch rank for a specific player
+#     query = """
+#     WITH ranked_scores AS (
+#         SELECT hs.player_name,
+#                hs.score,
+#                RANK() OVER (PARTITION BY pz.unique_identifier ORDER BY hs.score DESC) AS rank
+#         FROM highscores AS hs
+#         JOIN puzzles AS pz ON hs.puzzle_id = pz.id
+#         WHERE pz.unique_identifier = ?
+#     ),
+#     total_players AS (
+#         SELECT COUNT(*) AS total
+#         FROM highscores AS hs
+#         JOIN puzzles AS pz ON hs.puzzle_id = pz.id
+#         WHERE pz.unique_identifier = ?
+#     )
+#     SELECT rs.player_name, rs.score, rs.rank, tp.total
+#     FROM ranked_scores AS rs, total_players AS tp
+#     WHERE rs.player_name = ?;
+#     """
 
-    # Execute and fetch the results
-    cursor.execute(query, (identifier, identifier, player_name))
-    result = cursor.fetchone()
-    conn.close()
+#     # Execute and fetch the results
+#     cursor.execute(query, (identifier, identifier, player_name))
+#     result = cursor.fetchone()
+#     conn.close()
 
-    return result
+#     return result
+
 
 def generate_puzzle_identifier(required_letter, all_letters):
     # Combine the required letter and other letters into a single string
@@ -123,16 +125,16 @@ def generate_puzzle_identifier(required_letter, all_letters):
 
 
 # tests
-"""
-# generate_tables()
-insert_or_update_score('Robert', 's', 'efdoras', 421)
-insert_or_update_score('Benjy', 's', 'efdoras', 69)
-insert_or_update_score('Ethan', 's', 'efdoras', 68)
-insert_or_update_score('Priscilla', 's', 'efdoras', 100)
-insert_or_update_score('Kiah', 's', 'efdoras', 100)
 
-player_rank = get_player_rank('Benjy', 's', 'efdoras')
-all_scores = get_scores_for_puzzle('s', 'efdoras')
-print(f'Player rank is: {player_rank}')
-print(f'All scores for puzzle are: {all_scores}')
-"""
+# generate_tables()
+# insert_or_update_score('Robertss', 's', 'efdoras', 4211)
+# insert_or_update_score('Benjyss', 's', 'efdoras', 9)
+# insert_or_update_score('Ethans', 's', 'efdoras', 6)
+# insert_or_update_score('Priscilsla', 's', 'efdoras', 1001)
+# insert_or_update_score('Kiahs', 's', 'efdoras', 10)
+
+# player_rank = get_player_rank('Benjy', 's', 'efdoras')
+# all_scores = get_scores_for_puzzle('s', 'efdoras')
+# print(f'Player rank is: {player_rank}')
+# print(f'All scores for puzzle are: {all_scores}')
+

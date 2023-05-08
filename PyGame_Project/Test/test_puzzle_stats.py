@@ -212,4 +212,54 @@ def test_rank_index_calc_rank_8():
     assert check_1 
 
 
+def test_get_rank():
+    puzzleGen()
+    ranks = ["Beginner","Good Start","Moving Up","Good","Solid","Nice","Great","Amazing","Genius","Queen Bee"]
 
+    PuzzleStats().rank = 0    
+    checkBeginner = (PuzzleStats().get_rank() == ranks[0])
+
+    PuzzleStats().rank = 1   
+    checkGoodStart = (PuzzleStats().get_rank() == ranks[1])
+
+    PuzzleStats().rank = 2   
+    checkMovingUp = (PuzzleStats().get_rank() == ranks[2])
+
+    PuzzleStats().rank = 3  
+    checkGood = (PuzzleStats().get_rank() == ranks[3])
+
+    PuzzleStats().rank = 4    
+    checkSolid = (PuzzleStats().get_rank() == ranks[4])
+
+    PuzzleStats().rank = 5    
+    checkNice = (PuzzleStats().get_rank() == ranks[5])
+
+    PuzzleStats().rank = 6    
+    checkGreat = (PuzzleStats().get_rank() == ranks[6])
+
+    PuzzleStats().rank = 7    
+    checkAmazin = (PuzzleStats().get_rank() == ranks[7])
+
+    PuzzleStats().rank = 8    
+    checkGenius = (PuzzleStats().get_rank() == ranks[8])
+
+    PuzzleStats().rank = 9    
+    checkQueenBee = (PuzzleStats().get_rank() == ranks[9])
+
+    assert checkBeginner and checkGoodStart and checkMovingUp and checkGood and checkSolid and checkNice and checkGreat and checkAmazin and checkGenius and checkQueenBee
+
+def test_share_encrypt():
+    ## share key generation
+    puzzleGen()
+    
+    encoded = PuzzleStats().encode_puzzle_key()
+
+    assert encoded == "ygyxjrfq"
+
+
+def test_decode_puzzle_key():
+    ## share key decrypt
+
+    decoded = PuzzleStats().decode_puzzle_key("ygyxjrfq")
+
+    assert decoded == "tbtsemal"

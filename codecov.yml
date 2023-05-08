@@ -2,6 +2,13 @@ codecov:
  token: b86d51b5-9e2f-4502-b289-9534575c34d3
  require_ci_to_pass: yes
 
+ignore:
+  - "PyGame_Project/MVC/Controller/"
+  - "PyGame_Project/MVC/View_CLI/"
+  - "PyGame_Project/MVC/View_GUI/"
+  - "PyGame_Project/Test/"
+  - "PyGame_Project/__main__.py"
+
 coverage:
   round: down
   status:
@@ -13,5 +20,5 @@ coverage:
 
 comment:
   layout: "diff, flags, files"
-  behavior: update
+  behavior: default
   require_changes: false
